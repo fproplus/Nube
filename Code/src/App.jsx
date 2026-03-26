@@ -886,10 +886,12 @@ export default function App(){
 </div>
             <p style={{margin:0,fontSize:12,color:"#4b5563"}}>{t.appSubtitle}</p>
           </div>
-          <button onClick={()=>setLang(l=>l==="en"?"de":"en")} style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
-           title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
-            {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
-          </button>
+          <button 
+  onClick={()=>setLang(l=>l==="en"?"de":"en")} 
+  title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
+  style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
+  {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+</button>
         </div>
 
         <div style={{display:"flex",gap:8,marginBottom:20}}>
