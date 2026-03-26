@@ -894,7 +894,11 @@ export default function App(){
 
         <div style={{display:"flex",gap:8,marginBottom:20}}>
           {["today","history","insights"].map(tab=>(
-                      ))}
+  <button key={tab} onClick={()=>setActiveTab(tab)}
+    style={{flex:1,minHeight:44,background:activeTab===tab?"#fff":"#111827",color:activeTab===tab?"#111":"#6b7280",border:activeTab===tab?"none":"1px solid #1f2937",borderRadius:14,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s ease"}}>
+    {tab==="today"?"💪 "+t.tabToday:tab==="history"?"🔥 "+t.tabHistory:"🔬 "+t.tabInsights}
+  </button>
+))}
         </div>
 
         <TabPane active={activeTab==="today"}>
