@@ -894,10 +894,12 @@ export default function App(){
 
         <div style={{display:"flex",gap:8,marginBottom:20}}>
           {["today","history","insights"].map(tab=>(
-            <button key={tab} onClick={()=>setActiveTab(tab)}
-              style={{flex:1,minHeight:44,background:activeTab===tab?"#fff":"#111827",color:activeTab===tab?"#111":"#6b7280",border:activeTab===tab?"none":"1px solid #1f2937",borderRadius:14,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s ease"}}>
-              {tab==="today"?"💪 "+t.tabToday:tab==="history"?"🔥 "+t.tabHistory:"🔬 "+t.tabInsights}
-            </button>
+            <button 
+  onClick={()=>setLang(l=>l==="en"?"de":"en")} 
+  title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
+  style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
+  {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+</button>
           ))}
         </div>
 
