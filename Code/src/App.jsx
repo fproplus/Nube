@@ -49,7 +49,7 @@ const T = {
     benefitDisclaimer:"ℹ️ This is general nutritional information, not medical advice.",
   },
   de: {
-    appTitle:"Vollwert-Tracker", appSubtitle:"Nähr deinen Körper. Besitz deinen Tag.",
+    appTitle:"Nährwert-Tracker", appSubtitle:"Nähr deinen Körper. Besitz deinen Tag.",
     searchPlaceholder:"Lebensmittel... (z.B. Hähnchen, Spinat, Kurkuma)",
     tabToday:"Heute", tabHistory:"Streak", tabInsights:"Nährwert-Check",
     vitamins:"Vitamine", minerals:"Mineralstoffe", activeBenefits:"Vorteile",
