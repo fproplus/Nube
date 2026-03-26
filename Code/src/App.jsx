@@ -1008,6 +1008,18 @@ export default function App(){
             {added.length>0&&(
               <div style={{background:"#0f172a",borderRadius:20,padding:16,marginBottom:16}}>
                 <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
+                <div style={{display:"flex",gap:16,marginBottom:10,flexWrap:"wrap"}}>
+    {[["—","#374151",lang==="de"?"Nicht abgedeckt":"Not covered"],
+    ["~","#facc15",lang==="de"?"Spur vorhanden":"Trace amount"],
+    ["✓","#60a5fa",lang==="de"?"Gut abgedeckt":"Good coverage"],
+    ["✓✓","#4ade80",lang==="de"?"Sehr gut":"Excellent"]
+  ].map(([sym,col,label])=>(
+    <div key={sym} style={{display:"flex",alignItems:"center",gap:5}}>
+      <span style={{fontSize:12,fontWeight:700,color:col,minWidth:16}}>{sym}</span>
+      <span style={{fontSize:11,color:"#4b5563"}}>{label}</span>
+    </div>
+  ))}
+</div>
                 {ALL_VIT.map(v=><NutrientRow key={v} nk={v} type="vitamins"/>)}
                 <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",margin:"12px 0 8px"}}>{t.minerals}</p>
                 {ALL_MIN.map(m=><NutrientRow key={m} nk={m} type="minerals"/>)}
