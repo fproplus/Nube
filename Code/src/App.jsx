@@ -292,6 +292,7 @@ const FOODS_RAW = [
   {en:"Strawberries",de:"Erdbeeren",cat:"Fruit",v:{C:3,B9:1,K:1},m:{Manganese:1},b:{en:["Antioxidant-rich","Heart health","Anti-inflammatory"],de:["Antioxidantienreich","Herzgesundheit","Entzündungshemmend"]}},
   {en:"Mango",de:"Mango",cat:"Fruit",v:{C:3,A:3,B6:1,E:1,K:1},m:{Potassium:1},b:{en:["Beta-carotene","Immune support","Eye health"],de:["Beta-Carotin","Immununterstützung","Augengesundheit"]}},
   {en:"Kiwi",de:"Kiwi",cat:"Fruit",v:{C:3,K:3,E:1,B9:1},m:{Potassium:1},b:{en:["Vitamin C powerhouse","Sleep quality","Gut health"],de:["Vitamin-C-Kraftpaket","Schlafqualität","Darmgesundheit"]}},
+  {en:"Pear",de:"Birne",cat:"Fruit",v:{C:1,K:2,B9:1},m:{Potassium:2,Copper:1},b:{en:["Quercetin antioxidant","Gut health (pectin)","Anti-inflammatory"],de:["Quercetin-Antioxidans","Darmgesundheit (Pektin)","Entzündungshemmend"]}},
   {en:"Lemon",de:"Zitrone",cat:"Fruit",v:{C:3,B6:1},m:{Potassium:1},b:{en:["Enhances iron absorption","Liver detox","Antioxidant-rich"],de:["Verbessert Eisenaufnahme","Leberentgiftung","Antioxidantienreich"]}},
   {en:"Pineapple",de:"Ananas",cat:"Fruit",v:{C:3,B1:1,B6:1},m:{Manganese:3},b:{en:["Bromelain digestive enzyme","Anti-inflammatory","Immune support"],de:["Bromelain-Enzym","Entzündungshemmend","Immununterstützung"]}},
   {en:"Cherries",de:"Kirschen",cat:"Fruit",v:{C:1,A:1},m:{Potassium:1},b:{en:["Melatonin (sleep quality)","Reduces muscle soreness","Anti-inflammatory"],de:["Melatonin","Reduziert Muskelkater","Entzündungshemmend"]}},
