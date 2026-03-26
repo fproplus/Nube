@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 const T = {
   en: {
-    appTitle:"Whole Food Tracker", appSubtitle:"Feed your body. Own your day.",
+    appTitle:"Nube", appSubtitle:"Whole Food Tracker",
     searchPlaceholder:"Add a food... (e.g. chicken, spinach, turmeric)",
     tabToday:"Today", tabHistory:"Streaks", tabInsights:"Nutrition Check",
     vitamins:"Vitamins", minerals:"Minerals", activeBenefits:"Benefits",
@@ -49,7 +49,7 @@ const T = {
     benefitDisclaimer:"ℹ️ This is general nutritional information, not medical advice.",
   },
   de: {
-    appTitle:"Nährwert-Tracker", appSubtitle:"Nähr deinen Körper. Besitz deinen Tag.",
+    appTitle:"Nube", appSubtitle:"Nährwerttracker",
     searchPlaceholder:"Lebensmittel... (z.B. Hähnchen, Spinat, Kurkuma)",
     tabToday:"Heute", tabHistory:"Streak", tabInsights:"Nährwert-Check",
     vitamins:"Vitamine", minerals:"Mineralstoffe", activeBenefits:"Vorteile",
@@ -880,7 +880,10 @@ export default function App(){
       <div style={{maxWidth:520,margin:"0 auto",padding:"0 16px"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"calc(16px + env(safe-area-inset-top))",paddingBottom:16}}>
           <div>
-            <h1 style={{margin:0,fontSize:18,fontWeight:900,color:"#fff"}}>{t.appTitle}</h1>
+            <div style={{display:"flex",alignItems:"center",gap:10}}>
+  <img src="/logopng.png" alt="Nube" style={{height:36,borderRadius:8}}/>
+  <h1 style={{margin:0,fontSize:18,fontWeight:900,color:"#fff"}}>{t.appTitle}</h1>
+</div>
             <p style={{margin:0,fontSize:12,color:"#4b5563"}}>{t.appSubtitle}</p>
           </div>
           <button onClick={()=>setLang(l=>l==="en"?"de":"en")} style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
