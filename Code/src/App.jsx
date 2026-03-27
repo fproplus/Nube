@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 const T = {
   en: {
-    appTitle:"Nube", appSubtitle:"Whole Food Tracker",
+    appTitle:"Nube", appSubtitle:"track or check the benefits of your nutrition",
     searchPlaceholder:"Add a food... (e.g. chicken, spinach, turmeric)",
     tabToday:"Today", tabHistory:"Streaks", tabInsights:"Nutrition Check",
     vitamins:"Vitamins", minerals:"Minerals", activeBenefits:"Benefits",
@@ -49,7 +49,7 @@ const T = {
     benefitDisclaimer:"ℹ️ This is general nutritional information, not medical advice.",
   },
   de: {
-    appTitle:"Nube", appSubtitle:"Nährwerttracker",
+    appTitle:"Nube", appSubtitle:"tracke oder checke die Benefits deiner Ernährung",
     searchPlaceholder:"Lebensmittel... (z.B. Hähnchen, Spinat, Kurkuma)",
     tabToday:"Heute", tabHistory:"Streak", tabInsights:"Nährwert-Check",
     vitamins:"Vitamine", minerals:"Mineralstoffe", activeBenefits:"Vorteile",
