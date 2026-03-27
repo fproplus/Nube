@@ -456,6 +456,8 @@ function useInstallPrompt(){
   const dismissed=useRef(false);
   useEffect(()=>{
     const standalone=window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true;
+    const isMobile=/iphone|ipad|ipod|android/i.test(navigator.userAgent);
+if(!isMobile)return;
     if(standalone)return;
     try{if(sessionStorage.getItem("wft-install-dismissed"))return;}catch{}
     const h=e=>{e.preventDefault();setEvt(e);};
