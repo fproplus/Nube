@@ -2,7 +2,9 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 const T = {
   en: {
-    appTitle:"Nube", appSubtitle:"track or check the benefits of your nutrition",
+      </div>
+    </div>
+  );appTitle:"Nube", appSubtitle:"track or check the benefits of your nutrition",
     searchPlaceholder:"Add a food... (e.g. chicken, spinach, turmeric)",
     tabToday:"Today", tabHistory:"Streaks", tabInsights:"Nutrition Check",
     vitamins:"Vitamins", minerals:"Minerals", activeBenefits:"Benefits",
@@ -286,20 +288,20 @@ const FOODS_RAW = [
   {en:"Beetroot",de:"Rote Bete",cat:"Vegetable",v:{B9:3,C:1,B6:1},m:{Potassium:2,Iron:1,Manganese:2},b:{en:["Nitrates (blood pressure & endurance)","Folate-rich","Liver detox support","Anti-inflammatory betalains"],de:["Nitrate (Blutdruck & Ausdauer)","Folat-reich","Leberentgiftung","Entzündungshemmende Betalaine"]}},
   {en:"Mushrooms",de:"Pilze",cat:"Vegetable",v:{D:2,B2:2,B3:2,B5:2,B9:1},m:{Selenium:2,Copper:2,Phosphorus:1},b:{en:["Only plant source of vitamin D","Beta-glucan (immune)","Gut health"],de:["Einzige Pflanzenquelle für Vitamin D","Beta-Glucan","Darmgesundheit"]}},
   {en:"Champignon",de:"Champignon",cat:"Vegetable",v:{D:2,B2:3,B3:3,B5:2,B9:1},m:{Selenium:2,Copper:2,Phosphorus:2,Potassium:1},b:{en:["Most common vitamin D mushroom","B-vitamin powerhouse","Immune support","Gut health"],de:["Häufigster Vitamin-D-Pilz","B-Vitamin-Kraftpaket","Immununterstützung","Darmgesundheit"]}},
-{en:"Zucchini",de:"Zucchini",cat:"Vegetable",v:{C:2,B6:2,K:1,B9:1,A:1},m:{Potassium:2,Manganese:1,Magnesium:1},b:{en:["Low calorie","Gut health","Blood sugar regulation","Antioxidant-rich"],de:["Kalorienarm","Darmgesundheit","Blutzuckerregulation","Antioxidantienreich"]}},
-{en:"Cucumber",de:"Gurke",cat:"Vegetable",v:{C:1,K:2,B9:1},m:{Potassium:1,Magnesium:1},b:{en:["Hydration (96% water)","Gut health","Anti-inflammatory","Low calorie"],de:["Hydration (96% Wasser)","Darmgesundheit","Entzündungshemmend","Kalorienarm"]}},
-{en:"Cauliflower",de:"Blumenkohl",cat:"Vegetable",v:{C:3,K:2,B9:3,B6:2,B5:1},m:{Potassium:1,Manganese:1,Phosphorus:1},b:{en:["Sulforaphane (cancer-protective)","Choline source","Gut health","Anti-inflammatory"],de:["Sulforaphan","Cholinquelle","Darmgesundheit","Entzündungshemmend"]}},
-{en:"Kohlrabi",de:"Kohlrabi",cat:"Vegetable",v:{C:3,B6:2,B9:1,K:1},m:{Potassium:2,Manganese:1},b:{en:["Vitamin C powerhouse","Gut health (fibre)","Blood sugar regulation","Anti-inflammatory"],de:["Vitamin-C-Kraftpaket","Darmgesundheit","Blutzuckerregulation","Entzündungshemmend"]}},
-{en:"Leek",de:"Lauch",cat:"Vegetable",v:{K:3,C:2,B9:2,A:2,B6:1},m:{Manganese:2,Iron:1,Potassium:1},b:{en:["Prebiotic inulin","Vitamin K powerhouse","Heart health","Allicin (antimicrobial)"],de:["Präbiotisches Inulin","Vitamin-K-Kraftpaket","Herzgesundheit","Allicin (antimikrobiell)"]}},
-{en:"Celery",de:"Sellerie",cat:"Vegetable",v:{K:3,C:1,B9:1,A:1},m:{Potassium:2,Manganese:1},b:{en:["Apigenin (anti-inflammatory)","Blood pressure support","Gut health","Hydration"],de:["Apigenin (entzündungshemmend)","Blutdruckunterstützung","Darmgesundheit","Hydration"]}},
-{en:"Onion",de:"Zwiebel",cat:"Vegetable",v:{C:2,B6:2,B9:1},m:{Potassium:1,Manganese:1},b:{en:["Quercetin (antioxidant)","Prebiotic inulin","Heart health","Antimicrobial"],de:["Quercetin (Antioxidans)","Präbiotisches Inulin","Herzgesundheit","Antimikrobiell"]}},
-{en:"Fennel",de:"Fenchel",cat:"Vegetable",v:{C:2,K:2,B9:2,B6:1},m:{Potassium:2,Manganese:2,Calcium:1,Iron:1},b:{en:["Anethole (anti-inflammatory)","Gut health","Digestive support","Bone health"],de:["Anethol (entzündungshemmend)","Darmgesundheit","Verdauungsunterstützung","Knochengesundheit"]}},
-{en:"Radish",de:"Radieschen",cat:"Vegetable",v:{C:2,B9:1,K:1},m:{Potassium:1},b:{en:["Liver detox","Gut health","Anti-inflammatory","Low calorie"],de:["Leberentgiftung","Darmgesundheit","Entzündungshemmend","Kalorienarm"]}},
-{en:"Corn",de:"Mais",cat:"Vegetable",v:{B1:2,B3:2,B9:2,C:1},m:{Phosphorus:2,Magnesium:1,Manganese:1,Potassium:1},b:{en:["Sustained energy","Lutein & zeaxanthin (eye health)","Gut health (fibre)","B-vitamins"],de:["Anhaltende Energie","Lutein & Zeaxanthin (Augengesundheit)","Darmgesundheit","B-Vitamine"]}},
-{en:"Pak Choi",de:"Pak Choi",cat:"Vegetable",v:{C:3,K:3,A:3,B9:2,B6:1},m:{Calcium:2,Potassium:1,Manganese:1},b:{en:["Calcium-rich leafy green","Sulforaphane (cancer-protective)","Eye health","Immune powerhouse"],de:["Kalziumreiche Blattgrüne","Sulforaphan","Augengesundheit","Immunbooster"]}},
+  {en:"Zucchini",de:"Zucchini",cat:"Vegetable",v:{C:2,B6:2,K:1,B9:1,A:1},m:{Potassium:2,Manganese:1,Magnesium:1},b:{en:["Low calorie","Gut health","Blood sugar regulation","Antioxidant-rich"],de:["Kalorienarm","Darmgesundheit","Blutzuckerregulation","Antioxidantienreich"]}},
+  {en:"Cucumber",de:"Gurke",cat:"Vegetable",v:{C:1,K:2,B9:1},m:{Potassium:1,Magnesium:1},b:{en:["Hydration (96% water)","Gut health","Anti-inflammatory","Low calorie"],de:["Hydration (96% Wasser)","Darmgesundheit","Entzündungshemmend","Kalorienarm"]}},
+  {en:"Cauliflower",de:"Blumenkohl",cat:"Vegetable",v:{C:3,K:2,B9:3,B6:2,B5:1},m:{Potassium:1,Manganese:1,Phosphorus:1},b:{en:["Sulforaphane (cancer-protective)","Choline source","Gut health","Anti-inflammatory"],de:["Sulforaphan","Cholinquelle","Darmgesundheit","Entzündungshemmend"]}},
+  {en:"Kohlrabi",de:"Kohlrabi",cat:"Vegetable",v:{C:3,B6:2,B9:1,K:1},m:{Potassium:2,Manganese:1},b:{en:["Vitamin C powerhouse","Gut health (fibre)","Blood sugar regulation","Anti-inflammatory"],de:["Vitamin-C-Kraftpaket","Darmgesundheit","Blutzuckerregulation","Entzündungshemmend"]}},
+  {en:"Leek",de:"Lauch",cat:"Vegetable",v:{K:3,C:2,B9:2,A:2,B6:1},m:{Manganese:2,Iron:1,Potassium:1},b:{en:["Prebiotic inulin","Vitamin K powerhouse","Heart health","Allicin (antimicrobial)"],de:["Präbiotisches Inulin","Vitamin-K-Kraftpaket","Herzgesundheit","Allicin (antimikrobiell)"]}},
+  {en:"Celery",de:"Sellerie",cat:"Vegetable",v:{K:3,C:1,B9:1,A:1},m:{Potassium:2,Manganese:1},b:{en:["Apigenin (anti-inflammatory)","Blood pressure support","Gut health","Hydration"],de:["Apigenin (entzündungshemmend)","Blutdruckunterstützung","Darmgesundheit","Hydration"]}},
+  {en:"Onion",de:"Zwiebel",cat:"Vegetable",v:{C:2,B6:2,B9:1},m:{Potassium:1,Manganese:1},b:{en:["Quercetin (antioxidant)","Prebiotic inulin","Heart health","Antimicrobial"],de:["Quercetin (Antioxidans)","Präbiotisches Inulin","Herzgesundheit","Antimikrobiell"]}},
+  {en:"Fennel",de:"Fenchel",cat:"Vegetable",v:{C:2,K:2,B9:2,B6:1},m:{Potassium:2,Manganese:2,Calcium:1,Iron:1},b:{en:["Anethole (anti-inflammatory)","Gut health","Digestive support","Bone health"],de:["Anethol (entzündungshemmend)","Darmgesundheit","Verdauungsunterstützung","Knochengesundheit"]}},
+  {en:"Radish",de:"Radieschen",cat:"Vegetable",v:{C:2,B9:1,K:1},m:{Potassium:1},b:{en:["Liver detox","Gut health","Anti-inflammatory","Low calorie"],de:["Leberentgiftung","Darmgesundheit","Entzündungshemmend","Kalorienarm"]}},
+  {en:"Corn",de:"Mais",cat:"Vegetable",v:{B1:2,B3:2,B9:2,C:1},m:{Phosphorus:2,Magnesium:1,Manganese:1,Potassium:1},b:{en:["Sustained energy","Lutein & zeaxanthin (eye health)","Gut health (fibre)","B-vitamins"],de:["Anhaltende Energie","Lutein & Zeaxanthin (Augengesundheit)","Darmgesundheit","B-Vitamine"]}},
+  {en:"Pak Choi",de:"Pak Choi",cat:"Vegetable",v:{C:3,K:3,A:3,B9:2,B6:1},m:{Calcium:2,Potassium:1,Manganese:1},b:{en:["Calcium-rich leafy green","Sulforaphane (cancer-protective)","Eye health","Immune powerhouse"],de:["Kalziumreiche Blattgrüne","Sulforaphan","Augengesundheit","Immunbooster"]}},
   {en:"Brussels Sprouts",de:"Rosenkohl",cat:"Vegetable",v:{K:3,C:3,B9:2,B6:1,A:1},m:{Potassium:1,Manganese:1},b:{en:["Glucosinolates","Gut health","Anti-inflammatory"],de:["Glucosinolate","Darmgesundheit","Entzündungshemmend"]}},
   {en:"Red Cabbage",de:"Rotkraut",cat:"Vegetable",v:{C:3,K:2,B6:2,A:1,B9:1},m:{Potassium:2,Manganese:1},b:{en:["Anthocyanins (brain health)","Highest vitamin C of all cabbages","Gut health","Anti-inflammatory"],de:["Anthocyane (Gehirngesundheit)","Meistes Vitamin C aller Kohlsorten","Darmgesundheit","Entzündungshemmend"]}},
-{en:"Sauerkraut",de:"Sauerkraut",cat:"Vegetable",v:{C:2,K:2,B9:1,B6:1},m:{Iron:1,Manganese:1,Potassium:1},b:{en:["Most probiotic-rich fermented vegetable","Gut diversity","Immune support","Vitamin C preserved by fermentation"],de:["Probiotikareiche Fermentierung","Darmflora","Immununterstützung","Vitamin C durch Fermentierung erhalten"]}},
+  {en:"Sauerkraut",de:"Sauerkraut",cat:"Vegetable",v:{C:2,K:2,B9:1,B6:1},m:{Iron:1,Manganese:1,Potassium:1},b:{en:["Most probiotic-rich fermented vegetable","Gut diversity","Immune support","Vitamin C preserved by fermentation"],de:["Probiotikareiche Fermentierung","Darmflora","Immununterstützung","Vitamin C durch Fermentierung erhalten"]}},
   {en:"Potato",de:"Kartoffel",cat:"Vegetable",v:{C:2,B6:3,B1:1,B3:1},m:{Potassium:3,Phosphorus:1,Magnesium:1,Iron:1},b:{en:["High potassium (more than banana)","Vitamin B6 & C","Resistant starch (gut health when cooled)","Sustained energy"],de:["Viel Kalium (mehr als Banane)","Vitamin B6 & C","Resistente Stärke (Darmgesundheit nach Kühlen)","Anhaltende Energie"]}},
   {en:"Banana",de:"Banane",cat:"Fruit",v:{B6:3,C:1,B5:1},m:{Potassium:3,Magnesium:1,Manganese:2},b:{en:["Potassium source","Muscle recovery","Mood support"],de:["Kaliumquelle","Muskelregeneration","Stimmungsunterstützung"]}},
   {en:"Blueberries",de:"Blaubeeren",cat:"Fruit",v:{C:2,K:2,E:1},m:{Manganese:2},b:{en:["Anthocyanins (brain health)","Highest antioxidant fruit","Memory support"],de:["Anthocyane","Stärkste Antioxidantien","Gedächtnisunterstützung"]}},
@@ -313,16 +315,16 @@ const FOODS_RAW = [
   {en:"Lemon",de:"Zitrone",cat:"Fruit",v:{C:3,B6:1},m:{Potassium:1},b:{en:["Enhances iron absorption","Liver detox","Antioxidant-rich"],de:["Verbessert Eisenaufnahme","Leberentgiftung","Antioxidantienreich"]}},
   {en:"Lime",de:"Limette",cat:"Fruit",v:{C:3,B6:1,B9:1},m:{Potassium:1,Calcium:1},b:{en:["Vitamin C powerhouse","Enhances iron absorption","Liver detox","Antioxidant-rich"],de:["Vitamin-C-Kraftpaket","Verbessert Eisenaufnahme","Leberentgiftung","Antioxidantienreich"]}},
   {en:"Mandarin",de:"Mandarine",cat:"Fruit",v:{C:3,A:2,B1:1,B9:1},m:{Potassium:1,Calcium:1},b:{en:["Immune powerhouse","Beta-carotene","Skin health","Antioxidant-rich"],de:["Immunbooster","Beta-Carotin","Hautgesundheit","Antioxidantienreich"]}},
-{en:"Grapes",de:"Weintrauben",cat:"Fruit",v:{C:1,K:2,B6:1,B1:1},m:{Potassium:2,Manganese:1,Copper:1},b:{en:["Resveratrol (heart health)","Quercetin antioxidant","Gut health","Anti-inflammatory"],de:["Resveratrol (Herzgesundheit)","Quercetin-Antioxidans","Darmgesundheit","Entzündungshemmend"]}},
-{en:"Watermelon",de:"Wassermelone",cat:"Fruit",v:{C:2,A:2,B6:1,B5:1},m:{Potassium:2},b:{en:["Lycopene (heart health)","Hydration","Citrulline (muscle recovery)","Antioxidant-rich"],de:["Lycopin (Herzgesundheit)","Hydration","Citrullin (Muskelregeneration)","Antioxidantienreich"]}},
-{en:"Grapefruit",de:"Grapefruit",cat:"Fruit",v:{C:3,A:2,B9:1,B5:1},m:{Potassium:2},b:{en:["Immune powerhouse","Naringenin (fat metabolism)","Heart health","Liver detox"],de:["Immunbooster","Naringenin (Fettstoffwechsel)","Herzgesundheit","Leberentgiftung"]}},
-{en:"Plum",de:"Pflaume",cat:"Fruit",v:{C:1,K:2,A:1,B6:1},m:{Potassium:2,Manganese:1},b:{en:["Gut health (sorbitol)","Antioxidant-rich","Bone health","Blood sugar regulation"],de:["Darmgesundheit (Sorbitol)","Antioxidantienreich","Knochengesundheit","Blutzuckerregulation"]}},
-{en:"Peach",de:"Pfirsich",cat:"Fruit",v:{C:2,A:2,E:1,B3:1},m:{Potassium:2},b:{en:["Beta-carotene","Skin health","Gut health","Antioxidant-rich"],de:["Beta-Carotin","Hautgesundheit","Darmgesundheit","Antioxidantienreich"]}},
-{en:"Nectarine",de:"Nektarine",cat:"Fruit",v:{C:2,A:2,E:1,B3:1},m:{Potassium:2},b:{en:["Beta-carotene","Skin health","Immune support","Antioxidant-rich"],de:["Beta-Carotin","Hautgesundheit","Immununterstützung","Antioxidantienreich"]}},
-{en:"Raspberries",de:"Himbeeren",cat:"Fruit",v:{C:3,K:2,E:1,B9:1},m:{Manganese:2,Potassium:1},b:{en:["Highest fibre of all berries","Ellagic acid (anti-cancer)","Anti-inflammatory","Blood sugar regulation"],de:["Meiste Ballaststoffe aller Beeren","Ellagsäure","Entzündungshemmend","Blutzuckerregulation"]}},
-{en:"Blackberries",de:"Brombeeren",cat:"Fruit",v:{C:3,K:3,E:1,B9:1},m:{Manganese:2,Potassium:1,Copper:1},b:{en:["Anthocyanins (brain health)","Vitamin K powerhouse","Gut health","Anti-inflammatory"],de:["Anthocyane (Gehirngesundheit)","Vitamin-K-Kraftpaket","Darmgesundheit","Entzündungshemmend"]}},
-{en:"Fig",de:"Feige",cat:"Fruit",v:{B6:2,K:2,B1:1},m:{Potassium:2,Calcium:2,Magnesium:1,Manganese:1},b:{en:["Calcium-rich fruit","Prebiotic fibre","Gut health","Bone health"],de:["Kalziumreiches Obst","Präbiotische Ballaststoffe","Darmgesundheit","Knochengesundheit"]}},
-{en:"Pomegranate",de:"Granatapfel",cat:"Fruit",v:{C:2,K:2,B9:1,E:1},m:{Potassium:2,Manganese:1},b:{en:["Punicalagins (strongest antioxidant)","Heart health","Anti-inflammatory","Prostate health"],de:["Punicalagin (stärkstes Antioxidans)","Herzgesundheit","Entzündungshemmend","Prostatagesundheit"]}},
+  {en:"Grapes",de:"Weintrauben",cat:"Fruit",v:{C:1,K:2,B6:1,B1:1},m:{Potassium:2,Manganese:1,Copper:1},b:{en:["Resveratrol (heart health)","Quercetin antioxidant","Gut health","Anti-inflammatory"],de:["Resveratrol (Herzgesundheit)","Quercetin-Antioxidans","Darmgesundheit","Entzündungshemmend"]}},
+  {en:"Watermelon",de:"Wassermelone",cat:"Fruit",v:{C:2,A:2,B6:1,B5:1},m:{Potassium:2},b:{en:["Lycopene (heart health)","Hydration","Citrulline (muscle recovery)","Antioxidant-rich"],de:["Lycopin (Herzgesundheit)","Hydration","Citrullin (Muskelregeneration)","Antioxidantienreich"]}},
+  {en:"Grapefruit",de:"Grapefruit",cat:"Fruit",v:{C:3,A:2,B9:1,B5:1},m:{Potassium:2},b:{en:["Immune powerhouse","Naringenin (fat metabolism)","Heart health","Liver detox"],de:["Immunbooster","Naringenin (Fettstoffwechsel)","Herzgesundheit","Leberentgiftung"]}},
+  {en:"Plum",de:"Pflaume",cat:"Fruit",v:{C:1,K:2,A:1,B6:1},m:{Potassium:2,Manganese:1},b:{en:["Gut health (sorbitol)","Antioxidant-rich","Bone health","Blood sugar regulation"],de:["Darmgesundheit (Sorbitol)","Antioxidantienreich","Knochengesundheit","Blutzuckerregulation"]}},
+  {en:"Peach",de:"Pfirsich",cat:"Fruit",v:{C:2,A:2,E:1,B3:1},m:{Potassium:2},b:{en:["Beta-carotene","Skin health","Gut health","Antioxidant-rich"],de:["Beta-Carotin","Hautgesundheit","Darmgesundheit","Antioxidantienreich"]}},
+  {en:"Nectarine",de:"Nektarine",cat:"Fruit",v:{C:2,A:2,E:1,B3:1},m:{Potassium:2},b:{en:["Beta-carotene","Skin health","Immune support","Antioxidant-rich"],de:["Beta-Carotin","Hautgesundheit","Immununterstützung","Antioxidantienreich"]}},
+  {en:"Raspberries",de:"Himbeeren",cat:"Fruit",v:{C:3,K:2,E:1,B9:1},m:{Manganese:2,Potassium:1},b:{en:["Highest fibre of all berries","Ellagic acid (anti-cancer)","Anti-inflammatory","Blood sugar regulation"],de:["Meiste Ballaststoffe aller Beeren","Ellagsäure","Entzündungshemmend","Blutzuckerregulation"]}},
+  {en:"Blackberries",de:"Brombeeren",cat:"Fruit",v:{C:3,K:3,E:1,B9:1},m:{Manganese:2,Potassium:1,Copper:1},b:{en:["Anthocyanins (brain health)","Vitamin K powerhouse","Gut health","Anti-inflammatory"],de:["Anthocyane (Gehirngesundheit)","Vitamin-K-Kraftpaket","Darmgesundheit","Entzündungshemmend"]}},
+  {en:"Fig",de:"Feige",cat:"Fruit",v:{B6:2,K:2,B1:1},m:{Potassium:2,Calcium:2,Magnesium:1,Manganese:1},b:{en:["Calcium-rich fruit","Prebiotic fibre","Gut health","Bone health"],de:["Kalziumreiches Obst","Präbiotische Ballaststoffe","Darmgesundheit","Knochengesundheit"]}},
+  {en:"Pomegranate",de:"Granatapfel",cat:"Fruit",v:{C:2,K:2,B9:1,E:1},m:{Potassium:2,Manganese:1},b:{en:["Punicalagins (strongest antioxidant)","Heart health","Anti-inflammatory","Prostate health"],de:["Punicalagin (stärkstes Antioxidans)","Herzgesundheit","Entzündungshemmend","Prostatagesundheit"]}},
   {en:"Pineapple",de:"Ananas",cat:"Fruit",v:{C:3,B1:1,B6:1},m:{Manganese:3},b:{en:["Bromelain digestive enzyme","Anti-inflammatory","Immune support"],de:["Bromelain-Enzym","Entzündungshemmend","Immununterstützung"]}},
   {en:"Cherries",de:"Kirschen",cat:"Fruit",v:{C:1,A:1},m:{Potassium:1},b:{en:["Melatonin (sleep quality)","Reduces muscle soreness","Anti-inflammatory"],de:["Melatonin","Reduziert Muskelkater","Entzündungshemmend"]}},
   {en:"Brown Rice",de:"Vollkornreis",cat:"Grain",v:{B1:2,B3:2,B6:1},m:{Magnesium:2,Phosphorus:2,Manganese:3},b:{en:["Sustained energy","Gut health","Blood sugar regulation"],de:["Anhaltende Energie","Darmgesundheit","Blutzuckerregulation"]}},
@@ -349,15 +351,15 @@ const FOODS_RAW = [
   {en:"Green Beans",de:"Grüne Bohnen",cat:"Legume",v:{C:2,K:3,B9:2,A:1,B6:1},m:{Manganese:1,Potassium:1,Iron:1},b:{en:["Vitamin K powerhouse","Gut health (fibre)","Anti-inflammatory","Low calorie"],de:["Vitamin-K-Kraftpaket","Darmgesundheit","Entzündungshemmend","Kalorienarm"]}},
   {en:"Soybeans",de:"Sojabohnen",cat:"Legume",v:{B9:2,B1:2,K:2,C:1},m:{Iron:3,Phosphorus:3,Magnesium:2,Zinc:2,Manganese:2,Calcium:1},b:{en:["Complete plant protein","Highest plant iron","Isoflavones","Bone health"],de:["Vollständiges Pflanzenprotein","Höchstes pflanzliches Eisen","Isoflavone","Knochengesundheit"]}},
   {en:"Tofu",de:"Tofu",cat:"Protein",v:{B1:1,B2:1,E:1},m:{Calcium:3,Iron:2,Magnesium:2,Phosphorus:2,Zinc:1,Manganese:1},b:{en:["Complete plant protein","Highest calcium of all plant foods","Iron & Zinc boost","Isoflavones (hormonal balance)"],de:["Vollständiges Pflanzenprotein","Meistes Kalzium aller Pflanzenlebensmittel","Eisen & Zink","Isoflavone (Hormonbalance)"]}},
-{en:"Tempeh",de:"Tempeh",cat:"Protein",v:{B2:2,B3:2,B6:1,B12:1},m:{Calcium:2,Iron:2,Magnesium:2,Phosphorus:3,Zinc:2,Manganese:2},b:{en:["Fermented complete protein","Most bioavailable plant protein","Probiotics (fermented)","Gut health"],de:["Fermentiertes Vollprotein","Bioverfügbarstes Pflanzenprotein","Probiotika (fermentiert)","Darmgesundheit"]}},
+  {en:"Tempeh",de:"Tempeh",cat:"Protein",v:{B2:2,B3:2,B6:1,B12:1},m:{Calcium:2,Iron:2,Magnesium:2,Phosphorus:3,Zinc:2,Manganese:2},b:{en:["Fermented complete protein","Most bioavailable plant protein","Probiotics (fermented)","Gut health"],de:["Fermentiertes Vollprotein","Bioverfügbarstes Pflanzenprotein","Probiotika (fermentiert)","Darmgesundheit"]}},
   {en:"Lentils",de:"Linsen",cat:"Legume",v:{B9:3,B1:2,B6:1},m:{Iron:3,Phosphorus:2,Potassium:2,Zinc:1,Manganese:2},b:{en:["Plant-based iron","Gut health","Heart health"],de:["Pflanzliches Eisen","Darmgesundheit","Herzgesundheit"]}},
   {en:"Chickpeas",de:"Kichererbsen",cat:"Legume",v:{B9:3,B6:2,B1:1},m:{Iron:2,Phosphorus:2,Manganese:2,Zinc:1},b:{en:["Plant-based protein","Gut health (prebiotic)","Heart health"],de:["Pflanzliches Protein","Darmgesundheit","Herzgesundheit"]}},
   {en:"Almonds",de:"Mandeln",cat:"Nut/Seed",v:{E:3,B2:2,B3:1},m:{Magnesium:3,Calcium:2,Phosphorus:2,Zinc:1},b:{en:["Vitamin E powerhouse","Bone health","Heart health"],de:["Vitamin-E-Kraftpaket","Knochengesundheit","Herzgesundheit"]}},
   {en:"Walnuts",de:"Walnüsse",cat:"Nut/Seed",v:{B6:1,E:1},m:{Magnesium:2,Phosphorus:2,Manganese:2},b:{en:["ALA omega-3","Brain health","Anti-inflammatory"],de:["ALA Omega-3","Gehirngesundheit","Entzündungshemmend"]}},
   {en:"Chia Seeds",de:"Chiasamen",cat:"Nut/Seed",v:{B1:1},m:{Calcium:3,Magnesium:3,Phosphorus:2,Iron:2},b:{en:["ALA omega-3","Bone health","Gut health (gel fiber)"],de:["ALA Omega-3","Knochengesundheit","Darmgesundheit"]}},
   {en:"Sesame Seeds",de:"Sesam",cat:"Nut/Seed",v:{B1:2,B6:1,E:1},m:{Calcium:3,Iron:3,Magnesium:2,Phosphorus:2,Zinc:2,Manganese:3,Copper:2},b:{en:["Highest calcium of all seeds","Sesamin (anti-inflammatory)","Iron powerhouse","Bone health"],de:["Meistes Kalzium aller Samen","Sesamin (entzündungshemmend)","Eisen-Kraftpaket","Knochengesundheit"]}},
-{en:"Tahini",de:"Tahini",cat:"Nut/Seed",v:{B1:2,B6:1,E:2},m:{Calcium:3,Iron:2,Magnesium:2,Phosphorus:2,Zinc:1,Copper:2,Manganese:2},b:{en:["Calcium-rich plant spread","Complete amino acid profile","Heart health","Bone health"],de:["Kalziumreicher Pflanzenaufstrich","Vollständiges Aminosäureprofil","Herzgesundheit","Knochengesundheit"]}},
-{en:"Flaxseeds",de:"Leinsamen",cat:"Nut/Seed",v:{B1:2,B6:1,E:1},m:{Magnesium:2,Phosphorus:2,Iron:1,Manganese:3},b:{en:["Richest ALA omega-3 plant source","Lignans (hormonal balance)","Gut health (mucilage fibre)","Anti-inflammatory"],de:["Reichste ALA Omega-3 Pflanzenquelle","Lignane (Hormonbalance)","Darmgesundheit (Schleimballaststoffe)","Entzündungshemmend"]}},
+  {en:"Tahini",de:"Tahini",cat:"Nut/Seed",v:{B1:2,B6:1,E:2},m:{Calcium:3,Iron:2,Magnesium:2,Phosphorus:2,Zinc:1,Copper:2,Manganese:2},b:{en:["Calcium-rich plant spread","Complete amino acid profile","Heart health","Bone health"],de:["Kalziumreicher Pflanzenaufstrich","Vollständiges Aminosäureprofil","Herzgesundheit","Knochengesundheit"]}},
+  {en:"Flaxseeds",de:"Leinsamen",cat:"Nut/Seed",v:{B1:2,B6:1,E:1},m:{Magnesium:2,Phosphorus:2,Iron:1,Manganese:3},b:{en:["Richest ALA omega-3 plant source","Lignans (hormonal balance)","Gut health (mucilage fibre)","Anti-inflammatory"],de:["Reichste ALA Omega-3 Pflanzenquelle","Lignane (Hormonbalance)","Darmgesundheit (Schleimballaststoffe)","Entzündungshemmend"]}},
   {en:"Sunflower Seeds",de:"Sonnenblumenkerne",cat:"Nut/Seed",v:{E:3,B1:2,B6:1,B9:1},m:{Selenium:3,Magnesium:2,Phosphorus:2,Zinc:1},b:{en:["Vitamin E and selenium","Anti-inflammatory","Immune support"],de:["Vitamin E und Selen","Entzündungshemmend","Immununterstützung"]}},
   {en:"Pumpkin Seeds",de:"Kürbiskerne",cat:"Nut/Seed",v:{K:1,E:1},m:{Zinc:3,Magnesium:3,Iron:2,Phosphorus:2},b:{en:["Highest zinc source","Prostate health","Sleep (tryptophan)"],de:["Reichste Zinkquelle","Prostatagesundheit","Schlaf (Tryptophan)"]}},
   {en:"Olive Oil",de:"Olivenöl",cat:"Fat/Oil",v:{E:3,K:2},m:{},b:{en:["Oleocanthal (anti-inflammatory)","Heart health","Fat-soluble vitamin absorption"],de:["Oleocanthal","Herzgesundheit","Fettlösliche Vitaminaufnahme"]}},
@@ -495,7 +497,7 @@ function useInstallPrompt(){
   useEffect(()=>{
     const standalone=window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true;
     const isMobile=/iphone|ipad|ipod|android/i.test(navigator.userAgent);
-if(!isMobile)return;
+    if(!isMobile)return;
     if(standalone)return;
     try{if(sessionStorage.getItem("wft-install-dismissed"))return;}catch{}
     const h=e=>{e.preventDefault();setEvt(e);};
@@ -513,6 +515,10 @@ function OfflineBanner({offline,visible}){
     <div style={{position:"fixed",bottom:0,left:0,right:0,zIndex:100,pointerEvents:"none",transition:"opacity 0.4s ease,transform 0.4s ease",opacity:visible?1:0,transform:visible?"translateY(0)":"translateY(100%)"}}>
       <div style={{background:offline?"#1f2937":"#14532d",borderTop:offline?"1px solid #374151":"1px solid #166534",color:offline?"#fde68a":"#86efac",fontSize:12,fontWeight:600,padding:"10px 20px",textAlign:"center",paddingBottom:"calc(10px + env(safe-area-inset-bottom))"}}>
         {offline?"⚡ Offline — your data is still saved":"✓ Back online"}
+      </div>
+      <div style={{textAlign:"center",padding:"16px 0 calc(16px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20}}>
+        <button onClick={()=>setShowImpressum(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>Impressum</button>
+        <button onClick={()=>setShowPrivacy(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Datenschutz":"Privacy Policy"}</button>
       </div>
     </div>
   );
@@ -774,6 +780,8 @@ export default function App(){
   const [toast,setToast]=useState(null);
   const [shownMS,setShownMS]=useState(new Set());
   const [confetti,setConfetti]=useState(false);
+  const [showImpressum,setShowImpressum]=useState(false);
+  const [showPrivacy,setShowPrivacy]=useState(false);
   const prevScore=useRef(0);
   const {offline,visible:offlineVisible}=useOffline();
   const {show:showInstall,install,dismiss:dismissInstall,isNative}=useInstallPrompt();
@@ -907,41 +915,133 @@ export default function App(){
   };
 
   return(
-    <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",paddingBottom:"calc(80px + env(safe-area-inset-bottom))"}}>
-      <style>{`*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}input::placeholder{color:#4b5563;}@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    <div className="nube-outer" style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif"}}>
+      <div className="nube-inner" style={{width:"100%",paddingBottom:"calc(80px + env(safe-area-inset-bottom))"}}>      <style>{`
+        *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
+        input::placeholder{color:#4b5563;}
+        @keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+        @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+        ::-webkit-scrollbar{display:none;}
+        *{scrollbar-width:none;-ms-overflow-style:none;}
+        @media(min-width:640px){
+          body{background:#030712;}
+          .nube-outer{
+            background:
+              radial-gradient(ellipse at 20% 20%, rgba(34,197,94,0.07) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(59,130,246,0.07) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 50%, rgba(139,92,246,0.04) 0%, transparent 70%),
+              #030712;
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+          }
+          .nube-inner{
+            width:100%;
+            max-width:520px;
+            background:#030712;
+            box-shadow:0 0 0 1px rgba(255,255,255,0.04), 0 32px 80px rgba(0,0,0,0.6);
+            position:relative;
+          }
+          .nube-inner::before{
+            content:'';
+            position:absolute;
+            inset:0;
+            border-left:1px solid rgba(255,255,255,0.04);
+            border-right:1px solid rgba(255,255,255,0.04);
+            pointer-events:none;
+            z-index:1;
+          }
+        }
+        @media(min-width:640px){
+          button:hover{opacity:0.85;transition:opacity 0.15s ease;}
+          .nube-food-suggestion:hover{background:#1f2937 !important;}
+          .nube-tab-btn:hover{background:rgba(255,255,255,0.06) !important;}
+          .nube-tab-btn.active:hover{background:#fff !important;}
+        }
+      `}</style>
 
       <Confetti active={confetti}/>
       {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
       {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added}/>}
       {selBenefit&&<BenefitModal benefit={selBenefit} lang={lang} onClose={()=>setSelBenefit(null)}/>}
       {showSynergyModal&&<SynergyModal lang={lang} foodObjs={foodObjs} addFood={addFood} onClose={()=>setShowSynergyModal(false)}/>}
-      <OfflineBanner offline={offline} visible={offlineVisible}/>
+      {showImpressum&&(
+        <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
+          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+          <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
+            <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+            <div style={{padding:"8px 20px 16px"}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+                <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>Impressum</h3>
+                <button onClick={()=>setShowImpressum(false)} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+              </div>
+              <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{`Angaben gemäß § 5 TMG\n\nLars Frädrich\nVeit-Stoß-Straße 64\n80687 München\n\nKontakt\nE-Mail: hello@nubetracker.com\n\nSteuernummer\n147/116/50491\n\nVerantwortlich für den Inhalt nach § 55 Abs. 2 RStV\nLars Frädrich\nVeit-Stoß-Straße 64\n80687 München`}</p>
+            </div>
+          </div>
+        </div>
+      )}
+      {showPrivacy&&(
+        <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowPrivacy(false)}>
+          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+          <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
+            <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+            <div style={{padding:"8px 20px 16px"}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+                <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>{lang==="de"?"Datenschutzerklärung":"Privacy Policy"}</h3>
+                <button onClick={()=>setShowPrivacy(false)} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+              </div>
+              {lang==="de"?(
+                <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{`1. Verantwortlicher\nLars Frädrich, Veit-Stoß-Straße 64, 80687 München\nE-Mail: hello@nubetracker.com\n\n2. Grundsätze der Datenverarbeitung\nWir verarbeiten personenbezogene Daten im Einklang mit der DSGVO und dem BDSG.\n\n3. Hosting und Server-Logs\nDiese Website wird gehostet von:\nVercel Inc., 340 Pine Street, Suite 701, San Francisco, CA 94104, USA\n\nBei jedem Seitenaufruf verarbeitet Vercel automatisch:\nIP-Adresse (anonymisiert), Browsertyp, Betriebssystem, Uhrzeit und Datum des Zugriffs, aufgerufene URL.\n\nRechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO\nSpeicherdauer: 30 Tage, danach automatische Löschung.\nDatentransfer in die USA auf Basis der EU-Standardvertragsklauseln gemäß Art. 46 Abs. 2 lit. c DSGVO.\nWeitere Infos: https://vercel.com/legal/privacy-policy\n\n4. Lokale Datenspeicherung (localStorage)\nAlle eingegebenen Lebensmitteldaten werden ausschließlich lokal auf deinem Gerät gespeichert. Diese Daten verlassen dein Gerät nicht und werden nicht an uns oder Dritte übermittelt.\nRechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO\n\n5. Analyse (Vercel Analytics)\nWir nutzen Vercel Analytics zur anonymisierten Analyse. Vercel Analytics setzt keine Cookies, erfasst keine personenbezogenen Daten und speichert keine IP-Adressen.\nRechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO\n\n6. Cookies\nDiese Website verwendet keine Cookies.\n\n7. Deine Rechte\nAuskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung (Art. 18 DSGVO), Widerspruch (Art. 21 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO)\n\n8. Beschwerderecht\nBayerisches Landesamt für Datenschutzaufsicht (BayLDA)\nPromenade 18, 91522 Ansbach\nwww.lda.bayern.de\n\n9. Stand: März 2026`}</p>
+              ):(
+                <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{`1. Controller\nLars Frädrich, Veit-Stoß-Straße 64, 80687 München, Germany\nEmail: hello@nubetracker.com\n\n2. Hosting and Server Logs\nHosted by: Vercel Inc., 340 Pine Street, Suite 701, San Francisco, CA 94104, USA\n\nOn each page visit Vercel automatically processes:\nIP address (anonymized), browser type, operating system, time and date of access, accessed URL.\n\nLegal basis: Art. 6 (1) lit. f GDPR\nRetention: 30 days, then automatic deletion.\nData transfer to the USA based on EU Standard Contractual Clauses pursuant to Art. 46 (2) lit. c GDPR.\nMore info: https://vercel.com/legal/privacy-policy\n\n3. Local Data Storage (localStorage)\nAll food data you enter is stored exclusively on your device. This data does not leave your device and is not transmitted to us or third parties.\nLegal basis: Art. 6 (1) lit. b GDPR\n\n4. Analytics (Vercel Analytics)\nWe use Vercel Analytics for anonymized analysis. Vercel Analytics does not set cookies, does not collect personal data and does not store IP addresses.\nLegal basis: Art. 6 (1) lit. f GDPR\n\n5. Cookies\nThis website does not use cookies.\n\n6. Your Rights\nAccess (Art. 15 GDPR), Rectification (Art. 16 GDPR), Erasure (Art. 17 GDPR), Restriction (Art. 18 GDPR), Object (Art. 21 GDPR), Portability (Art. 20 GDPR)\n\n7. Supervisory Authority\nBayerisches Landesamt für Datenschutzaufsicht (BayLDA)\nPromenade 18, 91522 Ansbach, Germany\nwww.lda.bayern.de\n\n8. Last updated: March 2026`}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       <InstallPrompt show={showInstall} onInstall={install} onDismiss={dismissInstall} isNative={isNative} lang={lang}/>
 
       <div style={{maxWidth:520,margin:"0 auto",padding:"0 16px"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"calc(16px + env(safe-area-inset-top))",paddingBottom:16}}>
           <div>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
-  <img src="/logopng.png" alt="Nube" style={{height:32,borderRadius:8}}/>
-  <h1 style={{margin:0,fontSize:18,fontWeight:900,color:"#fff"}}>{t.appTitle}</h1>
-</div>
+              <img
+                src="/logopng.png"
+                alt="Nube"
+                height={32}
+                style={{height:32,borderRadius:8,display:"block"}}
+                onError={e=>{
+                  e.target.style.display="none";
+                  e.target.nextSibling.style.display="flex";
+                }}
+              />
+              <div style={{display:"none",width:32,height:32,borderRadius:8,background:"linear-gradient(135deg,#22c55e,#10b981)",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9z" fill="rgba(255,255,255,0.25)"/>
+                  <path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4z" fill="white"/>
+                  <path d="M12 7v2M12 15v2M7 12h2M15 12h2" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <h1 style={{margin:0,fontSize:18,fontWeight:900,color:"#fff"}}>{t.appTitle}</h1>
+            </div>
             <p style={{margin:0,fontSize:12,color:"#4b5563"}}>{t.appSubtitle}</p>
           </div>
-          <button 
-  onClick={()=>setLang(l=>l==="en"?"de":"en")} 
-  title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
-  style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
-  {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
-</button>
+          <button
+            onClick={()=>setLang(l=>l==="en"?"de":"en")}
+            title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
+            style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+          </button>
         </div>
 
         <div style={{display:"flex",gap:8,marginBottom:20}}>
           {["today","history","insights"].map(tab=>(
-  <button key={tab} onClick={()=>setActiveTab(tab)}
-    style={{flex:1,minHeight:44,background:activeTab===tab?"#fff":"#111827",color:activeTab===tab?"#111":"#6b7280",border:activeTab===tab?"none":"1px solid #1f2937",borderRadius:14,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s ease"}}>
-    {tab==="today"?"💪 "+t.tabToday:tab==="history"?"🔥 "+t.tabHistory:"🔬 "+t.tabInsights}
-  </button>
-))}
+            <button key={tab} onClick={()=>setActiveTab(tab)}
+              style={{flex:1,minHeight:44,background:activeTab===tab?"#fff":"#111827",color:activeTab===tab?"#111":"#6b7280",border:activeTab===tab?"none":"1px solid #1f2937",borderRadius:14,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s ease"}}>
+              {tab==="today"?"💪 "+t.tabToday:tab==="history"?"🔥 "+t.tabHistory:"🔬 "+t.tabInsights}
+            </button>
+          ))}
         </div>
 
         <TabPane active={activeTab==="today"}>
@@ -1049,17 +1149,17 @@ export default function App(){
               <div style={{background:"#0f172a",borderRadius:20,padding:16,marginBottom:16}}>
                 <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
                 <div style={{display:"flex",gap:16,marginBottom:10,flexWrap:"wrap"}}>
-    {[["—","#374151",lang==="de"?"Nicht abgedeckt":"Not covered"],
-    ["~","#facc15",lang==="de"?"Spur vorhanden":"Trace amount"],
-    ["✓","#60a5fa",lang==="de"?"Gut abgedeckt":"Good coverage"],
-    ["✓✓","#4ade80",lang==="de"?"Sehr gut":"Excellent"]
-  ].map(([sym,col,label])=>(
-    <div key={sym} style={{display:"flex",alignItems:"center",gap:5}}>
-      <span style={{fontSize:12,fontWeight:700,color:col,minWidth:16}}>{sym}</span>
-      <span style={{fontSize:11,color:"#4b5563"}}>{label}</span>
-    </div>
-  ))}
-</div>
+                  {[["—","#374151",lang==="de"?"Nicht abgedeckt":"Not covered"],
+                    ["~","#facc15",lang==="de"?"Spur vorhanden":"Trace amount"],
+                    ["✓","#60a5fa",lang==="de"?"Gut abgedeckt":"Good coverage"],
+                    ["✓✓","#4ade80",lang==="de"?"Sehr gut":"Excellent"]
+                  ].map(([sym,col,label])=>(
+                    <div key={sym} style={{display:"flex",alignItems:"center",gap:5}}>
+                      <span style={{fontSize:12,fontWeight:700,color:col,minWidth:16}}>{sym}</span>
+                      <span style={{fontSize:11,color:"#4b5563"}}>{label}</span>
+                    </div>
+                  ))}
+                </div>
                 {ALL_VIT.map(v=><NutrientRow key={v} nk={v} type="vitamins"/>)}
                 <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",margin:"12px 0 8px"}}>{t.minerals}</p>
                 {ALL_MIN.map(m=><NutrientRow key={m} nk={m} type="minerals"/>)}
