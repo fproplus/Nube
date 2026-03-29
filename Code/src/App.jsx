@@ -2,9 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 const T = {
   en: {
-      </div>
-    </div>
-  );appTitle:"Nube", appSubtitle:"track or check the benefits of your nutrition",
+    appTitle:"Nube", appSubtitle:"track or check the benefits of your nutrition",
     searchPlaceholder:"Add a food... (e.g. chicken, spinach, turmeric)",
     tabToday:"Today", tabHistory:"Streaks", tabInsights:"Nutrition Check",
     vitamins:"Vitamins", minerals:"Minerals", activeBenefits:"Benefits",
