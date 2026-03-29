@@ -915,8 +915,8 @@ export default function App(){
   };
 
   return(
-    <div className="nube-outer" style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif"}}>
-      <div className="nube-inner" style={{width:"100%",paddingBottom:"calc(80px + env(safe-area-inset-bottom))"}}>      <style>{`
+        <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif"}}>
+      <div style={{width:"100%",paddingBottom:"calc(80px + env(safe-area-inset-bottom))"}}>      <style>{`
         *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
         input::placeholder{color:#4b5563;}
         @keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -960,7 +960,6 @@ export default function App(){
           .nube-tab-btn.active:hover{background:#fff !important;}
         }
       `}</style>
-
       <Confetti active={confetti}/>
       {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
       {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added}/>}
