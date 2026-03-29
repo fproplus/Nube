@@ -916,50 +916,7 @@ export default function App(){
 
   return(
         <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif"}}>
-      <div style={{width:"100%",paddingBottom:"calc(80px + env(safe-area-inset-bottom))"}}>      <style>{`
-        *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
-        input::placeholder{color:#4b5563;}
-        @keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-        @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-        ::-webkit-scrollbar{display:none;}
-        *{scrollbar-width:none;-ms-overflow-style:none;}
-        @media(min-width:640px){
-          body{background:#030712;}
-          .nube-outer{
-            background:
-              radial-gradient(ellipse at 20% 20%, rgba(34,197,94,0.07) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 80%, rgba(59,130,246,0.07) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 50%, rgba(139,92,246,0.04) 0%, transparent 70%),
-              #030712;
-            min-height:100vh;
-            display:flex;
-            justify-content:center;
-          }
-          .nube-inner{
-            width:100%;
-            max-width:520px;
-            background:#030712;
-            box-shadow:0 0 0 1px rgba(255,255,255,0.04), 0 32px 80px rgba(0,0,0,0.6);
-            position:relative;
-          }
-          .nube-inner::before{
-            content:'';
-            position:absolute;
-            inset:0;
-            border-left:1px solid rgba(255,255,255,0.04);
-            border-right:1px solid rgba(255,255,255,0.04);
-            pointer-events:none;
-            z-index:1;
-          }
-        }
-        @media(min-width:640px){
-          button:hover{opacity:0.85;transition:opacity 0.15s ease;}
-          .nube-food-suggestion:hover{background:#1f2937 !important;}
-          .nube-tab-btn:hover{background:rgba(255,255,255,0.06) !important;}
-          .nube-tab-btn.active:hover{background:#fff !important;}
-        }
-      `}</style>
+      <div style={{width:"100%",paddingBottom:"calc(80px + env(safe-area-inset-bottom))"}}>      <style>{`*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}input::placeholder{color:#4b5563;}@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}::-webkit-scrollbar{display:none;}*{scrollbar-width:none;-ms-overflow-style:none;}`}</style>
       <Confetti active={confetti}/>
       {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
       {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added}/>}
