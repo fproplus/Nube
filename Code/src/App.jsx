@@ -851,7 +851,40 @@ function EditDayModal({dayKey,lang,history,setHistory,todayAdded,setAdded,onClos
             </button>
           )}
 
-          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",l
+          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>
+            {lang==="de"?"Lebensmittel dieses Tages":"Foods this day"} ({localFoods.length})
+          </p>
+
+          <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:20}}>
+            {localFoods.map(k=>{
+              const f=FOOD_BY_EN[k];if(!f)return null;
+              const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};
+              return(
+                <div key={k} style={{display:"flex",alignItems:"center",gap:6,background:"#1f2937",border:"1px solid #374151",borderRadius:99,padding:"8px 12px"}}>
+                  <span style={{fontSize:11,padding:"2px 6px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:600}}>{(t.catNames[f.cat]||f.cat)[0]}</span>
+                  <span style={{fontSize:12,fontWeight:600,color:"#e5e7eb"}}>{f[lang]}</span>
+                  <button onClick={()=>removeLocal(k)} style={{minWidth:24,minHeight:24,background:"transparent",border:"none",color:"#4b5563",cursor:"pointer",padding:0,fontSize:13}}>✕</button>
+                </div>
+              );
+            })}
+            {localFoods.length===0&&(
+              <p style={{fontSize:12,color:"#4b5563"}}>{lang==="de"?"Keine Lebensmittel an diesem Tag":"No foods logged this day"}</p>
+            )}
+          </div>
+
+          <button onClick={saveDay}
+            style={{width:"100%",minHeight:44,background:"#22c55e",border:"none",borderRadius:14,fontSize:14,fontWeight:700,color:"#fff",cursor:"pointer",transition:"background 0.2s"}}
+            onMouseEnter={e=>e.currentTarget.style.background="#16a34a"}
+            onMouseLeave={e=>e.currentTarget.style.background="#22c55e"}>
+            {lang==="de"?"Speichern":"Save"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function usePullToRefresh(onRefresh){
 function usePullToRefresh(onRefresh){
   const startY=useRef(null);const [pulling,setPulling]=useState(0);const [refreshing,setRefreshing]=useState(false);
   const onTouchStart=e=>{if(window.scrollY===0)startY.current=e.touches[0].clientY;};
