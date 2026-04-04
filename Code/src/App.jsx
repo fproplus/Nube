@@ -754,6 +754,19 @@ function FoodTag({food,lang,onRemove,isNew}){
     </div>
   );
 }
+function getRecentFoods(history,todayKey,added){
+  const counts={};
+  for(let i=1;i<=7;i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const k=d.toISOString().split("T")[0];
+    (history[k]||[]).forEach(f=>{counts[f]=(counts[f]||0)+1;});
+  }
+  return Object.entries(counts)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([k])=>k)
+    .filter(k=>!added.includes(k)&&FOOD_BY_EN[k])
+    .slice(0,5);
+}
 function usePullToRefresh(onRefresh){
   const startY=useRef(null);const [pulling,setPulling]=useState(0);const [refreshing,setRefreshing]=useState(false);
   const onTouchStart=e=>{if(window.scrollY===0)startY.current=e.touches[0].clientY;};
@@ -1108,7 +1121,32 @@ export default function App(){
                 </div>
               )}
             </div>
-
+            {(()=>{
+              const recentFoods=getRecentFoods(history,todayKey(),added);
+              if(!recentFoods.length)return null;
+              return(
+                <div style={{marginBottom:12}}>
+                  <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8}}>
+                    {lang==="de"?"🕐 Zuletzt gegessen":"🕐 Recently eaten"}
+                  </p>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                    {recentFoods.map(k=>{
+                      const f=FOOD_BY_EN[k];
+                      const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};
+                      return(
+                        <button key={k} onClick={()=>addFood(k)}
+                          style={{fontSize:12,padding:"6px 12px",borderRadius:99,background:"#0f172a",border:"1px solid #1f2937",color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",gap:6,transition:"border-color 0.15s"}}
+                          onMouseEnter={e=>e.currentTarget.style.borderColor="#22c55e"}
+                          onMouseLeave={e=>e.currentTarget.style.borderColor="#1f2937"}>
+                          <span style={{fontSize:10,padding:"1px 5px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:600}}>{(T[lang].catNames[f.cat]||f.cat)[0]}</span>
+                          {f[lang]}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
             {added.length>0?(
               <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:16}}>
                 {foodObjs.map((f,i)=>(
