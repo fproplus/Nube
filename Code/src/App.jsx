@@ -750,7 +750,7 @@ function FoodTag({food,lang,onRemove,isNew}){
     <div style={{display:"flex",alignItems:"center",gap:6,background:"#1f2937",border:"1px solid #374151",borderRadius:99,padding:"8px 12px",transition:"opacity 0.2s ease,transform 0.2s ease",opacity:removing?0:1,transform:removing?"scale(0.7)":pop?"scale(1.12)":"scale(1)"}}>
       <span style={{fontSize:11,padding:"2px 6px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:600}}>{(T[lang].catNames[food.cat]||food.cat)[0]}</span>
       <span style={{fontSize:12,fontWeight:600,color:"#e5e7eb"}}>{food[lang]}</span>
-      <button onClick={()=>{setRemoving(true);setTimeout(()=>onRemove(food.en),200);}} style={{minWidth:24,minHeight:24,background:"transparent",border:"none",color:"#4b5563",cursor:"pointer",padding:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>✕</button>
+      <button onClick={()=>onRequestRemove(food.en)} style={{minWidth:24,minHeight:24,background:"transparent",border:"none",color:"#4b5563",cursor:"pointer",padding:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>✕</button>
     </div>
   );
 }
@@ -778,6 +778,7 @@ export default function App(){
   const [toast,setToast]=useState(null);
   const [shownMS,setShownMS]=useState(new Set());
   const [confetti,setConfetti]=useState(false);
+  const [confirmRemove,setConfirmRemove]=useState(null);
   const [showImpressum,setShowImpressum]=useState(false);
   const [showPrivacy,setShowPrivacy]=useState(false);
   const prevScore=useRef(0);
@@ -919,6 +920,31 @@ export default function App(){
       {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
       {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added}/>}
       {selBenefit&&<BenefitModal benefit={selBenefit} lang={lang} onClose={()=>setSelBenefit(null)}/>}
+          {confirmRemove&&(
+  <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setConfirmRemove(null)}>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:20,padding:"24px 20px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
+      <p style={{margin:"0 0 6px",fontSize:15,fontWeight:900,color:"#f9fafb"}}>
+        {lang==="de"?"Lebensmittel entfernen?":"Remove food?"}
+      </p>
+      <p style={{margin:"0 0 20px",fontSize:13,color:"#6b7280"}}>
+        {lang==="de"
+          ?`"${FOOD_BY_EN[confirmRemove]?.[lang]||confirmRemove}" aus dem heutigen Tag entfernen?`
+          :`Remove "${FOOD_BY_EN[confirmRemove]?.[lang]||confirmRemove}" from today?`}
+      </p>
+      <div style={{display:"flex",gap:10}}>
+        <button onClick={()=>setConfirmRemove(null)}
+          style={{flex:1,minHeight:44,background:"transparent",border:"1px solid #374151",borderRadius:12,fontSize:13,fontWeight:600,color:"#9ca3af",cursor:"pointer"}}>
+          {lang==="de"?"Abbrechen":"Cancel"}
+        </button>
+        <button onClick={()=>{removeFood(confirmRemove);setConfirmRemove(null);}}
+          style={{flex:1,minHeight:44,background:"#ef4444",border:"none",borderRadius:12,fontSize:13,fontWeight:700,color:"#fff",cursor:"pointer"}}>
+          {lang==="de"?"Entfernen":"Remove"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
       {showSynergyModal&&<SynergyModal lang={lang} foodObjs={foodObjs} addFood={addFood} onClose={()=>setShowSynergyModal(false)}/>}
       {showImpressum&&(
         <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
@@ -1087,7 +1113,7 @@ export default function App(){
               <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:16}}>
                 {foodObjs.map((f,i)=>(
                   <div key={f.en} style={{animation:`fadeSlideIn 0.3s ease ${i*0.03}s both`}}>
-                    <FoodTag food={f} lang={lang} onRemove={removeFood} isNew={f.en===newKey}/>
+                    <FoodTag food={f} lang={lang} onRemove={removeFood} onRequestRemove={(key)=>setConfirmRemove(key)} isNew={f.en===newKey}/>
                   </div>
                 ))}
               </div>
