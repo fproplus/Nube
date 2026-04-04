@@ -791,6 +791,67 @@ function getRecentFoods(history,todayKey,added){
     .filter(k=>!added.includes(k)&&FOOD_BY_EN[k])
     .slice(0,5);
 }
+function EditDayModal({dayKey,lang,history,setHistory,todayAdded,setAdded,onClose}){
+  const isToday=dayKey===todayKey();
+  const foods=(history[dayKey]||[]);
+  const [localFoods,setLocalFoods]=useState([...foods]);
+  const [closing,setClosing]=useState(false);
+  const sheetRef=useRef(null);
+  const startY=useRef(null),curY=useRef(0);
+  const t=T[lang];
+  const onTS=e=>{startY.current=e.touches[0].clientY;};
+  const onTM=e=>{const dy=e.touches[0].clientY-startY.current;if(dy<0)return;curY.current=dy;if(sheetRef.current)sheetRef.current.style.transform=`translateY(${dy}px)`;};
+  const onTE=()=>{if(curY.current>80){setClosing(true);setTimeout(onClose,200);}else if(sheetRef.current)sheetRef.current.style.transform="translateY(0)";curY.current=0;};
+
+  const removeLocal=key=>setLocalFoods(p=>p.filter(k=>k!==key));
+
+  const saveDay=()=>{
+    const nh={...history,[dayKey]:localFoods};
+    setHistory(nh);
+    try{localStorage.setItem("wft-hist4",JSON.stringify(nh));}catch{}
+    if(isToday)setAdded(localFoods);
+    onClose();
+  };
+
+  const copyToToday=()=>{
+    const merged=[...new Set([...todayAdded,...localFoods])];
+    setAdded(merged);
+    const nh={...history,[todayKey()]:merged};
+    setHistory(nh);
+    try{localStorage.setItem("wft-hist4",JSON.stringify(nh));}catch{}
+    try{localStorage.setItem("wft-today4",JSON.stringify({date:todayKey(),foods:merged}));}catch{}
+    onClose();
+  };
+
+  const d=new Date(dayKey);
+  const dateLabel=t.dayLabel(d);
+
+  return(
+    <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={onClose}>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+      <div ref={sheetRef} onClick={e=>e.stopPropagation()} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
+        style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",transition:closing?"transform 0.2s ease":"none",maxHeight:"85vh",overflowY:"auto"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+        <div style={{padding:"8px 20px 16px"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+            <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>✏️ {dateLabel}</h3>
+            <button onClick={onClose} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+          </div>
+
+          {!isToday&&(
+            <button onClick={copyToToday}
+              style={{width:"100%",background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:14,padding:"12px 16px",marginBottom:16,cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"background 0.2s"}}
+              onMouseEnter={e=>e.currentTarget.style.background="rgba(34,197,94,0.2)"}
+              onMouseLeave={e=>e.currentTarget.style.background="rgba(34,197,94,0.1)"}>
+              <span style={{fontSize:18}}>📋</span>
+              <div style={{textAlign:"left"}}>
+                <p style={{margin:0,fontSize:13,fontWeight:700,color:"#4ade80"}}>{lang==="de"?"Auf heute übertragen":"Copy to Today"}</p>
+                <p style={{margin:"2px 0 0",fontSize:11,color:"#6b7280"}}>{lang==="de"?"Alle Foods dieses Tages zu heute hinzufügen":"Add all foods from this day to today"}</p>
+              </div>
+            </button>
+          )}
+
+          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",l
 function usePullToRefresh(onRefresh){
   const startY=useRef(null);const [pulling,setPulling]=useState(0);const [refreshing,setRefreshing]=useState(false);
   const onTouchStart=e=>{if(window.scrollY===0)startY.current=e.touches[0].clientY;};
@@ -816,6 +877,7 @@ export default function App(){
   const [shownMS,setShownMS]=useState(new Set());
   const [confetti,setConfetti]=useState(false);
   const [confirmRemove,setConfirmRemove]=useState(null);
+  const [editDay,setEditDay]=useState(null);
   const [showImpressum,setShowImpressum]=useState(false);
   const [showPrivacy,setShowPrivacy]=useState(false);
   const prevScore=useRef(0);
@@ -957,6 +1019,7 @@ export default function App(){
       {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
       {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added}/>}
       {selBenefit&&<BenefitModal benefit={selBenefit} lang={lang} onClose={()=>setSelBenefit(null)}/>}
+      {editDay&&<EditDayModal dayKey={editDay} lang={lang} history={history} setHistory={setHistory} todayAdded={added} setAdded={setAdded} onClose={()=>setEditDay(null)}/>}
           {confirmRemove&&(
   <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setConfirmRemove(null)}>
     <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
@@ -1265,7 +1328,9 @@ export default function App(){
               const foods=history[key]||[];if(!foods.length)return null;
               const c=getPowerColor(s);
               return(
-                <div key={key} style={{background:"#0f172a",borderRadius:16,padding:"12px 16px",border:isToday?"1px solid #065f46":"1px solid #111827"}}>
+                <div key={key} onClick={()=>setEditDay(key)} style={{background:"#0f172a",borderRadius:16,padding:"12px 16px",border:isToday?"1px solid #065f46":"1px solid #111827",cursor:"pointer",transition:"border-color 0.15s"}}
+                onMouseEnter={e=>e.currentTarget.style.borderColor="#374151"}
+                onMouseLeave={e=>e.currentTarget.style.borderColor=isToday?"#065f46":"#111827"}>
                   <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
                     <span style={{fontSize:13,fontWeight:600,color:"#d1d5db"}}>{t.dayLabel(d)}{isToday?" — "+t.todayMark:""}</span>
                     <span style={{fontSize:13,fontWeight:900,color:c.fill}}>{s}pts</span>
