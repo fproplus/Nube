@@ -769,6 +769,15 @@ function FoodTag({food,lang,onRemove,isNew}){
     </div>
   );
 }
+function getRotatedSuggestions(goal,lang,added,dateKey){
+  const allMatching=FOODS.filter(f=>
+    (f.b[lang]||[]).some(b=>goal.keywords.some(kw=>b.toLowerCase().includes(kw.toLowerCase())))
+  );
+  const seed=dateKey.replace(/-/g,"");
+  const offset=parseInt(seed.slice(-3))%allMatching.length;
+  const rotated=[...allMatching.slice(offset),...allMatching.slice(0,offset)];
+  return rotated.slice(0,4);
+}
 function getRecentFoods(history,todayKey,added){
   const counts={};
   for(let i=1;i<=7;i++){
@@ -1306,7 +1315,7 @@ export default function App(){
                   <div>
                     <p style={{fontSize:11,color:"#4b5563",fontWeight:600,marginBottom:6,textTransform:"uppercase",letterSpacing:"0.05em"}}>{lang==="de"?"Tipp — Noch heute hinzufügen:":"Tip — Add today:"}</p>
                     <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
-                      {FOODS.filter(f=>(f.b[lang]||[]).some(b=>goal.keywords.some(kw=>b.toLowerCase().includes(kw.toLowerCase())))).slice(0,4).map(f=>{
+                      {getRotatedSuggestions(goal,lang,added,todayKey()).map(f=>{
                         const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};
                         return <button key={f.en} onClick={()=>addFood(f.en)} style={{fontSize:11,padding:"3px 10px",borderRadius:99,background:"#1f2937",border:"1px dashed #374151",color:"#9ca3af",fontWeight:600,cursor:"pointer"}}>+ {f[lang]}</button>;
                       })}
