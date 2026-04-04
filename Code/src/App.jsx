@@ -885,7 +885,6 @@ function EditDayModal({dayKey,lang,history,setHistory,todayAdded,setAdded,onClos
 }
 
 function usePullToRefresh(onRefresh){
-function usePullToRefresh(onRefresh){
   const startY=useRef(null);const [pulling,setPulling]=useState(0);const [refreshing,setRefreshing]=useState(false);
   const onTouchStart=e=>{if(window.scrollY===0)startY.current=e.touches[0].clientY;};
   const onTouchMove=e=>{if(startY.current===null)return;setPulling(Math.min(Math.max(0,e.touches[0].clientY-startY.current),72));};
