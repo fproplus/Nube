@@ -1266,16 +1266,7 @@ export default function App(){
         </TabPane>
       </div>
 
-      {added.length>0&&(
-        <div style={{position:"fixed",bottom:"calc(24px + env(safe-area-inset-bottom))",right:20,zIndex:50,animation:"fadeSlideIn 0.3s ease both"}}>
-          <button onClick={clearAll}
-            style={{minWidth:44,minHeight:44,background:"#1f2937",border:"1px solid #374151",borderRadius:99,padding:"10px 16px",fontSize:12,fontWeight:700,color:"#9ca3af",cursor:"pointer",boxShadow:"0 4px 20px rgba(0,0,0,0.5)",display:"flex",alignItems:"center",gap:6,transition:"all 0.2s"}}
-            onMouseEnter={e=>{e.currentTarget.style.background="#374151";e.currentTarget.style.color="#f87171";}}
-            onMouseLeave={e=>{e.currentTarget.style.background="#1f2937";e.currentTarget.style.color="#9ca3af";}}>
-            🗑 {t.clearAll}
-          </button>
-        </div>
-      )}
+      
     </div>
   );
 }
