@@ -529,18 +529,22 @@ function useInstallPrompt(){
   return{show,install,dismiss,isNative:!!evt};
 }
 
-function OfflineBanner({offline,visible}){
+
+      function OfflineBanner({offline,visible}){
   return(
     <div style={{position:"fixed",bottom:0,left:0,right:0,zIndex:100,pointerEvents:"none",transition:"opacity 0.4s ease,transform 0.4s ease",opacity:visible?1:0,transform:visible?"translateY(0)":"translateY(100%)"}}>
       <div style={{background:offline?"#1f2937":"#14532d",borderTop:offline?"1px solid #374151":"1px solid #166534",color:offline?"#fde68a":"#86efac",fontSize:12,fontWeight:600,padding:"10px 20px",textAlign:"center",paddingBottom:"calc(10px + env(safe-area-inset-bottom))"}}>
         {offline?"⚡ Offline — your data is still saved":"✓ Back online"}
       </div>
-      <div style={{textAlign:"center",padding:"16px 0 calc(16px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20}}>
+      {/* Footer */}
+      <div style={{textAlign:"center",padding:"24px 0 calc(24px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20}}>
         <button onClick={()=>setShowImpressum(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>Impressum</button>
         <button onClick={()=>setShowPrivacy(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Datenschutz":"Privacy Policy"}</button>
       </div>
     </div>
   );
+}
+
 }
 function InstallPrompt({show,onInstall,onDismiss,isNative,lang}){
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
