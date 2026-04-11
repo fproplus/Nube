@@ -545,7 +545,6 @@ function useInstallPrompt(){
   );
 }
 
-}
 function InstallPrompt({show,onInstall,onDismiss,isNative,lang}){
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
   const de=lang==="de";
