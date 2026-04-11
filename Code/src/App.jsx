@@ -537,7 +537,7 @@ function useInstallPrompt(){
         {offline?"⚡ Offline — your data is still saved":"✓ Back online"}
       </div>
       {/* Footer */}
-      <div style={{textAlign:"center",padding:"24px 0 calc(24px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20}}>
+    <div style={{marginTop:"auto",textAlign:"center",padding:"24px 0 calc(24px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20}}>
         <button onClick={()=>setShowImpressum(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>Impressum</button>
         <button onClick={()=>setShowPrivacy(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Datenschutz":"Privacy Policy"}</button>
       </div>
@@ -1054,7 +1054,7 @@ export default function App(){
   };
 
   return(
-        <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif"}}>
+        <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",display:"flex",flexDirection:"column"}}>
       <style>{`*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}input::placeholder{color:#4b5563;}@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}::-webkit-scrollbar{display:none;}*{scrollbar-width:none;-ms-overflow-style:none;}`}</style>
       <Confetti active={confetti}/>
       {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
