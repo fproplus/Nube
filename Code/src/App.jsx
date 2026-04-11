@@ -537,7 +537,7 @@ function useInstallPrompt(){
         {offline?"⚡ Offline — your data is still saved":"✓ Back online"}
       </div>
       {/* Footer */}
-    <div style={{marginTop:"auto",textAlign:"center",padding:"24px 0 calc(24px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20}}>
+    <div style={{position:"fixed",bottom:0,left:0,right:0,textAlign:"center",padding:"12px 0 calc(12px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20,background:"#030712",borderTop:"1px solid #111827",zIndex:40}}>
         <button onClick={()=>setShowImpressum(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>Impressum</button>
         <button onClick={()=>setShowPrivacy(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Datenschutz":"Privacy Policy"}</button>
       </div>
