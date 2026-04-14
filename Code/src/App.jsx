@@ -915,6 +915,8 @@ export default function App(){
   const [editDay,setEditDay]=useState(null);
   const [showImpressum,setShowImpressum]=useState(false);
   const [showPrivacy,setShowPrivacy]=useState(false);
+  const [showContact,setShowContact]=useState(false);
+  const [showAbout,setShowAbout]=useState(false);
   const prevScore=useRef(0);
   const {offline,visible:offlineVisible}=useOffline();
   const {show:showInstall,install,dismiss:dismissInstall,isNative}=useInstallPrompt();
@@ -1092,6 +1094,36 @@ export default function App(){
                 <button onClick={()=>setShowImpressum(false)} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
               </div>
               <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{`Angaben gemäß § 5 TMG\n\nLars Frädrich\nVeit-Stoß-Straße 64\n80687 München\n\nKontakt\nE-Mail: hello@nubetracker.com\n\nSteuernummer\n147/116/50491\n\nVerantwortlich für den Inhalt nach § 55 Abs. 2 RStV\nLars Frädrich\nVeit-Stoß-Straße 64\n80687 München`}</p>
+            </div>
+          </div>
+        </div>
+      )}
+      {showContact&&(
+  <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowContact(false)}>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+    <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
+      <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+      <div style={{padding:"8px 20px 16px"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+          <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>{lang==="de"?"Kontakt":"Contact"}</h3>
+          <button onClick={()=>setShowContact(false)} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+        </div>
+        <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{lang==="de"?`Schreib uns\n\nWir freuen uns ueber dein Feedback, Fehlermeldungen oder einfach eine Nachricht.\n\nE-Mail: hello@nubetracker.com\n\nAntwortzeit: Wir antworten in der Regel innerhalb von 48 Stunden.`:`Get in touch\n\nWe would love to hear from you - whether it is feedback, a bug report, or just to say hello.\n\nEmail: hello@nubetracker.com\n\nResponse time: We aim to reply within 48 hours.`}</p>
+      </div>
+    </div>
+  </div>
+)}
+      {showAbout&&(
+        <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowAbout(false)}>
+          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+          <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
+            <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+            <div style={{padding:"8px 20px 16px"}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+                <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>{lang==="de"?"Ueber Nube":"About Nube"}</h3>
+                <button onClick={()=>setShowAbout(false)} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+              </div>
+              <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{lang==="de"?`Nube - Nutrition Benefits\n\nNube hilft dir dabei, deine Vollwerternaehrung zu tracken und Naehrstoffsynergien zwischen Lebensmitteln zu entdecken.\n\nIm Gegensatz zu Kalorientrackern konzentriert sich Nube auf das was wirklich zaehlt - Vitamine, Mineralstoffe und die wissenschaftlich belegten Wechselwirkungen zwischen Lebensmitteln.\n\nGebaut mit in Muenchen.\n\nVersion 1.0\nhello@nubetracker.com\nnubetracker.com`:`Nube - Nutrition Benefits\n\nNube helps you track your whole food intake and discover nutritional synergies between foods.\n\nUnlike calorie counters, Nube focuses on what really matters - vitamins, minerals and the science-backed interactions between foods that maximise their benefits.\n\nBuilt with in Munich.\n\nVersion 1.0\nhello@nubetracker.com\nnubetracker.com`}</p>
             </div>
           </div>
         </div>
@@ -1431,6 +1463,8 @@ export default function App(){
      <div style={{textAlign:"center",padding:"24px 0 calc(24px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20}}>
         <button onClick={()=>setShowImpressum(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>Impressum</button>
         <button onClick={()=>setShowPrivacy(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Datenschutz":"Privacy Policy"}</button>
+        <button onClick={()=>setShowContact(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Kontakt":"Contact"}</button>
+        <button onClick={()=>setShowAbout(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Ueber uns":"About"}</button>
       </div> 
     </div>
   );
