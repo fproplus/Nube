@@ -8,7 +8,7 @@ if (COMING_SOON && window.location.hostname === 'nubetracker.com') {
 
 const T = {
   en: {
-    appTitle:"Nube", appSubtitle:"track or check the benefits of your nutrition",
+    appTitle:"Nube", appSubtitle:"What food can do.",
     searchPlaceholder:"Add a food... (e.g. chicken, spinach, turmeric)",
     tabToday:"Today", tabHistory:"Streaks", tabInsights:"Nutrition Check",
     vitamins:"Vitamins", minerals:"Minerals", activeBenefits:"Benefits",
@@ -55,7 +55,7 @@ const T = {
     benefitDisclaimer:"ℹ️ This is general nutritional information, not medical advice.",
   },
   de: {
-    appTitle:"Nube", appSubtitle:"tracke oder checke die Benefits deiner Ernährung",
+    appTitle:"Nube", appSubtitle:"What food can do.",
     searchPlaceholder:"Lebensmittel... (z.B. Hähnchen, Spinat, Kurkuma)",
     tabToday:"Heute", tabHistory:"Streak", tabInsights:"Nährwert-Check",
     vitamins:"Vitamine", minerals:"Mineralstoffe", activeBenefits:"Vorteile",
@@ -1156,7 +1156,24 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
             {isDE?"Jetzt tracken — kostenlos →":"Start tracking — it's free →"}
           </button>
         </div>
-
+        {/* BUY ME A COFFEE */}
+        <div style={{borderTop:"1px solid #111827",padding:"32px 16px",textAlign:"center"}}>
+          <div style={{maxWidth:360,margin:"0 auto"}}>
+            <p style={{margin:"0 0 8px",fontSize:16,fontWeight:800,color:"#f9fafb"}}>
+              {isDE?"Nube ist kostenlos — und bleibt es auch.":"Nube is free — and always will be."}
+            </p>
+            <p style={{margin:"0 0 20px",fontSize:13,color:"#6b7280",lineHeight:1.6}}>
+              {isDE?"Wenn es dir hilft besser zu essen, kannst du uns einen Kaffee ausgeben. Kein Druck, nur Liebe. ☕":"If it helps you eat better, you can buy us a coffee. No pressure, just love. ☕"}
+            </p>
+            <button
+              onClick={()=>window.open("https://buymeacoffee.com/DEIN_LINK","_blank")}
+              style={{background:"#1f2937",border:"1px solid #374151",borderRadius:99,padding:"12px 24px",fontSize:14,fontWeight:700,color:"#d1d5db",cursor:"pointer",transition:"background 0.2s"}}
+              onMouseEnter={e=>e.currentTarget.style.background="#374151"}
+              onMouseLeave={e=>e.currentTarget.style.background="#1f2937"}>
+              {isDE?"☕ Einen Kaffee ausgeben":"☕ Buy us a coffee"}
+            </button>
+          </div>
+        </div>
         {/* FOOTER */}
         <div style={{display:"flex",justifyContent:"center",flexWrap:"wrap",gap:16,paddingBottom:"calc(16px + env(safe-area-inset-bottom))"}}>
           {[
@@ -1819,6 +1836,7 @@ export default function App(){
         <button onClick={()=>setShowPrivacy(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Datenschutz":"Privacy Policy"}</button>
         <button onClick={()=>setShowContact(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Kontakt":"Contact"}</button>
         <button onClick={()=>setShowAbout(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Ueber uns":"About"}</button>
+        <button onClick={()=>window.open("https://buymeacoffee.com/DEIN_LINK","_blank")} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"☕ Unterstützen":"☕ Support"}</button>
       </div> 
     </div>
   );
