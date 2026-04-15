@@ -886,6 +886,162 @@ function EditDayModal({dayKey,lang,history,setHistory,todayAdded,setAdded,onClos
     </div>
   );
 }
+function AppDemo({lang}){
+  const isDE=lang==="de";
+  const [step,setStep]=useState(0);
+  const [typed,setTyped]=useState("");
+  const [tags,setTags]=useState([]);
+  const [score,setScore]=useState(0);
+  const [synergies,setSynergies]=useState([]);
+  const [fadeOut,setFadeOut]=useState(false);
+
+  const powerLabels=isDE
+    ?["Ruhetag 😴","Anfang gemacht 🌱","Aufbauend 💧","Gute Basis 🌿","Starker Tag 💪","Kraftpaket ⚡","Elite Fuel 🏆"]
+    :["Rest Day 😴","Getting Started 🌱","Building Up 💧","Solid Foundation 🌿","Strong Day 💪","Powerhouse ⚡","Elite Fuel 🏆"];
+
+  const getPowerIdx=s=>s===0?0:s<20?1:s<40?2:s<55?3:s<70?4:s<85?5:6;
+  const getRingColor=s=>{
+    if(s<20)return"#9ca3af";
+    if(s<40)return"#22c55e";
+    if(s<70)return"#3b82f6";
+    return"#8b5cf6";
+  };
+
+  const typeWord=useCallback((word,onDone)=>{
+    let i=0;
+    setTyped("");
+    const iv=setInterval(()=>{
+      i++;
+      setTyped(word.slice(0,i));
+      if(i>=word.length){clearInterval(iv);setTimeout(onDone,400);}
+    },80);
+    return()=>clearInterval(iv);
+  },[]);
+
+  useEffect(()=>{
+    let cancelled=false;
+    const run=async()=>{
+      setStep(0);setTyped("");setTags([]);setScore(0);setSynergies([]);setFadeOut(false);
+      await new Promise(r=>setTimeout(r,1000));
+      if(cancelled)return;
+
+      // Step 2 — type Spinach
+      await new Promise(r=>typeWord(isDE?"Spinat":"Spinach",r));
+      if(cancelled)return;
+
+      // Step 3 — add Spinach
+      setTyped("");
+      setTags([{emoji:"🥬",label:isDE?"Spinat":"Spinach",bg:"#dcfce7",color:"#15803d"}]);
+      setScore(28);
+      await new Promise(r=>setTimeout(r,1000));
+      if(cancelled)return;
+
+      // Step 4 — type Lemon
+      await new Promise(r=>typeWord(isDE?"Zitrone":"Lemon",r));
+      if(cancelled)return;
+
+      // Step 5 — add Lemon + synergy
+      setTyped("");
+      setTags(p=>[...p,{emoji:"🍋",label:isDE?"Zitrone":"Lemon",bg:"#ffedd5",color:"#c2410c"}]);
+      setScore(52);
+      setSynergies([{
+        title:isDE?"⚡ Synergie! Eisenaufnahme x4":"⚡ Synergy unlocked! Iron absorption x4",
+        desc:isDE?"Vitamin C aus der Zitrone maximiert die Eisenaufnahme":"Vitamin C from lemon supercharges iron absorption"
+      }]);
+      await new Promise(r=>setTimeout(r,1500));
+      if(cancelled)return;
+
+      // Step 6 — type Turmeric
+      await new Promise(r=>typeWord(isDE?"Kurkuma":"Turmeric",r));
+      if(cancelled)return;
+
+      // Step 7 — add Turmeric
+      setTyped("");
+      setTags(p=>[...p,{emoji:"🌿",label:isDE?"Kurkuma":"Turmeric",bg:"#ede9fe",color:"#6d28d9"}]);
+      setScore(71);
+      await new Promise(r=>setTimeout(r,1000));
+      if(cancelled)return;
+
+      // Step 8 — type Black Pepper
+      await new Promise(r=>typeWord(isDE?"Schwarzer Pfeffer":"Black Pepper",r));
+      if(cancelled)return;
+
+      // Step 9 — add Black Pepper + synergy
+      setTyped("");
+      setTags(p=>[...p,{emoji:"🌶️",label:isDE?"Schwarzer Pfeffer":"Black Pepper",bg:"#ede9fe",color:"#6d28d9"}]);
+      setScore(82);
+      setSynergies(p=>[...p,{
+        title:isDE?"⚡ Synergie! Curcumin x20":"⚡ Synergy unlocked! Curcumin x20",
+        desc:isDE?"Schwarzer Pfeffer steigert Curcumin-Aufnahme um 2000%":"Black pepper increases curcumin absorption by 2000%"
+      }]);
+      await new Promise(r=>setTimeout(r,3000));
+      if(cancelled)return;
+
+      // Step 11 — fade out and reset
+      setFadeOut(true);
+      await new Promise(r=>setTimeout(r,800));
+      if(cancelled)return;
+    };
+    run().then(()=>{if(!cancelled)run();});
+    return()=>{cancelled=true;};
+  },[lang]);
+
+  const ringColor=getRingColor(score);
+  const r=34,circ=2*Math.PI*r,dash=(score/100)*circ;
+
+  return(
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",marginBottom:24}}>
+      <div style={{opacity:fadeOut?0:1,transition:"opacity 0.8s ease",width:"100%",maxWidth:280,background:"#0f172a",border:"1px solid #1f2937",borderRadius:28,padding:16,boxShadow:"0 0 40px rgba(34,197,94,0.1)"}}>
+
+        {/* Mini score ring */}
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
+          <div style={{position:"relative",width:80,height:80,flexShrink:0}}>
+            <svg style={{width:"100%",height:"100%",transform:"rotate(-90deg)"}} viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r={r} fill="none" stroke="#1f2937" strokeWidth="7"/>
+              <circle cx="40" cy="40" r={r} fill="none" stroke={ringColor} strokeWidth="7"
+                strokeDasharray={`${dash} ${circ-dash}`} strokeLinecap="round"
+                style={{transition:"stroke-dasharray 0.8s ease,stroke 0.5s ease"}}/>
+            </svg>
+            <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+              <span style={{fontSize:16,fontWeight:900,color:ringColor,lineHeight:1}}>{score}</span>
+              <span style={{fontSize:8,color:"#6b7280"}}>/ 100</span>
+            </div>
+          </div>
+          <div style={{flex:1}}>
+            <p style={{margin:0,fontSize:11,fontWeight:700,color:ringColor}}>{powerLabels[getPowerIdx(score)]}</p>
+            <p style={{margin:"4px 0 0",fontSize:10,color:"#4b5563"}}>{isDE?"Heutiger Score":"Today's score"}</p>
+          </div>
+        </div>
+
+        {/* Search bar */}
+        <div style={{background:"#111827",border:"1px solid #374151",borderRadius:10,padding:"8px 12px",marginBottom:10,fontSize:12,color:typed?"#fff":"#4b5563",minHeight:34,display:"flex",alignItems:"center"}}>
+          {typed||<span style={{color:"#374151"}}>{isDE?"Lebensmittel hinzufügen...":"Add a food..."}</span>}
+          {typed&&<span style={{opacity:1,animation:"blink 1s infinite",marginLeft:1}}>|</span>}
+        </div>
+
+        {/* Food tags */}
+        {tags.length>0&&(
+          <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:10}}>
+            {tags.map((tag,i)=>(
+              <span key={i} style={{fontSize:10,padding:"3px 8px",borderRadius:99,background:tag.bg,color:tag.color,fontWeight:700,animation:"fadeSlideIn 0.3s ease both"}}>
+                {tag.emoji} {tag.label}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Synergy badges */}
+        {synergies.map((syn,i)=>(
+          <div key={i} style={{background:"rgba(120,53,15,0.4)",border:"1px solid rgba(180,83,9,0.4)",borderRadius:10,padding:"8px 10px",marginBottom:6,animation:"fadeSlideIn 0.4s ease both"}}>
+            <p style={{margin:"0 0 3px",fontSize:10,fontWeight:700,color:"#fbbf24"}}>{syn.title}</p>
+            <p style={{margin:0,fontSize:9,color:"#6b7280",lineHeight:1.4}}>{syn.desc}</p>
+          </div>
+        ))}
+      </div>
+      <style>{`@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}`}</style>
+    </div>
+  );
+}
 function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setShowContact,setShowAbout}){
   const isDE=lang==="de";
   return(
@@ -946,7 +1102,13 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
             ))}
           </div>
         </div>
-
+        {/* APP DEMO */}
+        <div className="land-section" style={{animationDelay:"0.25s",marginBottom:24}}>
+          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:12}}>
+            {isDE?"Sieh es in Aktion":"See it in action"}
+          </p>
+          <AppDemo lang={lang}/>
+        </div>
         {/* FEATURE CARDS */}
         <div className="land-section" style={{animationDelay:"0.3s",marginBottom:24}}>
           {[
