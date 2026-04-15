@@ -991,7 +991,7 @@ function AppDemo({lang}){
 
   return(
     <div style={{display:"flex",flexDirection:"column",alignItems:"center",marginBottom:24}}>
-      <div style={{opacity:fadeOut?0:1,transition:"opacity 0.8s ease",width:"100%",maxWidth:280,background:"#0f172a",border:"1px solid #1f2937",borderRadius:28,padding:16,boxShadow:"0 0 40px rgba(34,197,94,0.1)"}}>
+      <div style={{opacity:fadeOut?0:1,transition:"opacity 0.8s ease",width:"100%",maxWidth:280,minHeight:280,background:"#0f172a",border:"1px solid #1f2937",borderRadius:28,padding:16,boxShadow:"0 0 40px rgba(34,197,94,0.1)"}}>
 
         {/* Mini score ring */}
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
@@ -1338,7 +1338,56 @@ export default function App(){
       </button>
     );
   };
-  if(showLanding)return <LandingPage lang={lang} setLang={setLang} onEnter={()=>setShowLanding(false)} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>;
+  if(showLanding)return(
+  <>
+    <LandingPage lang={lang} setLang={setLang} onEnter={()=>setShowLanding(false)} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>
+    {showImpressum&&(
+      <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+        <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
+          <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+          <div style={{padding:"8px 20px 16px"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+              <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>Impressum</h3>
+              <button onClick={()=>setShowImpressum(false)} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer"}}>✕</button>
+            </div>
+            <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{`Angaben gemäß § 5 TMG\n\nLars Frädrich\nVeit-Stoß-Straße 64\n80687 München\n\nKontakt\nE-Mail: hello@nubetracker.com\n\nSteuernummer\n147/116/50491\n\nVerantwortlich für den Inhalt nach § 55 Abs. 2 RStV\nLars Frädrich\nVeit-Stoß-Straße 64\n80687 München`}</p>
+          </div>
+        </div>
+      </div>
+    )}
+    {showPrivacy&&(
+      <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowPrivacy(false)}>
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+        <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
+          <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+          <div style={{padding:"8px 20px 16px"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+              <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>{lang==="de"?"Datenschutzerklärung":"Privacy Policy"}</h3>
+              <button onClick={()=>setShowPrivacy(false)} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer"}}>✕</button>
+            </div>
+            <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{lang==="de"?`Datenschutzinhalt DE`:`Privacy content EN`}</p>
+          </div>
+        </div>
+      </div>
+    )}
+    {showContact&&(
+      <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowContact(false)}>
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+        <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
+          <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+          <div style={{padding:"8px 20px 16px"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+              <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>{lang==="de"?"Kontakt":"Contact"}</h3>
+              <button onClick={()=>setShowContact(false)} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer"}}>✕</button>
+            </div>
+            <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.8,margin:0,whiteSpace:"pre-line"}}>{lang==="de"?`Schreib uns\n\nWir freuen uns ueber dein Feedback.\n\nE-Mail: hello@nubetracker.com\n\nAntwortzeit: Wir antworten in der Regel innerhalb von 48 Stunden.`:`Get in touch\n\nWe would love to hear from you.\n\nEmail: hello@nubetracker.com\n\nResponse time: We aim to reply within 48 hours.`}</p>
+          </div>
+        </div>
+      </div>
+    )}
+    {showAbout&&(
+      <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowAbout(false)}>
   return(
         <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif"}}>
       <style>{`*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}input::placeholder{color:#4b5563;}@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}::-webkit-scrollbar{display:none;}*{scrollbar-width:none;-ms-overflow-style:none;}`}</style>
