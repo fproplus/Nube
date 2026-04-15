@@ -886,7 +886,134 @@ function EditDayModal({dayKey,lang,history,setHistory,todayAdded,setAdded,onClos
     </div>
   );
 }
+function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setShowContact,setShowAbout}){
+  const isDE=lang==="de";
+  return(
+    <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",paddingBottom:40}}>
+      <style>{`
+        @keyframes fadeSlideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+        .land-section{animation:fadeSlideIn 0.5s ease both}
+        .land-btn:hover{transform:scale(1.02);filter:brightness(1.08)}
+        .land-btn{transition:transform 0.2s ease,filter 0.2s ease}
+      `}</style>
 
+      <div style={{maxWidth:520,margin:"0 auto",padding:"0 16px"}}>
+
+        {/* HEADER */}
+        <div className="land-section" style={{animationDelay:"0s",display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"calc(20px + env(safe-area-inset-top))",paddingBottom:24}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <img src="/logopng.png" alt="Nube" height={48} style={{height:48,borderRadius:10}}/>
+            <div>
+              <h1 style={{margin:0,fontSize:20,fontWeight:900,color:"#fff"}}>Nube</h1>
+              <p style={{margin:0,fontSize:11,color:"#4b5563"}}>Nutrition Benefits</p>
+            </div>
+          </div>
+          <button onClick={()=>setLang(l=>l==="en"?"de":"en")}
+            style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+          </button>
+        </div>
+
+        {/* HERO */}
+        <div className="land-section" style={{animationDelay:"0.1s",marginBottom:32}}>
+          <h2 style={{margin:"0 0 16px",fontSize:36,fontWeight:900,color:"#fff",lineHeight:1.15}}>
+            {isDE?"Was Essen kann.":"What food can do."}
+          </h2>
+          <p style={{margin:"0 0 28px",fontSize:15,color:"#9ca3af",lineHeight:1.7}}>
+            {isDE
+              ?"Die meisten zählen Kalorien. Nube trackt was wirklich zählt — Vitamine, Mineralstoffe und die wissenschaftlich belegten Synergien zwischen Lebensmitteln."
+              :"Most people count calories. Nube tracks what actually matters — vitamins, minerals and the science-backed synergies between foods that multiply their benefits."}
+          </p>
+          <button className="land-btn" onClick={onEnter}
+            style={{width:"100%",height:52,background:"#22c55e",border:"none",borderRadius:16,fontSize:15,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+            {isDE?"Ernährung entdecken →":"Discover your nutrition →"}
+          </button>
+        </div>
+
+        {/* SYNERGY HIGHLIGHT */}
+        <div className="land-section" style={{animationDelay:"0.2s",background:"#0f172a",border:"1px solid rgba(245,158,11,0.4)",borderRadius:20,padding:20,marginBottom:24}}>
+          <p style={{margin:"0 0 8px",fontSize:13,fontWeight:800,color:"#fbbf24"}}>
+            {isDE?"⚡ Schwarzer Pfeffer + Kurkuma = Curcumin-Aufnahme x20":"⚡ Black Pepper + Turmeric = Curcumin absorption x20"}
+          </p>
+          <p style={{margin:"0 0 12px",fontSize:12,color:"#9ca3af",lineHeight:1.6}}>
+            {isDE
+              ?"Eine Prise schwarzer Pfeffer steigert die Curcumin-Bioverfügbarkeit um 2000%. Nube zeigt dir diese versteckten Verbindungen."
+              :"A pinch of black pepper increases curcumin bioavailability by 2000%. Nube shows you these hidden connections."}
+          </p>
+          <div style={{display:"flex",gap:8}}>
+            {["🌶️ Black Pepper","🌿 Turmeric"].map(f=>(
+              <span key={f} style={{fontSize:11,padding:"4px 12px",borderRadius:99,background:"rgba(245,158,11,0.12)",border:"1px solid rgba(245,158,11,0.3)",color:"#fbbf24",fontWeight:600}}>{f}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* FEATURE CARDS */}
+        <div className="land-section" style={{animationDelay:"0.3s",marginBottom:24}}>
+          {[
+            {icon:"🔬",en:{t:"Science-backed",d:"Every benefit, every synergy is rooted in nutritional science. Not trends."},de:{t:"Wissenschaftlich belegt",d:"Jeder Benefit, jede Synergie basiert auf Ernährungswissenschaft. Keine Trends."}},
+            {icon:"🥗",en:{t:"Whole foods only",d:"No supplements, no processed food scores. Real food, real benefits."},de:{t:"Nur Vollwertkost",d:"Keine Supplements, keine Fertigkost-Scores. Echte Lebensmittel, echte Benefits."}},
+            {icon:"⚡",en:{t:"Synergy detection",d:"Discover which foods multiply each other's benefits when eaten together."},de:{t:"Synergie-Erkennung",d:"Entdecke welche Lebensmittel sich gegenseitig verstärken wenn du sie zusammen isst."}},
+          ].map((f,i)=>(
+            <div key={i} style={{background:"#0f172a",borderRadius:16,padding:"16px 18px",marginBottom:10,display:"flex",alignItems:"flex-start",gap:14}}>
+              <span style={{fontSize:24,flexShrink:0}}>{f.icon}</span>
+              <div>
+                <p style={{margin:"0 0 4px",fontSize:13,fontWeight:800,color:"#f9fafb"}}>{isDE?f.de.t:f.en.t}</p>
+                <p style={{margin:0,fontSize:12,color:"#6b7280",lineHeight:1.6}}>{isDE?f.de.d:f.en.d}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* HEALTH GOALS PREVIEW */}
+        <div className="land-section" style={{animationDelay:"0.4s",marginBottom:32}}>
+          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:12}}>
+            {isDE?"Tracke was dein Körper braucht":"Track what your body needs"}
+          </p>
+          <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+            {[
+              {icon:"🦠",en:"Gut Health",de:"Darmgesundheit"},
+              {icon:"⚡",en:"Energy & Focus",de:"Energie & Fokus"},
+              {icon:"🛡️",en:"Immune System",de:"Immunsystem"},
+              {icon:"💪",en:"Muscle & Strength",de:"Muskel & Kraft"},
+            ].map(g=>(
+              <div key={g.en} style={{display:"flex",alignItems:"center",gap:6,background:"#0f172a",border:"1px solid #1f2937",borderRadius:99,padding:"8px 14px"}}>
+                <span style={{fontSize:14}}>{g.icon}</span>
+                <span style={{fontSize:12,fontWeight:600,color:"#d1d5db"}}>{isDE?g.de:g.en}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* FINAL CTA */}
+        <div className="land-section" style={{animationDelay:"0.5s",marginBottom:40,textAlign:"center"}}>
+          <p style={{fontSize:16,fontWeight:800,color:"#f9fafb",marginBottom:16}}>
+            {isDE?"Bereit zu entdecken was Essen kann?":"Ready to discover what food can do?"}
+          </p>
+          <button className="land-btn" onClick={onEnter}
+            style={{width:"100%",height:52,background:"#22c55e",border:"none",borderRadius:16,fontSize:15,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+            {isDE?"Jetzt tracken — kostenlos →":"Start tracking — it's free →"}
+          </button>
+        </div>
+
+        {/* FOOTER */}
+        <div style={{display:"flex",justifyContent:"center",flexWrap:"wrap",gap:16,paddingBottom:"calc(16px + env(safe-area-inset-bottom))"}}>
+          {[
+            {label:"Impressum",onClick:()=>setShowImpressum(true)},
+            {label:isDE?"Datenschutz":"Privacy Policy",onClick:()=>setShowPrivacy(true)},
+            {label:isDE?"Kontakt":"Contact",onClick:()=>setShowContact(true)},
+            {label:isDE?"Über uns":"About",onClick:()=>setShowAbout(true)},
+          ].map(b=>(
+            <button key={b.label} onClick={b.onClick}
+              style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>
+              {b.label}
+            </button>
+          ))}
+        </div>
+
+      </div>
+    </div>
+  );
+}
 function usePullToRefresh(onRefresh){
   const startY=useRef(null);const [pulling,setPulling]=useState(0);const [refreshing,setRefreshing]=useState(false);
   const onTouchStart=e=>{if(window.scrollY===0)startY.current=e.touches[0].clientY;};
@@ -916,6 +1043,7 @@ export default function App(){
   const [showImpressum,setShowImpressum]=useState(false);
   const [showPrivacy,setShowPrivacy]=useState(false);
   const [showContact,setShowContact]=useState(false);
+  const [showLanding,setShowLanding]=useState(true);
   const [showAbout,setShowAbout]=useState(false);
   const prevScore=useRef(0);
   const {offline,visible:offlineVisible}=useOffline();
@@ -1048,7 +1176,7 @@ export default function App(){
       </button>
     );
   };
-
+  if(showLanding)return <LandingPage lang={lang} setLang={setLang} onEnter={()=>setShowLanding(false)} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>;
   return(
         <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif"}}>
       <style>{`*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}input::placeholder{color:#4b5563;}@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}::-webkit-scrollbar{display:none;}*{scrollbar-width:none;-ms-overflow-style:none;}`}</style>
