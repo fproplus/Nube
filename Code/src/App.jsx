@@ -1237,12 +1237,12 @@ export default function App(){
     setHistLoaded(true);
   },[]);
   useEffect(()=>{
-    if(!histLoaded)return;
-    try{localStorage.setItem("wft-today4",JSON.stringify({date:todayKey(),foods:added}));}catch{}
-    const nh={...history,[todayKey()]:added};setHistory(nh);
-    try{localStorage.setItem("wft-hist4",JSON.stringify(nh));}catch{}
+  if(!histLoaded)return;
+  if(added.length===0&&Object.keys(history).length===0)return;
+  try{localStorage.setItem("wft-today4",JSON.stringify({date:todayKey(),foods:added}));}catch{}
+  const nh={...history,[todayKey()]:added};setHistory(nh);
+  try{localStorage.setItem("wft-hist4",JSON.stringify(nh));}catch{}
   },[added,histLoaded]);
-  useEffect(()=>{setSuggestions([]);setQuery("");},[lang]);
 
   const fireMS=useCallback((key,msg)=>{
     if(shownMS.has(key))return;
