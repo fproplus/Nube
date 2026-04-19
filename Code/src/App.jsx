@@ -1222,7 +1222,9 @@ export default function App(){
   const [showImpressum,setShowImpressum]=useState(false);
   const [showPrivacy,setShowPrivacy]=useState(false);
   const [showContact,setShowContact]=useState(false);
-  const [showLanding,setShowLanding]=useState(true);
+  const [showLanding,setShowLanding]=useState(()=>{
+  try{return localStorage.getItem("wft-visited")!=="1";}catch{return true;}
+  });
   const [showAbout,setShowAbout]=useState(false);
   const prevScore=useRef(0);
   const {offline,visible:offlineVisible}=useOffline();
@@ -1357,7 +1359,7 @@ export default function App(){
   };
   if(showLanding)return(
   <>
-    <LandingPage lang={lang} setLang={setLang} onEnter={()=>setShowLanding(false)} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>
+    <LandingPage lang={lang} setLang={setLang} onEnter={()=>{setShowLanding(false);try{localStorage.setItem("wft-visited","1");}catch{}}} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>
     {showImpressum&&(
       <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
         <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
