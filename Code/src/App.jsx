@@ -764,7 +764,7 @@ function TabPane({active,children}){
   if(!render)return null;
   return <div style={{transition:"opacity 0.22s ease,transform 0.22s ease",opacity:anim==="in"?1:0,transform:anim==="in"?"translateY(0)":"translateY(10px)"}}>{children}</div>;
 }
-function FoodTag({food,lang,onRemove,isNew}){
+function FoodTag({food,lang,onRemove,onRequestRemove,isNew}){
   const [pop,setPop]=useState(isNew);const [removing,setRemoving]=useState(false);
   useEffect(()=>{if(pop){const t=setTimeout(()=>setPop(false),350);return()=>clearTimeout(t);}},[pop]);
   const cs=CAT_STYLE[food.cat]||{bg:"#374151",color:"#d1d5db"};
