@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 // Coming Soon Mode - set to false to disable
-const COMING_SOON = true;
+const COMING_SOON = false;
 
 if (COMING_SOON && window.location.hostname === 'nubetracker.com') {
   window.location.href = '/coming-soon.html';
