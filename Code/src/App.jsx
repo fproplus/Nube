@@ -10,7 +10,7 @@ const T = {
   en: {
     appTitle:"Nube", appSubtitle:"What food can do.",
     searchPlaceholder:"Add a food... (e.g. chicken, spinach, turmeric)",
-    tabToday:"Today", tabHistory:"Streaks", tabInsights:"Nutrition Check",
+    tabToday:"Today", tabHistory:"Streaks", tabInsights:"Nutrition Check", tabBrowse:"Browse",
     vitamins:"Vitamins", minerals:"Minerals", activeBenefits:"Benefits",
     synergiesDetected:"Synergies Unlocked",
     syn1:"Black Pepper + Turmeric → Curcumin absorption x20",
@@ -57,7 +57,7 @@ const T = {
   de: {
     appTitle:"Nube", appSubtitle:"What food can do.",
     searchPlaceholder:"Lebensmittel... (z.B. Hähnchen, Spinat, Kurkuma)",
-    tabToday:"Heute", tabHistory:"Streak", tabInsights:"Nährwert-Check",
+    tabToday:"Heute", tabHistory:"Streak", tabInsights:"Nährwert-Check", tabBrowse:"Lexikon",
     vitamins:"Vitamine", minerals:"Mineralstoffe", activeBenefits:"Vorteile",
     synergiesDetected:"Synergien freigeschaltet",
     syn1:"Schwarzer Pfeffer + Kurkuma → Curcumin-Aufnahme x20",
@@ -1224,6 +1224,8 @@ export default function App(){
   const [confetti,setConfetti]=useState(false);
   const [confirmRemove,setConfirmRemove]=useState(null);
   const [editDay,setEditDay]=useState(null);
+  const [browseQuery,setBrowseQuery]=useState("");
+  const [openCats,setOpenCats]=useState({Protein:true});
   const [showImpressum,setShowImpressum]=useState(false);
   const [showPrivacy,setShowPrivacy]=useState(false);
   const [showContact,setShowContact]=useState(false);
@@ -1565,10 +1567,10 @@ export default function App(){
         </div>
 
         <div style={{display:"flex",gap:8,marginBottom:20}}>
-          {["today","history","insights"].map(tab=>(
+          {["today","history","insights","browse"].map(tab=>(
             <button key={tab} onClick={()=>setActiveTab(tab)}
               style={{flex:1,minHeight:44,background:activeTab===tab?"#fff":"#111827",color:activeTab===tab?"#111":"#6b7280",border:activeTab===tab?"none":"1px solid #1f2937",borderRadius:14,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s ease"}}>
-              {tab==="today"?"💪 "+t.tabToday:tab==="history"?"🔥 "+t.tabHistory:"🔬 "+t.tabInsights}
+              {tab==="today"?"💪 "+t.tabToday:tab==="history"?"🔥 "+t.tabHistory:tab==="insights"?"🔬 "+t.tabInsights:"📖 "+(lang==="de"?"Lexikon":"Browse")}
             </button>
           ))}
         </div>
@@ -1795,7 +1797,96 @@ export default function App(){
             })}
           </div>
         </TabPane>
-
+        <TabPane active={activeTab==="browse"}>
+        <div>
+          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4,marginTop:0}}>
+            {lang==="de"?"Alle Lebensmittel":"All Foods"}
+          </p>
+          <p style={{fontSize:12,color:"#4b5563",marginBottom:12,marginTop:0}}>
+            {lang==="de"?"Tippe ein Lebensmittel um es heute hinzuzufügen":"Tap any food to add it to today"}
+          </p>
+          <div style={{position:"relative",marginBottom:16}}>
+            <input value={browseQuery} onChange={e=>setBrowseQuery(e.target.value)}
+              placeholder={lang==="de"?"Lebensmittel suchen...":"Search foods..."}
+              autoComplete="off" autoCorrect="off"
+              style={{width:"100%",padding:"12px 16px",borderRadius:14,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none"}}
+              onFocus={e=>e.target.style.borderColor="#22c55e"}
+              onBlur={e=>e.target.style.borderColor="#1f2937"}/>
+            {browseQuery&&(
+              <button onClick={()=>setBrowseQuery("")}
+                style={{position:"absolute",right:12,top:"50%",transform:"translateY(-50%)",background:"transparent",border:"none",color:"#6b7280",cursor:"pointer",fontSize:16,padding:0}}>✕</button>
+            )}
+          </div>
+          {browseQuery.trim()?(
+            <div>
+              {FOODS.filter(f=>
+                f[lang].toLowerCase().includes(browseQuery.toLowerCase())||
+                f.en.toLowerCase().includes(browseQuery.toLowerCase())||
+                (f.aliases||[]).some(a=>a.toLowerCase().includes(browseQuery.toLowerCase()))
+              ).length===0?(
+                <p style={{fontSize:13,color:"#4b5563",textAlign:"center",padding:"24px 0"}}>
+                  {lang==="de"?"Keine Lebensmittel gefunden":"No foods found"}
+                </p>
+              ):(
+                FOODS.filter(f=>
+                  f[lang].toLowerCase().includes(browseQuery.toLowerCase())||
+                  f.en.toLowerCase().includes(browseQuery.toLowerCase())||
+                  (f.aliases||[]).some(a=>a.toLowerCase().includes(browseQuery.toLowerCase()))
+                ).map(f=>{
+                  const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};
+                  const isAdded=added.includes(f.en);
+                  return(
+                    <button key={f.en} onClick={()=>addFood(f.en)}
+                      style={{width:"100%",minHeight:44,background:"#0f172a",border:"1px solid "+(isAdded?"rgba(34,197,94,0.3)":"#1f2937"),borderRadius:12,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left"}}
+                      onMouseEnter={e=>e.currentTarget.style.background="#111827"}
+                      onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                      <span style={{fontSize:10,padding:"2px 7px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{(T[lang].catNames[f.cat])||f.cat}</span>
+                      <span style={{fontSize:13,fontWeight:600,color:isAdded?"#4ade80":"#e5e7eb",flex:1}}>{f[lang]}</span>
+                      {isAdded&&<span style={{fontSize:14,color:"#4ade80",flexShrink:0}}>✓</span>}
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          ):(
+            ["Protein","Dairy","Vegetable","Fruit","Grain","Legume","Nut/Seed","Fat/Oil","Spice","Special","SoulFood"].map(cat=>{
+              const catFoods=FOODS.filter(f=>f.cat===cat);
+              if(!catFoods.length)return null;
+              const cs=CAT_STYLE[cat]||{bg:"#374151",color:"#d1d5db"};
+              const isOpen=!!openCats[cat];
+              const catLabel=T[lang].catNames[cat]||cat;
+              return(
+                <div key={cat} style={{marginBottom:8}}>
+                  <button onClick={()=>setOpenCats(p=>({...p,[cat]:!p[cat]}))}
+                    style={{width:"100%",minHeight:44,background:"#0f172a",border:"1px solid #1f2937",borderRadius:isOpen?"14px 14px 0 0":"14px",padding:"10px 14px",display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left"}}
+                    onMouseEnter={e=>e.currentTarget.style.background="#111827"}
+                    onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                    <span style={{fontSize:11,padding:"2px 8px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{catLabel}</span>
+                    <span style={{fontSize:13,fontWeight:700,color:"#d1d5db",flex:1}}>{catLabel} <span style={{color:"#4b5563",fontWeight:400}}>({catFoods.length})</span></span>
+                    <span style={{color:"#4b5563",fontSize:12,display:"inline-block",transform:isOpen?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.2s"}}>▼</span>
+                  </button>
+                  {isOpen&&(
+                    <div style={{border:"1px solid #1f2937",borderTop:"none",borderRadius:"0 0 14px 14px",overflow:"hidden"}}>
+                      {catFoods.map((f,i)=>{
+                        const isAdded=added.includes(f.en);
+                        return(
+                          <button key={f.en} onClick={()=>addFood(f.en)}
+                            style={{width:"100%",minHeight:44,background:isAdded?"rgba(34,197,94,0.05)":"#0f172a",borderBottom:i<catFoods.length-1?"1px solid #111827":"none",padding:"10px 14px",display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left",border:"none"}}
+                            onMouseEnter={e=>e.currentTarget.style.background=isAdded?"rgba(34,197,94,0.1)":"#111827"}
+                            onMouseLeave={e=>e.currentTarget.style.background=isAdded?"rgba(34,197,94,0.05)":"#0f172a"}>
+                            <span style={{fontSize:13,fontWeight:600,color:isAdded?"#4ade80":"#d1d5db",flex:1}}>{f[lang]}</span>
+                            {isAdded?<span style={{fontSize:13,color:"#4ade80",flexShrink:0}}>✓</span>:<span style={{fontSize:11,color:"#374151",flexShrink:0}}>+</span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </TabPane>
         <TabPane active={activeTab==="insights"}>
           <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:16,marginTop:0}}>
             {lang==="de"?"Was deckst du heute ab?":"What are you covering today?"}
