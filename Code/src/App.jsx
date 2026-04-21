@@ -1226,6 +1226,9 @@ export default function App(){
   const [editDay,setEditDay]=useState(null);
   const [browseQuery,setBrowseQuery]=useState("");
   const [openCats,setOpenCats]=useState({Protein:true});
+  const [adminMode,setAdminMode]=useState(false);
+  const [adminInput,setAdminInput]=useState("");
+  const [missingFoods,setMissingFoods]=useState({});
   const [showImpressum,setShowImpressum]=useState(false);
   const [showPrivacy,setShowPrivacy]=useState(false);
   const [showContact,setShowContact]=useState(false);
@@ -1288,6 +1291,13 @@ export default function App(){
     const q=query.toLowerCase();
     const results=FOODS.filter(f=>f[lang].toLowerCase().includes(q)||f.en.toLowerCase().includes(q)||(f.aliases||[]).some(a=>a.toLowerCase().includes(q))).slice(0,7);
     setSuggestions(results);
+    if(results.length===0&&q.trim().length>=3){
+    try{
+    const stored=JSON.parse(localStorage.getItem("wft-missing")||"{}");
+    stored[q.trim()]=(stored[q.trim()]||0)+1;
+    localStorage.setItem("wft-missing",JSON.stringify(stored));
+    }catch{}
+    }
     if(results.length===0&&query.trim().length>=3){
     try{window.va&&window.va("event",{name:"missing_food",data:{query:query.trim().toLowerCase()}});}catch{}
     }
@@ -1803,6 +1813,49 @@ export default function App(){
         </TabPane>
         <TabPane active={activeTab==="browse"}>
         <div>
+          {/* ADMIN SECTION */}
+        <div style={{marginBottom:16}}>
+          {!adminMode?(
+            <button onClick={()=>{
+              const pw=prompt("Admin Password:");
+              if(pw==="nube2026admin"){
+                setAdminMode(true);
+                try{setMissingFoods(JSON.parse(localStorage.getItem("wft-missing")||"{}"))}catch{}
+              }
+            }} style={{background:"transparent",border:"none",color:"#1f2937",fontSize:10,cursor:"pointer",padding:0}}>·</button>
+          ):(
+            <div style={{background:"#0f172a",border:"1px solid #ef4444",borderRadius:16,padding:16,marginBottom:16}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+                <p style={{margin:0,fontSize:12,fontWeight:700,color:"#ef4444"}}>🔐 Admin — Missing Foods</p>
+                <div style={{display:"flex",gap:8}}>
+                  <button onClick={()=>{
+                    if(window.confirm("Alle fehlgeschlagenen Suchen löschen?")){
+                      localStorage.removeItem("wft-missing");
+                      setMissingFoods({});
+                    }
+                  }} style={{background:"transparent",border:"1px solid #374151",borderRadius:8,padding:"4px 10px",fontSize:11,color:"#6b7280",cursor:"pointer"}}>Clear</button>
+                  <button onClick={()=>setAdminMode(false)} style={{background:"transparent",border:"none",color:"#6b7280",fontSize:16,cursor:"pointer"}}>✕</button>
+                </div>
+              </div>
+              {Object.keys(missingFoods).length===0?(
+                <p style={{fontSize:12,color:"#4b5563",margin:0}}>Keine fehlgeschlagenen Suchen gespeichert.</p>
+              ):(
+                <div>
+                  <p style={{fontSize:11,color:"#4b5563",marginBottom:8,marginTop:0}}>Sortiert nach Häufigkeit — {Object.keys(missingFoods).length} einzigartige Begriffe</p>
+                  {Object.entries(missingFoods)
+                    .sort((a,b)=>b[1]-a[1])
+                    .map(([term,count])=>(
+                      <div key={term} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"6px 0",borderBottom:"1px solid #1f2937"}}>
+                        <span style={{fontSize:12,color:"#d1d5db"}}>{term}</span>
+                        <span style={{fontSize:11,fontWeight:700,color:"#ef4444",background:"rgba(239,68,68,0.1)",padding:"2px 8px",borderRadius:99}}>{count}×</span>
+                      </div>
+                    ))
+                  }
+                </div>
+              )}
+            </div>
+          )}
+        </div>
           <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4,marginTop:0}}>
             {lang==="de"?"Alle Lebensmittel":"All Foods"}
           </p>
