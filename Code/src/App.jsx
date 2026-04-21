@@ -8,7 +8,7 @@ if (COMING_SOON && window.location.hostname === 'nubetracker.com') {
 
 const T = {
   en: {
-    appTitle:"Nube", appSubtitle:"What food can do.",
+    appTitle:"NuBe", appSubtitle:"What food can do.",
     searchPlaceholder:"Add a food... (e.g. chicken, spinach, turmeric)",
     tabToday:"Today", tabHistory:"Streaks", tabInsights:"Nutrition Check", tabBrowse:"Browse",
     vitamins:"Vitamins", minerals:"Minerals", activeBenefits:"Benefits",
@@ -55,7 +55,7 @@ const T = {
     benefitDisclaimer:"ℹ️ This is general nutritional information, not medical advice.",
   },
   de: {
-    appTitle:"Nube", appSubtitle:"What food can do.",
+    appTitle:"NuBe", appSubtitle:"What food can do.",
     searchPlaceholder:"Lebensmittel... (z.B. Hähnchen, Spinat, Kurkuma)",
     tabToday:"Heute", tabHistory:"Streak", tabInsights:"Nährwert-Check", tabBrowse:"Lexikon",
     vitamins:"Vitamine", minerals:"Mineralstoffe", activeBenefits:"Vorteile",
