@@ -1822,7 +1822,7 @@ export default function App(){
                 setAdminMode(true);
                 try{setMissingFoods(JSON.parse(localStorage.getItem("wft-missing")||"{}"))}catch{}
               }
-            }} style={{background:"transparent",border:"none",color:"#1f2937",fontSize:10,cursor:"pointer",padding:0}}>·</button>
+            }} style={{background:"transparent",border:"none",color:"#030712",fontSize:10,cursor:"pointer",padding:0,userSelect:"none"}}>·</button>
           ):(
             <div style={{background:"#0f172a",border:"1px solid #ef4444",borderRadius:16,padding:16,marginBottom:16}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
