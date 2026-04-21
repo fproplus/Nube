@@ -1286,7 +1286,11 @@ export default function App(){
   useEffect(()=>{
     if(!query.trim()){setSuggestions([]);return;}
     const q=query.toLowerCase();
-    setSuggestions(FOODS.filter(f=>f[lang].toLowerCase().includes(q)||f.en.toLowerCase().includes(q)||(f.aliases||[]).some(a=>a.toLowerCase().includes(q))).slice(0,7));
+    const results=FOODS.filter(f=>f[lang].toLowerCase().includes(q)||f.en.toLowerCase().includes(q)||(f.aliases||[]).some(a=>a.toLowerCase().includes(q))).slice(0,7);
+    setSuggestions(results);
+    if(results.length===0&&query.trim().length>=3){
+    try{window.va&&window.va("event",{name:"missing_food",data:{query:query.trim().toLowerCase()}});}catch{}
+    }
   },[query,lang]);
 
   const addFood=useCallback(key=>{
