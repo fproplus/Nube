@@ -1,4 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createClient } from '@supabase/supabase-js';
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 // Coming Soon Mode - set to false to disable
 const COMING_SOON = false;
 
@@ -891,6 +896,117 @@ function EditDayModal({dayKey,lang,history,setHistory,todayAdded,setAdded,onClos
     </div>
   );
 }
+function AuthScreen({lang,setLang,onAuth,onGuest}){
+  const [mode,setMode]=useState("login");
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState("");
+  const isDE=lang==="de";
+
+  const handleSubmit=async()=>{
+    if(!email||!password){setError(isDE?"Bitte alle Felder ausfüllen":"Please fill in all fields");return;}
+    setLoading(true);setError("");
+    try{
+      let result;
+      if(mode==="login"){
+        result=await supabase.auth.signInWithPassword({email,password});
+      }else{
+        result=await supabase.auth.signUp({email,password});
+      }
+      if(result.error)throw result.error;
+      onAuth(result.data.user||result.data.session?.user);
+    }catch(e){
+      setError(e.message||( isDE?"Ein Fehler ist aufgetreten":"An error occurred"));
+    }
+    setLoading(false);
+  };
+
+  return(
+    <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"0 24px"}}>
+      <div style={{width:"100%",maxWidth:400}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:40}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <img src="/logopng.png" alt="Nube" height={48} style={{height:48,borderRadius:10}}/>
+            <div>
+              <h1 style={{margin:0,fontSize:20,fontWeight:900,color:"#fff"}}>Nube</h1>
+              <p style={{margin:0,fontSize:11,color:"#4b5563"}}>What food can do.</p>
+            </div>
+          </div>
+          <button onClick={()=>setLang(l=>l==="en"?"de":"en")}
+            style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer"}}>
+            {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+          </button>
+        </div>
+
+        <h2 style={{margin:"0 0 8px",fontSize:24,fontWeight:900,color:"#fff"}}>
+          {isDE?"Willkommen bei Nube":"Welcome to Nube"}
+        </h2>
+        <p style={{margin:"0 0 32px",fontSize:14,color:"#6b7280"}}>
+          {isDE?"Tracke deine Ernährung und entdecke Synergien":"Track your nutrition and discover synergies"}
+        </p>
+
+        <div style={{display:"flex",gap:4,background:"#111827",borderRadius:12,padding:4,marginBottom:24}}>
+          {["login","register"].map(m=>(
+            <button key={m} onClick={()=>{setMode(m);setError("");}}
+              style={{flex:1,minHeight:40,background:mode===m?"#1f2937":"transparent",border:"none",borderRadius:10,fontSize:13,fontWeight:700,color:mode===m?"#fff":"#6b7280",cursor:"pointer",transition:"all 0.2s"}}>
+              {m==="login"?(isDE?"Anmelden":"Login"):(isDE?"Konto erstellen":"Create account")}
+            </button>
+          ))}
+        </div>
+
+        <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:16}}>
+          <div>
+            <label style={{fontSize:12,fontWeight:600,color:"#9ca3af",display:"block",marginBottom:6}}>
+              {isDE?"E-Mail":"Email"}
+            </label>
+            <input value={email} onChange={e=>setEmail(e.target.value)}
+              type="email" autoComplete="email"
+              placeholder={isDE?"deine@email.com":"your@email.com"}
+              style={{width:"100%",padding:"12px 16px",borderRadius:12,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",boxSizing:"border-box"}}
+              onFocus={e=>e.target.style.borderColor="#22c55e"}
+              onBlur={e=>e.target.style.borderColor="#1f2937"}
+              onKeyDown={e=>e.key==="Enter"&&handleSubmit()}/>
+          </div>
+          <div>
+            <label style={{fontSize:12,fontWeight:600,color:"#9ca3af",display:"block",marginBottom:6}}>
+              {isDE?"Passwort":"Password"}
+            </label>
+            <input value={password} onChange={e=>setPassword(e.target.value)}
+              type="password" autoComplete={mode==="login"?"current-password":"new-password"}
+              placeholder={isDE?"Mindestens 6 Zeichen":"At least 6 characters"}
+              style={{width:"100%",padding:"12px 16px",borderRadius:12,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",boxSizing:"border-box"}}
+              onFocus={e=>e.target.style.borderColor="#22c55e"}
+              onBlur={e=>e.target.style.borderColor="#1f2937"}
+              onKeyDown={e=>e.key==="Enter"&&handleSubmit()}/>
+          </div>
+        </div>
+
+        {error&&(
+          <div style={{background:"rgba(239,68,68,0.1)",border:"1px solid rgba(239,68,68,0.3)",borderRadius:10,padding:"10px 14px",marginBottom:16}}>
+            <p style={{margin:0,fontSize:12,color:"#f87171"}}>{error}</p>
+          </div>
+        )}
+
+        <button onClick={handleSubmit} disabled={loading}
+          style={{width:"100%",height:52,background:loading?"#166534":"#22c55e",border:"none",borderRadius:14,fontSize:15,fontWeight:800,color:"#fff",cursor:loading?"not-allowed":"pointer",transition:"background 0.2s",marginBottom:16}}>
+          {loading?(isDE?"Laden...":"Loading..."):(mode==="login"?(isDE?"Anmelden":"Login"):(isDE?"Konto erstellen":"Create account"))}
+        </button>
+
+        <button onClick={onGuest}
+          style={{width:"100%",background:"transparent",border:"none",color:"#4b5563",fontSize:13,cursor:"pointer",padding:"8px 0"}}>
+          {isDE?"Ohne Konto fortfahren →":"Continue without account →"}
+        </button>
+
+        {mode==="register"&&(
+          <p style={{fontSize:11,color:"#4b5563",textAlign:"center",marginTop:16,lineHeight:1.5}}>
+            {isDE?"Mit der Registrierung stimmst du unserer Datenschutzerklärung zu.":"By registering you agree to our Privacy Policy."}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
 function AppDemo({lang}){
   const isDE=lang==="de";
   const [step,setStep]=useState(0);
@@ -1226,12 +1342,16 @@ export default function App(){
   const [editDay,setEditDay]=useState(null);
   const [browseQuery,setBrowseQuery]=useState("");
   const [openCats,setOpenCats]=useState({Protein:true});
+  const [showAccountMenu,setShowAccountMenu]=useState(false);
   const [adminMode,setAdminMode]=useState(false);
   const [adminInput,setAdminInput]=useState("");
   const [missingFoods,setMissingFoods]=useState({});
   const [showImpressum,setShowImpressum]=useState(false);
   const [showPrivacy,setShowPrivacy]=useState(false);
   const [showContact,setShowContact]=useState(false);
+  const [user,setUser]=useState(null);
+  const [authChecked,setAuthChecked]=useState(false);
+  const [isGuest,setIsGuest]=useState(false);
   const [showLanding,setShowLanding]=useState(()=>{
   try{return localStorage.getItem("wft-visited")!=="1";}catch{return true;}
   });
@@ -1241,19 +1361,56 @@ export default function App(){
   const {show:showInstall,install,dismiss:dismissInstall,isNative}=useInstallPrompt();
 
   useEffect(()=>{
+  supabase.auth.getSession().then(({data:{session}})=>{
+    setUser(session?.user||null);
+    setAuthChecked(true);
+  });
+  const {data:{subscription}}=supabase.auth.onAuthStateChange((_,session)=>{
+    setUser(session?.user||null);
+  });
+  return()=>subscription.unsubscribe();
+},[]);
+useEffect(()=>{
+  const loadData=async()=>{
+    if(user&&!isGuest){
+      try{
+        const{data,error}=await supabase.from("user_data").select("*").eq("user_id",user.id).single();
+        if(data&&!error){
+          if(data.history)setHistory(data.history);
+          if(data.foods_today&&data.date===todayKey())setAdded(data.foods_today);
+          if(data.milestones)setShownMS(new Set(data.milestones));
+          setHistLoaded(true);return;
+        }
+      }catch(e){console.error("Load error:",e);}
+    }
     try{const r=localStorage.getItem("wft-hist4");if(r)setHistory(JSON.parse(r));}catch{}
     try{const r=localStorage.getItem("wft-today4");if(r){const d=JSON.parse(r);if(d.date===todayKey())setAdded(d.foods||[]);}}catch{}
     try{const r=localStorage.getItem("wft-ms2");if(r)setShownMS(new Set(JSON.parse(r)));}catch{}
     setHistLoaded(true);
-  },[]);
-  useEffect(()=>{
+  };
+  if(authChecked)loadData();
+},[authChecked,user,isGuest]);  useEffect(()=>{
   if(!histLoaded)return;
   if(added.length===0&&Object.keys(history).length===0)return;
   try{localStorage.setItem("wft-today4",JSON.stringify({date:todayKey(),foods:added}));}catch{}
   const nh={...history,[todayKey()]:added};setHistory(nh);
   try{localStorage.setItem("wft-hist4",JSON.stringify(nh));}catch{}
   },[added,histLoaded]);
-
+  useEffect(()=>{
+  if(!user||isGuest||!histLoaded)return;
+  const sync=async()=>{
+    try{
+      await supabase.from("user_data").upsert({
+        user_id:user.id,
+        foods_today:added,
+        history:history,
+        milestones:[...shownMS],
+        date:todayKey()
+      },{onConflict:"user_id"});
+    }catch(e){console.error("Sync error:",e);}
+  };
+  sync();
+},[added,history,user,isGuest,histLoaded]);
   const fireMS=useCallback((key,msg)=>{
     if(shownMS.has(key))return;
     const u=new Set([...shownMS,key]);setShownMS(u);
@@ -1378,6 +1535,8 @@ export default function App(){
       </button>
     );
   };
+  if(!authChecked)return <div style={{minHeight:"100vh",background:"#030712"}}/>;
+  if(!user&&!isGuest)return <AuthScreen lang={lang} setLang={setLang} onAuth={u=>{setUser(u);}} onGuest={()=>setIsGuest(true)}/>;
   if(showLanding)return(
   <>
     <LandingPage lang={lang} setLang={setLang} onEnter={()=>{setShowLanding(false);try{localStorage.setItem("wft-visited","1");}catch{}}} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>
@@ -1572,6 +1731,33 @@ export default function App(){
             </div>
             <p style={{margin:0,fontSize:12,color:"#4b5563"}}>{t.appSubtitle}</p>
           </div>
+          {user&&!isGuest&&(
+            <div style={{position:"relative"}}>
+              <button onClick={()=>setShowAccountMenu(p=>!p)}
+                style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 12px",fontSize:12,fontWeight:600,color:"#22c55e",cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
+                👤
+              </button>
+              {showAccountMenu&&(
+                <div style={{position:"absolute",right:0,top:52,background:"#111827",border:"1px solid #374151",borderRadius:16,padding:12,minWidth:220,zIndex:100,boxShadow:"0 8px 32px rgba(0,0,0,0.6)"}}>
+                  <p style={{margin:"0 0 12px",fontSize:12,color:"#6b7280",wordBreak:"break-all"}}>{user.email}</p>
+                  <button onClick={async()=>{await supabase.auth.signOut();setUser(null);setShowAccountMenu(false);}}
+                    style={{width:"100%",minHeight:44,background:"transparent",border:"1px solid #374151",borderRadius:10,fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",marginBottom:8}}>
+                    {lang==="de"?"Abmelden":"Sign out"}
+                  </button>
+                  <button onClick={async()=>{
+                    if(window.confirm(lang==="de"?"Account wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.":"Really delete account? This cannot be undone.")){
+                      await supabase.from("user_data").delete().eq("user_id",user.id);
+                      await supabase.auth.admin.deleteUser(user.id);
+                      await supabase.auth.signOut();
+                      setUser(null);setShowAccountMenu(false);
+                    }
+                  }} style={{width:"100%",minHeight:44,background:"transparent",border:"1px solid rgba(239,68,68,0.3)",borderRadius:10,fontSize:13,fontWeight:600,color:"#f87171",cursor:"pointer"}}>
+                    {lang==="de"?"Account löschen":"Delete account"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
           <button
             onClick={()=>setLang(l=>l==="en"?"de":"en")}
             title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
