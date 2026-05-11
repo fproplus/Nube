@@ -902,6 +902,7 @@ function AuthScreen({lang,setLang,onAuth,onGuest}){
   const [password,setPassword]=useState("");
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState("");
+  const [showPassword,setShowPassword]=useState(false);
   const [confirmPassword,setConfirmPassword]=useState("");
   const [showConfirmPassword,setShowConfirmPassword]=useState(false);
   const isDE=lang==="de";
