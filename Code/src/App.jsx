@@ -903,10 +903,23 @@ function AuthScreen({lang,setLang,onAuth,onGuest}){
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState("");
   const isDE=lang==="de";
+  const pwRules=[
+  {key:"len",en:"At least 8 characters",de:"Mindestens 8 Zeichen",test:p=>p.length>=8},
+  {key:"upper",en:"One uppercase letter",de:"Ein Großbuchstabe",test:p=>/[A-Z]/.test(p)},
+  {key:"lower",en:"One lowercase letter",de:"Ein Kleinbuchstabe",test:p=>/[a-z]/.test(p)},
+  {key:"num",en:"One number",de:"Eine Zahl",test:p=>/[0-9]/.test(p)},
+];
+const pwScore=mode==="register"?pwRules.filter(r=>r.test(password)).length:4;
+const pwStrong=pwScore===4;
+const pwBarColor=pwScore<=1?"#ef4444":pwScore===2?"#f97316":pwScore===3?"#facc15":"#22c55e";
+const pwBarLabel=isDE
+  ?["","Schwach","Ausreichend","Gut","Stark"][pwScore]
+  :["","Weak","Fair","Good","Strong"][pwScore];
 
   const handleSubmit=async()=>{
-    if(!email||!password){setError(isDE?"Bitte alle Felder ausfüllen":"Please fill in all fields");return;}
-    setLoading(true);setError("");
+  if(!email||!password){setError(isDE?"Bitte alle Felder ausfüllen":"Please fill in all fields");return;}
+  if(mode==="register"&&!pwStrong){setError(isDE?"Bitte alle Passwort-Anforderungen erfüllen":"Please meet all password requirements");return;} 
+  setLoading(true);setError("");
     try{
       let result;
       if(mode==="login"){
@@ -980,6 +993,26 @@ function AuthScreen({lang,setLang,onAuth,onGuest}){
               onBlur={e=>e.target.style.borderColor="#1f2937"}
               onKeyDown={e=>e.key==="Enter"&&handleSubmit()}/>
           </div>
+          {mode==="register"&&password.length>0&&(
+            <div style={{marginTop:8}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+                <div style={{flex:1,height:4,borderRadius:2,background:"#1f2937"}}>
+                  <div style={{height:4,borderRadius:2,background:pwBarColor,width:`${pwScore*25}%`,transition:"width 0.3s ease,background 0.3s ease"}}/>
+                </div>
+                <span style={{fontSize:11,color:pwBarColor,marginLeft:8,fontWeight:600,minWidth:50}}>{pwBarLabel}</span>
+              </div>
+              <div style={{display:"flex",flexDirection:"column",gap:3,marginTop:6}}>
+                {pwRules.map(r=>{
+                  const met=r.test(password);
+                  return(
+                    <span key={r.key} style={{fontSize:11,color:met?"#4ade80":"#6b7280"}}>
+                      {met?"✓":"✗"} {isDE?r.de:r.en}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {error&&(
@@ -989,7 +1022,7 @@ function AuthScreen({lang,setLang,onAuth,onGuest}){
         )}
 
         <button onClick={handleSubmit} disabled={loading}
-          style={{width:"100%",height:52,background:loading?"#166534":"#22c55e",border:"none",borderRadius:14,fontSize:15,fontWeight:800,color:"#fff",cursor:loading?"not-allowed":"pointer",transition:"background 0.2s",marginBottom:16}}>
+          style={{width:"100%",height:52,background:loading?"#166834":(mode==="register"&&!pwStrong)?"#1f2937":"#22c55e",border:(mode==="register"&&!pwStrong)?"1px solid #374151":"none",borderRadius:14,fontSize:15,fontWeight:800,color:(mode==="register"&&!pwStrong)?"#4b5563":"#fff",cursor:(loading||(mode==="register"&&!pwStrong))?"not-allowed":"pointer",transition:"background 0.2s",marginBottom:16}}>
           {loading?(isDE?"Laden...":"Loading..."):(mode==="login"?(isDE?"Anmelden":"Login"):(isDE?"Konto erstellen":"Create account"))}
         </button>
 
