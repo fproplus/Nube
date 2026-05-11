@@ -1385,6 +1385,7 @@ export default function App(){
   const [user,setUser]=useState(null);
   const [authChecked,setAuthChecked]=useState(false);
   const [isGuest,setIsGuest]=useState(false);
+  const [authLoading,setAuthLoading]=useState(true);
   const [showLanding,setShowLanding]=useState(()=>{
   try{return localStorage.getItem("wft-visited")!=="1";}catch{return true;}
   });
@@ -1397,9 +1398,12 @@ export default function App(){
   supabase.auth.getSession().then(({data:{session}})=>{
     setUser(session?.user||null);
     setAuthChecked(true);
+    setAuthLoading(false);
   });
-  const {data:{subscription}}=supabase.auth.onAuthStateChange((_,session)=>{
+  const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{
     setUser(session?.user||null);
+    setAuthChecked(true);
+    setAuthLoading(false);
   });
   return()=>subscription.unsubscribe();
 },[]);
@@ -1568,9 +1572,15 @@ useEffect(()=>{
       </button>
     );
   };
+  if(authLoading)return(
+    <div style={{minHeight:"100vh",background:"#030712",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}>
+      <img src="/logopng.png" alt="Nube" height={48} style={{height:48,borderRadius:10,opacity:0.8}}/>
+      <div style={{width:24,height:24,border:"2px solid #374151",borderTop:"2px solid #22c55e",borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+    </div>
+  );
   if(!authChecked)return <div style={{minHeight:"100vh",background:"#030712"}}/>;
-  if(!user&&!isGuest)return <AuthScreen lang={lang} setLang={setLang} onAuth={u=>{setUser(u);}} onGuest={()=>setIsGuest(true)}/>;
-  if(showLanding)return(
+  if(!user&&!isGuest)return <AuthScreen lang={lang} setLang={setLang} onAuth={u=>{setUser(u);}} onGuest={()=>setIsGuest(true)}/>;  if(showLanding)return(
   <>
     <LandingPage lang={lang} setLang={setLang} onEnter={()=>{setShowLanding(false);try{localStorage.setItem("wft-visited","1");}catch{}}} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>
     {showImpressum&&(
