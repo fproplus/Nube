@@ -927,12 +927,36 @@ const pwBarLabel=isDE
       }else{
         result=await supabase.auth.signUp({email,password});
       }
-      if(result.error)throw result.error;
+    if(result.error)throw result.error;
       onAuth(result.data.user||result.data.session?.user);
     }catch(e){
-      setError(e.message||( isDE?"Ein Fehler ist aufgetreten":"An error occurred"));
-    }
-    setLoading(false);
+      const msg=e.message||"";
+      let friendly="";
+      if(mode==="login"){
+        if(msg.includes("Invalid login credentials")||msg.includes("invalid_credentials"))
+          friendly=isDE?"E-Mail oder Passwort falsch. Bitte erneut versuchen.":"Email or password incorrect. Please try again.";
+        else if(msg.includes("Email not confirmed"))
+          friendly=isDE?"Bitte bestätige zuerst deine E-Mail-Adresse.":"Please confirm your email address first.";
+        else if(msg.includes("NetworkError")||msg.includes("fetch"))
+          friendly=isDE?"Verbindungsfehler. Bitte Internet prüfen.":"Connection error. Please check your internet.";
+        else if(msg.includes("Too many requests"))
+          friendly=isDE?"Zu viele Versuche. Bitte kurz warten.":"Too many attempts. Please wait a moment.";
+        else
+          friendly=isDE?"Etwas ist schiefgelaufen. Bitte erneut versuchen.":"Something went wrong. Please try again.";
+      }else{
+        if(msg.includes("User already registered"))
+          friendly=isDE?"Diese E-Mail ist bereits registriert. Versuche dich anzumelden.":"This email is already registered. Try logging in.";
+        else if(msg.includes("Password should be at least"))
+          friendly=isDE?"Passwort muss mindestens 8 Zeichen haben.":"Password must be at least 8 characters.";
+        else if(msg.includes("NetworkError")||msg.includes("fetch"))
+          friendly=isDE?"Verbindungsfehler. Bitte Internet prüfen.":"Connection error. Please check your internet.";
+        else if(msg.includes("Too many requests"))
+          friendly=isDE?"Zu viele Versuche. Bitte kurz warten.":"Too many attempts. Please wait a moment.";
+        else
+          friendly=isDE?"Etwas ist schiefgelaufen. Bitte erneut versuchen.":"Something went wrong. Please try again.";
+      }
+      setError(friendly);
+    }    setLoading(false);
   };
 
   return(
@@ -1016,11 +1040,10 @@ const pwBarLabel=isDE
         </div>
 
         {error&&(
-          <div style={{background:"rgba(239,68,68,0.1)",border:"1px solid rgba(239,68,68,0.3)",borderRadius:10,padding:"10px 14px",marginBottom:16}}>
-            <p style={{margin:0,fontSize:12,color:"#f87171"}}>{error}</p>
+          <div style={{background:"rgba(239,68,68,0.1)",border:"1px solid rgba(239,68,68,0.3)",borderRadius:12,padding:"12px 16px",marginBottom:16}}>
+            <p style={{margin:0,fontSize:13,color:"#fca5a5"}}>{error}</p>
           </div>
         )}
-
         <button onClick={handleSubmit} disabled={loading}
           style={{width:"100%",height:52,background:loading?"#166834":(mode==="register"&&!pwStrong)?"#1f2937":"#22c55e",border:(mode==="register"&&!pwStrong)?"1px solid #374151":"none",borderRadius:14,fontSize:15,fontWeight:800,color:(mode==="register"&&!pwStrong)?"#4b5563":"#fff",cursor:(loading||(mode==="register"&&!pwStrong))?"not-allowed":"pointer",transition:"background 0.2s",marginBottom:16}}>
           {loading?(isDE?"Laden...":"Loading..."):(mode==="login"?(isDE?"Anmelden":"Login"):(isDE?"Konto erstellen":"Create account"))}
