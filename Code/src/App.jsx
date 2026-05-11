@@ -902,6 +902,8 @@ function AuthScreen({lang,setLang,onAuth,onGuest}){
   const [password,setPassword]=useState("");
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState("");
+  const [confirmPassword,setConfirmPassword]=useState("");
+  const [showConfirmPassword,setShowConfirmPassword]=useState(false);
   const isDE=lang==="de";
   const pwRules=[
   {key:"len",en:"At least 8 characters",de:"Mindestens 8 Zeichen",test:p=>p.length>=8},
@@ -919,6 +921,7 @@ const pwBarLabel=isDE
   const handleSubmit=async()=>{
   if(!email||!password){setError(isDE?"Bitte alle Felder ausfüllen":"Please fill in all fields");return;}
   if(mode==="register"&&!pwStrong){setError(isDE?"Bitte alle Passwort-Anforderungen erfüllen":"Please meet all password requirements");return;} 
+  if(mode==="register"&&password!==confirmPassword){setError(isDE?"Passwörter stimmen nicht überein":"Passwords do not match");return;}
   setLoading(true);setError("");
     try{
       let result;
@@ -983,7 +986,7 @@ const pwBarLabel=isDE
 
         <div style={{display:"flex",gap:4,background:"#111827",borderRadius:12,padding:4,marginBottom:24}}>
           {["login","register"].map(m=>(
-            <button key={m} onClick={()=>{setMode(m);setError("");}}
+          <button key={m} onClick={()=>{setMode(m);setError("");setConfirmPassword("");}}
               style={{flex:1,minHeight:40,background:mode===m?"#1f2937":"transparent",border:"none",borderRadius:10,fontSize:13,fontWeight:700,color:mode===m?"#fff":"#6b7280",cursor:"pointer",transition:"all 0.2s"}}>
               {m==="login"?(isDE?"Anmelden":"Login"):(isDE?"Konto erstellen":"Create account")}
             </button>
@@ -1007,14 +1010,51 @@ const pwBarLabel=isDE
             <label style={{fontSize:12,fontWeight:600,color:"#9ca3af",display:"block",marginBottom:6}}>
               {isDE?"Passwort":"Password"}
             </label>
-            <input value={password} onChange={e=>setPassword(e.target.value)}
-              type="password" autoComplete={mode==="login"?"current-password":"new-password"}
-              placeholder={isDE?"Mindestens 6 Zeichen":"At least 6 characters"}
-              style={{width:"100%",padding:"12px 16px",borderRadius:12,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",boxSizing:"border-box"}}
+                  <div style={{position:"relative"}}>
+                <input value={password} onChange={e=>setPassword(e.target.value)}
+                  type={showPassword?"text":"password"} autoComplete={mode==="login"?"current-password":"new-password"}
+                  placeholder={isDE?"Mindestens 8 Zeichen":"At least 8 characters"}
+                  style={{width:"100%",padding:"12px 48px 12px 16px",borderRadius:12,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",boxSizing:"border-box"}}
+                  onFocus={e=>e.target.style.borderColor="#22c55e"}
+                  onBlur={e=>e.target.style.borderColor="#1f2937"}
+                  onKeyDown={e=>e.key==="Enter"&&handleSubmit()}/>
+                <button onClick={()=>setShowPassword(p=>!p)}
+                  style={{position:"absolute",right:12,top:"50%",transform:"translateY(-50%)",background:"transparent",border:"none",color:"#6b7280",cursor:"pointer",fontSize:16,padding:0,display:"flex",alignItems:"center"}}>
+                  {showPassword?"🙈":"👁️"}
+                </button>
+              </div>
+                </div>
+                {mode==="register"&&(
+        <div>
+          <label style={{fontSize:12,fontWeight:600,color:"#9ca3af",display:"block",marginBottom:6}}>
+            {isDE?"Passwort bestätigen":"Confirm Password"}
+          </label>
+          <div style={{position:"relative"}}>
+            <input value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)}
+              type={showConfirmPassword?"text":"password"}
+              autoComplete="new-password"
+              placeholder={isDE?"Passwort wiederholen":"Repeat password"}
+              style={{width:"100%",padding:"12px 48px 12px 16px",borderRadius:12,border:"1px solid "+(confirmPassword&&confirmPassword!==password?"rgba(239,68,68,0.5)":confirmPassword&&confirmPassword===password?"rgba(34,197,94,0.5)":"#1f2937"),background:"#0f172a",fontSize:14,color:"#fff",outline:"none",boxSizing:"border-box"}}
               onFocus={e=>e.target.style.borderColor="#22c55e"}
-              onBlur={e=>e.target.style.borderColor="#1f2937"}
+              onBlur={e=>e.target.style.borderColor=confirmPassword&&confirmPassword!==password?"rgba(239,68,68,0.5)":confirmPassword&&confirmPassword===password?"rgba(34,197,94,0.5)":"#1f2937"}
               onKeyDown={e=>e.key==="Enter"&&handleSubmit()}/>
+            <button onClick={()=>setShowConfirmPassword(p=>!p)}
+              style={{position:"absolute",right:12,top:"50%",transform:"translateY(-50%)",background:"transparent",border:"none",color:"#6b7280",cursor:"pointer",fontSize:16,padding:0,display:"flex",alignItems:"center"}}>
+              {showConfirmPassword?"🙈":"👁️"}
+            </button>
           </div>
+          {confirmPassword&&confirmPassword!==password&&(
+            <p style={{margin:"4px 0 0",fontSize:11,color:"#f87171"}}>
+              {isDE?"Passwörter stimmen nicht überein":"Passwords do not match"}
+            </p>
+          )}
+          {confirmPassword&&confirmPassword===password&&(
+            <p style={{margin:"4px 0 0",fontSize:11,color:"#4ade80"}}>
+              {isDE?"Passwörter stimmen überein ✓":"Passwords match ✓"}
+            </p>
+          )}
+        </div>
+      )}
           {mode==="register"&&password.length>0&&(
             <div style={{marginTop:8}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
