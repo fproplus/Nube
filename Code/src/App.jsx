@@ -905,6 +905,8 @@ function AuthScreen({lang,setLang,onAuth,onGuest}){
   const [showPassword,setShowPassword]=useState(false);
   const [confirmPassword,setConfirmPassword]=useState("");
   const [showConfirmPassword,setShowConfirmPassword]=useState(false);
+  const [registered,setRegistered]=useState(false);
+  const [registeredEmail,setRegisteredEmail]=useState("");
   const isDE=lang==="de";
   const pwRules=[
   {key:"len",en:"At least 8 characters",de:"Mindestens 8 Zeichen",test:p=>p.length>=8},
@@ -932,7 +934,12 @@ const pwBarLabel=isDE
         result=await supabase.auth.signUp({email,password});
       }
     if(result.error)throw result.error;
-      onAuth(result.data.user||result.data.session?.user);
+      if(mode==="register"){
+      setRegisteredEmail(email);
+      setRegistered(true);
+      return;
+    }
+    onAuth(result.data.user||result.data.session?.user);
     }catch(e){
       const msg=e.message||"";
       let friendly="";
@@ -960,7 +967,27 @@ const pwBarLabel=isDE
       console.log("Error message:", msg);setError(friendly);
     }    setLoading(false);
   };
-
+  if(registered)return(
+  <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"0 24px"}}>
+    <div style={{width:"100%",maxWidth:400,textAlign:"center"}}>
+      <div style={{fontSize:64,marginBottom:24}}>📬</div>
+      <h2 style={{margin:"0 0 12px",fontSize:24,fontWeight:900,color:"#fff"}}>
+        {isDE?"Fast geschafft!":"Almost there!"}
+      </h2>
+      <p style={{margin:"0 0 8px",fontSize:15,color:"#9ca3af",lineHeight:1.6}}>
+        {isDE?"Wir haben eine Bestätigungsmail gesendet an:":"We sent a confirmation email to:"}
+      </p>
+      <p style={{margin:"0 0 24px",fontSize:15,fontWeight:700,color:"#22c55e"}}>{registeredEmail}</p>
+      <p style={{margin:"0 0 32px",fontSize:13,color:"#6b7280",lineHeight:1.6}}>
+        {isDE?"Bitte bestätige deine E-Mail-Adresse um fortzufahren. Schau auch im Spam-Ordner nach.":"Please confirm your email address to continue. Also check your spam folder."}
+      </p>
+      <button onClick={()=>{setRegistered(false);setMode("login");}}
+        style={{width:"100%",height:52,background:"#22c55e",border:"none",borderRadius:14,fontSize:15,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+        {isDE?"Zum Login":"Go to Login"}
+      </button>
+    </div>
+  </div>
+);
   return(
     <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"0 24px"}}>
       <div style={{width:"100%",maxWidth:400}}>
