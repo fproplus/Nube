@@ -1879,7 +1879,6 @@ useEffect(()=>{
                   <button onClick={async()=>{
                     if(window.confirm(lang==="de"?"Account wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.":"Really delete account? This cannot be undone.")){
                       await supabase.from("user_data").delete().eq("user_id",user.id);
-                      await supabase.auth.admin.deleteUser(user.id);
                       await supabase.auth.signOut();
                       setUser(null);setShowAccountMenu(false);
                     }
