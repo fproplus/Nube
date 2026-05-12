@@ -1665,7 +1665,7 @@ useEffect(()=>{
     {key:"syn10",active:hasOmega3Food&&hasVitEFood,sideA:hasOmega3Food,sideB:hasVitEFood,missingA:lang==="de"?"Omega-3-Quelle (Lachs, Walnüsse...)":"Omega-3 food (Salmon, Walnuts...)",missingB:lang==="de"?"Vitamin-E-Quelle (Mandeln, Avocado...)":"Vitamin E food (Almonds, Avocado...)"},
   ];
   const synergiesAll=SYNERGY_CHECKS.filter(s=>s.active).map(s=>t[s.key]);
-  const synergies=isPremium?synergiesAll:synergiesAll.filter((_,i)=>i===0).filter(()=>synergiesAll.some((_,i)=>i===0&&SYNERGY_CHECKS.find(s=>s.active&&s.key==="syn1")));
+  const synergies=isPremium?synergiesAll:synergiesAll.slice(0,1);
   const synergiesLocked=isPremium?0:Math.max(0,synergiesAll.length-(synergies.length));
   const potentialSynergies=SYNERGY_CHECKS.filter(s=>!s.active&&(s.sideA||s.sideB)).slice(0,3);
 
@@ -1954,12 +1954,16 @@ useEffect(()=>{
               )}
             </div>
           )}
-          {!isPremium&&(
+          {isPremium?(
+            <div style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f59e0b,#f97316)",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#fff",display:"flex",alignItems:"center",gap:4}}>
+              ⚡ Pro
+            </div>
+          ):(
             <button onClick={()=>setShowUpgradeModal(true)}
               style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#fff",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
               ⚡ Pro
             </button>
-)}
+          )}
           <button
             onClick={()=>setLang(l=>l==="en"?"de":"en")}
             title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
