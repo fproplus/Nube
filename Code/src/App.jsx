@@ -1520,11 +1520,13 @@ export default function App(){
   useEffect(()=>{
   supabase.auth.getSession().then(({data:{session}})=>{
     setUser(session?.user||null);
+    setIsPremium(session?.user?.user_metadata?.isPremium===true);
     setAuthChecked(true);
     setAuthLoading(false);
   });
   const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{
     setUser(session?.user||null);
+    setIsPremium(session?.user?.user_metadata?.isPremium===true);
     setAuthChecked(true);
     setAuthLoading(false);
   });
