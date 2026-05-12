@@ -2112,6 +2112,17 @@ useEffect(()=>{
                 <div style={{fontSize:40,marginBottom:8}}>🥗</div>
                 <p style={{margin:0,fontSize:14}}>{t.noFoodsYet}</p>
                 <p style={{margin:"4px 0 0",fontSize:12,color:"#374151"}}>{t.noFoodsTip}</p>
+              {!isPremium&&foodObjs.length>3&&(
+                  <button onClick={()=>setShowUpgradeModal(true)}
+                    style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:14,padding:"12px 16px",marginTop:8,cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"background 0.2s"}}
+                    onMouseEnter={e=>e.currentTarget.style.background="#111827"}
+                    onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                    <span style={{fontSize:16}}>🔒</span>
+                    <span style={{fontSize:12,fontWeight:600,color:"#6b7280"}}>
+                      {lang==="de"?`${foodObjs.length-3} weitere Lebensmittel mit Nube Pro sehen`:`See ${foodObjs.length-3} more foods with Nube Pro`}
+                    </span>
+                  </button>
+                )}
               </div>
             )}
 
@@ -2139,7 +2150,7 @@ useEffect(()=>{
             {added.length>0&&(
               <div style={{marginBottom:16}}>
                 <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>✨ {lang==="de"?"Deine heutigen Lebensmittel":"Today's Foods"}</p>
-                {foodObjs.map((food,i)=>{
+                {(isPremium?foodObjs:foodObjs.slice(0,3)).map((food,i)=>{
                   const cs=CAT_STYLE[food.cat]||{bg:"#374151",color:"#d1d5db"};
                   return(
                     <div key={food.en} style={{background:"#0f172a",borderRadius:14,padding:"12px 14px",marginBottom:8,animation:`fadeSlideIn 0.3s ease ${i*0.04}s both`}}>
@@ -2152,9 +2163,12 @@ useEffect(()=>{
                           const bs=BENEFIT_STYLES[j%BENEFIT_STYLES.length];
                           const hasInfo=!!(BENEFIT_INFO[lang]?.[b]||BENEFIT_INFO.en?.[b]);
                           return(
-                            <button key={b} onClick={()=>hasInfo&&setSelBenefit(b)}
-                              style={{fontSize:11,padding:"3px 10px",borderRadius:99,background:bs.bg,color:bs.color,border:bs.border,fontWeight:500,cursor:hasInfo?"pointer":"default",transition:"opacity 0.15s",opacity:hasInfo?1:0.75}}>
-                              {b}{hasInfo?" ›":""}
+                            <button key={b} onClick={()=>{
+                                if(!isPremium){setShowUpgradeModal(true);return;}
+                                hasInfo&&setSelBenefit(b);
+                              }}
+                              style={{fontSize:11,padding:"3px 10px",borderRadius:99,background:bs.bg,color:bs.color,border:bs.border,fontWeight:500,cursor:hasInfo||!isPremium?"pointer":"default",transition:"opacity 0.15s",opacity:hasInfo?1:0.75}}>
+                              {b}{hasInfo?(isPremium?" ›":" 🔒"):""}
                             </button>
                           );
                         })}
