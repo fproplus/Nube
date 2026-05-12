@@ -647,7 +647,7 @@ function BenefitModal({benefit,lang,onClose}){
   );
 }
 
-function SynergyModal({lang,foodObjs,addFood,onClose}){
+function SynergyModal({lang,foodObjs,addFood,onClose,isPremium,onUpgrade}){
   const details=SYNERGY_DETAILS[lang];
   const sheetRef=useRef(null);
   const startY=useRef(null),curY=useRef(0);
@@ -665,7 +665,27 @@ function SynergyModal({lang,foodObjs,addFood,onClose}){
     if(syn.needs.every(n=>hasIngredient(n)))return false;
     return syn.needs.some(n=>hasIngredient(n));
   });
-
+  const LockedSynergyCard=({syn})=>(
+    <div style={{position:"relative",borderRadius:16,marginBottom:12,overflow:"hidden"}}>
+      <div style={{filter:"blur(3px)",pointerEvents:"none",background:"rgba(34,197,94,0.08)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:16,padding:16}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
+          <span style={{fontSize:20}}>{syn.emoji}</span>
+          <div>
+            <p style={{margin:0,fontSize:13,fontWeight:800,color:"#4ade80"}}>{syn.title}</p>
+            <p style={{margin:"2px 0 0",fontSize:11,color:"#86efac"}}>{syn.short}</p>
+          </div>
+        </div>
+        <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.6,margin:0}}>{"█".repeat(120)}</p>
+      </div>
+      <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"rgba(3,7,18,0.7)",borderRadius:16}}>
+        <span style={{fontSize:24,marginBottom:8}}>🔒</span>
+        <button onClick={onUpgrade}
+          style={{background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:10,padding:"8px 18px",fontSize:12,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+          {lang==="de"?"Mit Nube Pro freischalten →":"Unlock with Nube Pro →"}
+        </button>
+      </div>
+    </div>
+  );
   const SynergyCard=({syn,isUnlocked})=>{
     const missing=syn.needs.filter(n=>!hasIngredient(n));
     const present=syn.needs.filter(n=>hasIngredient(n));
@@ -713,20 +733,32 @@ function SynergyModal({lang,foodObjs,addFood,onClose}){
             <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>⚡ {t.synergyModalTitle}</h3>
             <button onClick={onClose} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
           </div>
-          {unlocked.length>0&&(
+          {isPremium?(
             <>
-              <p style={{fontSize:11,fontWeight:700,color:"#4ade80",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>🔓 {lang==="de"?"Freigeschaltete Synergien":"Unlocked synergies"} ({unlocked.length})</p>
-              {unlocked.map(syn=><SynergyCard key={syn.id} syn={syn} isUnlocked={true}/>)}
+              {unlocked.length>0&&(
+                <>
+                  <p style={{fontSize:11,fontWeight:700,color:"#4ade80",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>🔓 {lang==="de"?"Freigeschaltete Synergien":"Unlocked synergies"} ({unlocked.length})</p>
+                  {unlocked.map(syn=><SynergyCard key={syn.id} syn={syn} isUnlocked={true}/>)}
+                </>
+              )}
+              {partial.length>0&&(
+                <>
+                  <p style={{fontSize:11,fontWeight:700,color:"#f59e0b",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,marginTop:unlocked.length>0?16:0}}>💡 {t.potentialSynergies} — {lang==="de"?"du hast bereits eine Zutat:":"you already have one ingredient:"}</p>
+                  {partial.map(syn=><SynergyCard key={syn.id} syn={syn} isUnlocked={false}/>)}
+                </>
+              )}
+              {unlocked.length===0&&partial.length===0&&(
+                <p style={{fontSize:13,color:"#4b5563",textAlign:"center",padding:"24px 0"}}>{lang==="de"?"Füge mehr Lebensmittel hinzu um Synergien freizuschalten.":"Add more foods to unlock synergies."}</p>
+              )}
             </>
-          )}
-          {partial.length>0&&(
+          ):(
             <>
-              <p style={{fontSize:11,fontWeight:700,color:"#f59e0b",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,marginTop:unlocked.length>0?16:0}}>💡 {t.potentialSynergies} — {lang==="de"?"du hast bereits eine Zutat:":"you already have one ingredient:"}</p>
-              {partial.map(syn=><SynergyCard key={syn.id} syn={syn} isUnlocked={false}/>)}
+              {unlocked.filter(s=>s.id==="turmeric_pepper").map(syn=><SynergyCard key={syn.id} syn={syn} isUnlocked={true}/>)}
+              {[...unlocked.filter(s=>s.id!=="turmeric_pepper"),...partial].map(syn=><LockedSynergyCard key={syn.id} syn={syn}/>)}
+              {unlocked.length===0&&partial.length===0&&(
+                <p style={{fontSize:13,color:"#4b5563",textAlign:"center",padding:"24px 0"}}>{lang==="de"?"Füge mehr Lebensmittel hinzu um Synergien freizuschalten.":"Add more foods to unlock synergies."}</p>
+              )}
             </>
-          )}
-          {unlocked.length===0&&partial.length===0&&(
-            <p style={{fontSize:13,color:"#4b5563",textAlign:"center",padding:"24px 0"}}>{lang==="de"?"Füge mehr Lebensmittel hinzu um Synergien freizuschalten.":"Add more foods to unlock synergies."}</p>
           )}
         </div>
       </div>
@@ -1479,6 +1511,8 @@ export default function App(){
   try{return localStorage.getItem("wft-visited")!=="1";}catch{return true;}
   });
   const [showAbout,setShowAbout]=useState(false);
+  const [isPremium,setIsPremium]=useState(false);
+  const [showUpgradeModal,setShowUpgradeModal]=useState(false);
   const prevScore=useRef(0);
   const {offline,visible:offlineVisible}=useOffline();
   const {show:showInstall,install,dismiss:dismissInstall,isNative}=useInstallPrompt();
@@ -1628,7 +1662,9 @@ useEffect(()=>{
     {key:"syn9",active:hasGarlic&&hasVitCVeg,sideA:hasGarlic,sideB:hasVitCVeg,missingA:lang==="de"?"Knoblauch":"Garlic",missingB:lang==="de"?"Vitamin-C-Gemüse (Paprika, Kiwi...)":"Vitamin C veg (Bell Pepper, Kiwi...)"},
     {key:"syn10",active:hasOmega3Food&&hasVitEFood,sideA:hasOmega3Food,sideB:hasVitEFood,missingA:lang==="de"?"Omega-3-Quelle (Lachs, Walnüsse...)":"Omega-3 food (Salmon, Walnuts...)",missingB:lang==="de"?"Vitamin-E-Quelle (Mandeln, Avocado...)":"Vitamin E food (Almonds, Avocado...)"},
   ];
-  const synergies=SYNERGY_CHECKS.filter(s=>s.active).map(s=>t[s.key]);
+  const synergiesAll=SYNERGY_CHECKS.filter(s=>s.active).map(s=>t[s.key]);
+  const synergies=isPremium?synergiesAll:synergiesAll.filter((_,i)=>i===0).filter(()=>synergiesAll.some((_,i)=>i===0&&SYNERGY_CHECKS.find(s=>s.active&&s.key==="syn1")));
+  const synergiesLocked=isPremium?0:Math.max(0,synergiesAll.length-(synergies.length));
   const potentialSynergies=SYNERGY_CHECKS.filter(s=>!s.active&&(s.sideA||s.sideB)).slice(0,3);
 
   const getVerdict=s=>{
@@ -1746,7 +1782,7 @@ useEffect(()=>{
       {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added}/>}
       {selBenefit&&<BenefitModal benefit={selBenefit} lang={lang} onClose={()=>setSelBenefit(null)}/>}
       {editDay&&<EditDayModal dayKey={editDay} lang={lang} history={history} setHistory={setHistory} todayAdded={added} setAdded={setAdded} onClose={()=>setEditDay(null)}/>}
-          {confirmRemove&&(
+      {confirmRemove&&(
   <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setConfirmRemove(null)}>
     <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
     <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:20,padding:"24px 20px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
@@ -1771,7 +1807,34 @@ useEffect(()=>{
     </div>
   </div>
 )}
-      {showSynergyModal&&<SynergyModal lang={lang} foodObjs={foodObjs} addFood={addFood} onClose={()=>setShowSynergyModal(false)}/>}
+      {showSynergyModal&&<SynergyModal lang={lang} foodObjs={foodObjs} addFood={addFood} onClose={()=>setShowSynergyModal(false)} isPremium={isPremium} onUpgrade={()=>{setShowSynergyModal(false);setShowUpgradeModal(true);}}/>}
+        {showUpgradeModal&&(
+          <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setShowUpgradeModal(false)}>
+            <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(6px)"}}/>
+            <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:24,padding:"28px 24px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
+              <div style={{textAlign:"center",marginBottom:20}}>
+                <div style={{fontSize:40,marginBottom:8}}>⚡</div>
+                <h2 style={{margin:"0 0 4px",fontSize:22,fontWeight:900,color:"#fff"}}>Nube Pro</h2>
+                <p style={{margin:0,fontSize:28,fontWeight:900,background:"linear-gradient(135deg,#f59e0b,#f97316)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{lang==="de"?"2,99€ / Monat":"2,99€ / month"}</p>
+              </div>
+              <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
+                {(lang==="de"?["✓ Alle Nährstoffsynergien","✓ Health Goals Tracking","✓ Vollständiges Lebensmittel-Lexikon","✓ Unbegrenzte Historie","✓ Geräte-Sync"]:["✓ All nutritional synergies","✓ Health Goals tracking","✓ Full food lexicon","✓ Unlimited history","✓ Sync across devices"]).map(f=>(
+                  <div key={f} style={{display:"flex",alignItems:"center",gap:10,background:"#0f172a",borderRadius:10,padding:"10px 14px"}}>
+                    <span style={{fontSize:13,fontWeight:600,color:"#d1d5db"}}>{f}</span>
+                  </div>
+                ))}
+              </div>
+              <button onClick={()=>window.location.href="mailto:hello@nubetracker.com?subject=Nube Pro Waitlist"}
+                style={{width:"100%",height:52,background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:14,fontSize:15,fontWeight:800,color:"#fff",cursor:"pointer",marginBottom:12}}>
+                {lang==="de"?"Coming Soon — Warteliste beitreten":"Coming Soon — Join Waitlist"}
+              </button>
+              <button onClick={()=>setShowUpgradeModal(false)}
+                style={{width:"100%",background:"transparent",border:"none",color:"#4b5563",fontSize:13,cursor:"pointer",padding:"8px 0"}}>
+                {lang==="de"?"Vielleicht später":"Maybe later"}
+              </button>
+            </div>
+          </div>
+        )}
       {showImpressum&&(
         <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
           <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
@@ -1889,6 +1952,12 @@ useEffect(()=>{
               )}
             </div>
           )}
+          {!isPremium&&(
+            <button onClick={()=>setShowUpgradeModal(true)}
+              style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#fff",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
+              ⚡ Pro
+            </button>
+)}
           <button
             onClick={()=>setLang(l=>l==="en"?"de":"en")}
             title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
@@ -1945,15 +2014,29 @@ useEffect(()=>{
               </div>
             )}
 
-            {synergies.length>0&&(
-              <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"rgba(120,53,15,0.3)",border:"1px solid rgba(180,83,9,0.4)",borderRadius:16,padding:"12px 16px",marginBottom:8,textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
-                onMouseEnter={e=>e.currentTarget.style.background="rgba(120,53,15,0.45)"} onMouseLeave={e=>e.currentTarget.style.background="rgba(120,53,15,0.3)"}>
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-                  <p style={{margin:0,fontSize:12,fontWeight:700,color:"#fbbf24"}}>⚡ {t.synergiesDetected} ({synergies.length})</p>
-                  <span style={{fontSize:11,color:"#f59e0b"}}>Details ›</span>
-                </div>
-                {synergies.map((s,i)=><p key={i} style={{margin:0,fontSize:11,color:"rgba(251,191,36,0.8)"}}>⚡ {s}</p>)}
-              </button>
+            {(synergies.length>0||synergiesLocked>0)&&(
+              <div style={{marginBottom:8}}>
+                {synergies.length>0&&(
+                  <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"rgba(120,53,15,0.3)",border:"1px solid rgba(180,83,9,0.4)",borderRadius:synergiesLocked>0?"16px 16px 0 0":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
+                    onMouseEnter={e=>e.currentTarget.style.background="rgba(120,53,15,0.45)"} onMouseLeave={e=>e.currentTarget.style.background="rgba(120,53,15,0.3)"}>
+                    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+                      <p style={{margin:0,fontSize:12,fontWeight:700,color:"#fbbf24"}}>⚡ {t.synergiesDetected} ({synergies.length})</p>
+                      <span style={{fontSize:11,color:"#f59e0b"}}>Details ›</span>
+                    </div>
+                    {synergies.map((s,i)=><p key={i} style={{margin:0,fontSize:11,color:"rgba(251,191,36,0.8)"}}>⚡ {s}</p>)}
+                  </button>
+                )}
+                {synergiesLocked>0&&(
+                  <button onClick={()=>setShowUpgradeModal(true)}
+                    style={{width:"100%",background:"#0f172a",border:"1px solid #374151",borderRadius:synergies.length>0?"0 0 16px 16px":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"background 0.2s"}}
+                    onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                    <span style={{fontSize:16}}>🔒</span>
+                    <span style={{fontSize:12,fontWeight:600,color:"#6b7280"}}>
+                      {lang==="de"?`${synergiesLocked} weitere Synergien erkannt — Mit Nube Pro freischalten`:`${synergiesLocked} more synergies detected — Unlock with Nube Pro`}
+                    </span>
+                  </button>
+                )}
+              </div>
             )}
             {potentialSynergies.length>0&&added.length>0&&(
               <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:16,padding:"12px 16px",marginBottom:16,textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
@@ -2106,8 +2189,19 @@ useEffect(()=>{
             </div>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:8}}>
-            {heatDays.slice().reverse().map(({key,score:s,isToday,d})=>{
+            {!isPremium&&heatDays.slice(0,22).some(({key})=>(history[key]||[]).length>0)&&(
+              <button onClick={()=>setShowUpgradeModal(true)}
+                style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:14,padding:"12px 16px",marginBottom:4,cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"background 0.2s"}}
+                onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                <span style={{fontSize:16}}>🔒</span>
+                <span style={{fontSize:12,fontWeight:600,color:"#6b7280"}}>
+                  {lang==="de"?"Ältere Historie mit Nube Pro verfügbar":"Older history available with Nube Pro"}
+                </span>
+              </button>
+            )}
+            {heatDays.slice().reverse().map(({key,score:s,isToday,d},idx)=>{
               const foods=history[key]||[];if(!foods.length)return null;
+              if(!isPremium&&idx>6)return null;
               const c=getPowerColor(s);
               return(
                 <div key={key} onClick={()=>setEditDay(key)} style={{background:"#0f172a",borderRadius:16,padding:"12px 16px",border:isToday?"1px solid #065f46":"1px solid #111827",cursor:"pointer",transition:"border-color 0.15s"}}
@@ -2129,6 +2223,37 @@ useEffect(()=>{
           </div>
         </TabPane>
         <TabPane active={activeTab==="browse"}>
+        {!isPremium?(
+          <div style={{position:"relative",minHeight:300}}>
+            <div style={{filter:"blur(5px)",pointerEvents:"none",opacity:0.4}}>
+              <div style={{background:"#0f172a",borderRadius:14,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:10,padding:"2px 7px",borderRadius:99,background:"#fee2e2",color:"#b91c1c",fontWeight:700}}>Protein</span>
+                <span style={{fontSize:13,fontWeight:600,color:"#d1d5db",flex:1}}>Chicken Breast</span>
+              </div>
+              <div style={{background:"#0f172a",borderRadius:14,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:10,padding:"2px 7px",borderRadius:99,background:"#dcfce7",color:"#15803d",fontWeight:700}}>Vegetable</span>
+                <span style={{fontSize:13,fontWeight:600,color:"#d1d5db",flex:1}}>Spinach</span>
+              </div>
+              <div style={{background:"#0f172a",borderRadius:14,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:10,padding:"2px 7px",borderRadius:99,background:"#ffedd5",color:"#c2410c",fontWeight:700}}>Fruit</span>
+                <span style={{fontSize:13,fontWeight:600,color:"#d1d5db",flex:1}}>Blueberries</span>
+              </div>
+            </div>
+            <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,textAlign:"center",padding:"0 24px"}}>
+              <span style={{fontSize:32}}>🔒</span>
+              <p style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>
+                {lang==="de"?"Das Lebensmittel-Lexikon ist ein Nube Pro Feature":"The Food Lexicon is a Nube Pro feature"}
+              </p>
+              <p style={{margin:0,fontSize:13,color:"#6b7280",lineHeight:1.5}}>
+                {lang==="de"?"Durchstöbere alle Lebensmittel nach Kategorie.":"Browse all foods by category and add them directly."}
+              </p>
+              <button onClick={()=>setShowUpgradeModal(true)}
+                style={{background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:14,padding:"12px 24px",fontSize:14,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+                {lang==="de"?"Nube Pro freischalten →":"Unlock Nube Pro →"}
+              </button>
+            </div>
+          </div>
+        ):(
         <div>
           {/* ADMIN SECTION */}
         <div style={{marginBottom:16}}>
@@ -2259,9 +2384,38 @@ useEffect(()=>{
               );
             })
           )}
-        </div>
+        </div>)}
       </TabPane>
         <TabPane active={activeTab==="insights"}>
+          {!isPremium?(
+            <div style={{position:"relative",minHeight:300}}>
+              <div style={{filter:"blur(5px)",pointerEvents:"none",opacity:0.4}}>
+                {HEALTH_GOALS[lang].slice(0,2).map(goal=>(
+                  <div key={goal.id} style={{background:"#0f172a",borderRadius:16,padding:16,marginBottom:12,border:"1px solid #1f2937"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
+                      <span style={{fontSize:22}}>{goal.icon}</span>
+                      <span style={{fontSize:14,fontWeight:800,color:"#f9fafb"}}>{goal.label}</span>
+                    </div>
+                    <p style={{fontSize:12,color:"#6b7280",lineHeight:1.5,margin:0}}>{goal.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,textAlign:"center",padding:"0 24px"}}>
+                <span style={{fontSize:32}}>🔒</span>
+                <p style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>
+                  {lang==="de"?"Health Goals sind ein Nube Pro Feature":"Health Goals are a Nube Pro feature"}
+                </p>
+                <p style={{margin:0,fontSize:13,color:"#6b7280",lineHeight:1.5}}>
+                  {lang==="de"?"Sieh genau welche Gesundheitsziele dein Essen heute abdeckt.":"See exactly which health goals your food covers today."}
+                </p>
+                <button onClick={()=>setShowUpgradeModal(true)}
+                  style={{background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:14,padding:"12px 24px",fontSize:14,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+                  {lang==="de"?"Nube Pro freischalten →":"Unlock Nube Pro →"}
+                </button>
+              </div>
+            </div>
+          ):(
+          <>
           <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:16,marginTop:0}}>
             {lang==="de"?"Was deckst du heute ab?":"What are you covering today?"}
           </p>
@@ -2304,6 +2458,7 @@ useEffect(()=>{
               </div>
             );
           })}
+        </>)}
         </TabPane>
       </div>
 
