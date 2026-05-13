@@ -1513,6 +1513,7 @@ export default function App(){
   const [showAbout,setShowAbout]=useState(false);
   const [isPremium,setIsPremium]=useState(false);
   const [showUpgradeModal,setShowUpgradeModal]=useState(false);
+  const [billingYearly,setBillingYearly]=useState(true);
   const prevScore=useRef(0);
   const {offline,visible:offlineVisible}=useOffline();
   const {show:showInstall,install,dismiss:dismissInstall,isNative}=useInstallPrompt();
@@ -1810,9 +1811,7 @@ useEffect(()=>{
   </div>
 )}
       {showSynergyModal&&<SynergyModal lang={lang} foodObjs={foodObjs} addFood={addFood} onClose={()=>setShowSynergyModal(false)} isPremium={isPremium} onUpgrade={()=>{setShowSynergyModal(false);setShowUpgradeModal(true);}}/>}
-        {showUpgradeModal&&(()=>{
-        const [billingYearly,setBillingYearly]=React.useState(true);
-        return(
+        {showUpgradeModal&&(
         <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setShowUpgradeModal(false)}>
           <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(6px)"}}/>
           <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:24,padding:"28px 24px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
@@ -1856,8 +1855,7 @@ useEffect(()=>{
             </button>
           </div>
         </div>
-        );
-      })()}
+        )}
       {showImpressum&&(
         <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
           <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
