@@ -1810,33 +1810,54 @@ useEffect(()=>{
   </div>
 )}
       {showSynergyModal&&<SynergyModal lang={lang} foodObjs={foodObjs} addFood={addFood} onClose={()=>setShowSynergyModal(false)} isPremium={isPremium} onUpgrade={()=>{setShowSynergyModal(false);setShowUpgradeModal(true);}}/>}
-        {showUpgradeModal&&(
-          <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setShowUpgradeModal(false)}>
-            <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(6px)"}}/>
-            <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:24,padding:"28px 24px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
-              <div style={{textAlign:"center",marginBottom:20}}>
-                <div style={{fontSize:40,marginBottom:8}}>⚡</div>
-                <h2 style={{margin:"0 0 4px",fontSize:22,fontWeight:900,color:"#fff"}}>Nube Pro</h2>
-                <p style={{margin:0,fontSize:28,fontWeight:900,background:"linear-gradient(135deg,#f59e0b,#f97316)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{lang==="de"?"2,99€ / Monat":"2,99€ / month"}</p>
+        {showUpgradeModal&&(()=>{
+        const [billingYearly,setBillingYearly]=React.useState(true);
+        return(
+        <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setShowUpgradeModal(false)}>
+          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(6px)"}}/>
+          <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:24,padding:"28px 24px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
+            <div style={{textAlign:"center",marginBottom:20}}>
+              <div style={{fontSize:40,marginBottom:8}}>⚡</div>
+              <h2 style={{margin:"0 0 16px",fontSize:22,fontWeight:900,color:"#fff"}}>Nube Pro</h2>
+              <div style={{display:"flex",gap:4,background:"#0f172a",borderRadius:12,padding:4,marginBottom:16}}>
+                <button onClick={()=>setBillingYearly(false)}
+                  style={{flex:1,minHeight:36,background:!billingYearly?"#1f2937":"transparent",border:"none",borderRadius:10,fontSize:12,fontWeight:700,color:!billingYearly?"#fff":"#6b7280",cursor:"pointer",transition:"all 0.2s"}}>
+                  {lang==="de"?"Monatlich":"Monthly"}
+                </button>
+                <button onClick={()=>setBillingYearly(true)}
+                  style={{flex:1,minHeight:36,background:billingYearly?"#1f2937":"transparent",border:"none",borderRadius:10,fontSize:12,fontWeight:700,color:billingYearly?"#fff":"#6b7280",cursor:"pointer",transition:"all 0.2s",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>
+                  {lang==="de"?"Jährlich":"Yearly"} 🏆
+                </button>
               </div>
-              <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
-                {(lang==="de"?["✓ Alle Nährstoffsynergien","✓ Health Goals Tracking","✓ Vollständiges Lebensmittel-Lexikon","✓ Unbegrenzte Historie","✓ Geräte-Sync"]:["✓ All nutritional synergies","✓ Health Goals tracking","✓ Full food lexicon","✓ Unlimited history","✓ Sync across devices"]).map(f=>(
-                  <div key={f} style={{display:"flex",alignItems:"center",gap:10,background:"#0f172a",borderRadius:10,padding:"10px 14px"}}>
-                    <span style={{fontSize:13,fontWeight:600,color:"#d1d5db"}}>{f}</span>
-                  </div>
-                ))}
-              </div>
-              <button onClick={()=>window.location.href="mailto:hello@nubetracker.com?subject=Nube Pro Waitlist"}
-                style={{width:"100%",height:52,background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:14,fontSize:15,fontWeight:800,color:"#fff",cursor:"pointer",marginBottom:12}}>
-                {lang==="de"?"Coming Soon — Warteliste beitreten":"Coming Soon — Join Waitlist"}
-              </button>
-              <button onClick={()=>setShowUpgradeModal(false)}
-                style={{width:"100%",background:"transparent",border:"none",color:"#4b5563",fontSize:13,cursor:"pointer",padding:"8px 0"}}>
-                {lang==="de"?"Vielleicht später":"Maybe later"}
-              </button>
+              {billingYearly?(
+                <div>
+                  <p style={{margin:"0 0 4px",fontSize:28,fontWeight:900,background:"linear-gradient(135deg,#f59e0b,#f97316)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>29,99€ / {lang==="de"?"Jahr":"year"}</p>
+                  <p style={{margin:0,fontSize:13,color:"#4ade80",fontWeight:600}}>2,49€ / {lang==="de"?"Mo — 37% sparen":"mo — save 37%"}</p>
+                  <span style={{display:"inline-block",marginTop:6,fontSize:11,fontWeight:700,color:"#f59e0b",background:"rgba(245,158,11,0.12)",padding:"3px 10px",borderRadius:99}}>{lang==="de"?"Bestes Angebot 🏆":"Best Value 🏆"}</span>
+                </div>
+              ):(
+                <p style={{margin:0,fontSize:28,fontWeight:900,background:"linear-gradient(135deg,#f59e0b,#f97316)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>3,99€ / {lang==="de"?"Monat":"month"}</p>
+              )}
             </div>
+            <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
+              {(lang==="de"?["✓ Alle Nährstoffsynergien","✓ Health Goals Tracking","✓ Vollständiges Lebensmittel-Lexikon","✓ Unbegrenzte Historie","✓ Geräte-Sync"]:["✓ All nutritional synergies","✓ Health Goals tracking","✓ Full food lexicon","✓ Unlimited history","✓ Sync across devices"]).map(f=>(
+                <div key={f} style={{display:"flex",alignItems:"center",gap:10,background:"#0f172a",borderRadius:10,padding:"10px 14px"}}>
+                  <span style={{fontSize:13,fontWeight:600,color:"#d1d5db"}}>{f}</span>
+                </div>
+              ))}
+            </div>
+            <button onClick={()=>window.location.href="mailto:hello@nubetracker.com?subject=Nube Pro Waitlist"}
+              style={{width:"100%",height:52,background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:14,fontSize:15,fontWeight:800,color:"#fff",cursor:"pointer",marginBottom:12}}>
+              {lang==="de"?"Coming Soon — Warteliste beitreten":"Coming Soon — Join Waitlist"}
+            </button>
+            <button onClick={()=>setShowUpgradeModal(false)}
+              style={{width:"100%",background:"transparent",border:"none",color:"#4b5563",fontSize:13,cursor:"pointer",padding:"8px 0"}}>
+              {lang==="de"?"Vielleicht später":"Maybe later"}
+            </button>
           </div>
-        )}
+        </div>
+        );
+      })()}
       {showImpressum&&(
         <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
           <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
