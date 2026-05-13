@@ -999,6 +999,159 @@ const pwBarLabel=isDE
       console.log("Error message:", msg);setError(friendly);
     }    setLoading(false);
   };
+  const isDesktop=window.innerWidth>=900;
+  if(isDesktop)return(
+    <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div style={{width:"100%",maxWidth:1200,display:"flex",alignItems:"center",gap:32,padding:"0 40px"}}>
+
+        {/* LEFT — App Demo */}
+        <div style={{flex:"0 0 280px",display:"flex",flexDirection:"column",alignItems:"center"}}>
+          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:12,textAlign:"center"}}>
+            {isDE?"Sieh es in Aktion":"See it in action"}
+          </p>
+          <AppDemo lang={lang}/>
+        </div>
+
+        {/* MIDDLE — Login Form */}
+        <div style={{flex:"1",maxWidth:400,margin:"0 auto"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:32}}>
+            <div style={{display:"flex",alignItems:"center",gap:10}}>
+              <img src="/logopng.png" alt="Nube" height={48} style={{height:48,borderRadius:10}}/>
+              <div>
+                <h1 style={{margin:0,fontSize:20,fontWeight:900,color:"#fff"}}>Nube</h1>
+                <p style={{margin:0,fontSize:11,color:"#4b5563"}}>What food can do.</p>
+              </div>
+            </div>
+            <button onClick={()=>setLang(l=>l==="en"?"de":"en")}
+              style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer"}}>
+              {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+            </button>
+          </div>
+          <h2 style={{margin:"0 0 8px",fontSize:24,fontWeight:900,color:"#fff"}}>
+            {isDE?"Willkommen bei Nube":"Welcome to Nube"}
+          </h2>
+          <p style={{margin:"0 0 32px",fontSize:14,color:"#6b7280"}}>
+            {isDE?"Tracke deine Ernährung und entdecke Synergien":"Track your nutrition and discover synergies"}
+          </p>
+          <div style={{display:"flex",gap:4,background:"#111827",borderRadius:12,padding:4,marginBottom:24}}>
+            {["login","register"].map(m=>(
+              <button key={m} onClick={()=>{setMode(m);setError("");setConfirmPassword("");}}
+                style={{flex:1,minHeight:40,background:mode===m?"#1f2937":"transparent",border:"none",borderRadius:10,fontSize:13,fontWeight:700,color:mode===m?"#fff":"#6b7280",cursor:"pointer",transition:"all 0.2s"}}>
+                {m==="login"?(isDE?"Anmelden":"Login"):(isDE?"Konto erstellen":"Create account")}
+              </button>
+            ))}
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:16}}>
+            <div>
+              <label style={{fontSize:12,fontWeight:600,color:"#9ca3af",display:"block",marginBottom:6}}>{isDE?"E-Mail":"Email"}</label>
+              <input value={email} onChange={e=>setEmail(e.target.value)} type="email" autoComplete="email"
+                placeholder={isDE?"deine@email.com":"your@email.com"}
+                style={{width:"100%",padding:"12px 16px",borderRadius:12,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",boxSizing:"border-box"}}
+                onFocus={e=>e.target.style.borderColor="#22c55e"} onBlur={e=>e.target.style.borderColor="#1f2937"}
+                onKeyDown={e=>e.key==="Enter"&&handleSubmit()}/>
+            </div>
+            <div>
+              <label style={{fontSize:12,fontWeight:600,color:"#9ca3af",display:"block",marginBottom:6}}>{isDE?"Passwort":"Password"}</label>
+              <div style={{position:"relative"}}>
+                <input value={password} onChange={e=>setPassword(e.target.value)}
+                  type={showPassword?"text":"password"} autoComplete={mode==="login"?"current-password":"new-password"}
+                  placeholder={isDE?"Mindestens 8 Zeichen":"At least 8 characters"}
+                  style={{width:"100%",padding:"12px 48px 12px 16px",borderRadius:12,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",boxSizing:"border-box"}}
+                  onFocus={e=>e.target.style.borderColor="#22c55e"} onBlur={e=>e.target.style.borderColor="#1f2937"}
+                  onKeyDown={e=>e.key==="Enter"&&handleSubmit()}/>
+                <button onClick={()=>setShowPassword(p=>!p)}
+                  style={{position:"absolute",right:12,top:"50%",transform:"translateY(-50%)",background:"transparent",border:"none",color:"#6b7280",cursor:"pointer",fontSize:16,padding:0}}>
+                  {showPassword?"🙈":"👁️"}
+                </button>
+              </div>
+            </div>
+            {mode==="register"&&(
+              <div>
+                <label style={{fontSize:12,fontWeight:600,color:"#9ca3af",display:"block",marginBottom:6}}>{isDE?"Passwort bestätigen":"Confirm Password"}</label>
+                <div style={{position:"relative"}}>
+                  <input value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)}
+                    type={showConfirmPassword?"text":"password"} autoComplete="new-password"
+                    placeholder={isDE?"Passwort wiederholen":"Repeat password"}
+                    style={{width:"100%",padding:"12px 48px 12px 16px",borderRadius:12,border:"1px solid "+(confirmPassword&&confirmPassword!==password?"rgba(239,68,68,0.5)":confirmPassword&&confirmPassword===password?"rgba(34,197,94,0.5)":"#1f2937"),background:"#0f172a",fontSize:14,color:"#fff",outline:"none",boxSizing:"border-box"}}
+                    onFocus={e=>e.target.style.borderColor="#22c55e"} onBlur={e=>e.target.style.borderColor="#1f2937"}
+                    onKeyDown={e=>e.key==="Enter"&&handleSubmit()}/>
+                  <button onClick={()=>setShowConfirmPassword(p=>!p)}
+                    style={{position:"absolute",right:12,top:"50%",transform:"translateY(-50%)",background:"transparent",border:"none",color:"#6b7280",cursor:"pointer",fontSize:16,padding:0}}>
+                    {showConfirmPassword?"🙈":"👁️"}
+                  </button>
+                </div>
+                {confirmPassword&&confirmPassword!==password&&<p style={{margin:"4px 0 0",fontSize:11,color:"#f87171"}}>{isDE?"Passwörter stimmen nicht überein":"Passwords do not match"}</p>}
+                {confirmPassword&&confirmPassword===password&&<p style={{margin:"4px 0 0",fontSize:11,color:"#4ade80"}}>{isDE?"Passwörter stimmen überein ✓":"Passwords match ✓"}</p>}
+              </div>
+            )}
+            {mode==="register"&&password.length>0&&(
+              <div style={{marginTop:4}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+                  <div style={{flex:1,height:4,borderRadius:2,background:"#1f2937"}}>
+                    <div style={{height:4,borderRadius:2,background:pwBarColor,width:`${pwScore*25}%`,transition:"width 0.3s ease,background 0.3s ease"}}/>
+                  </div>
+                  <span style={{fontSize:11,color:pwBarColor,marginLeft:8,fontWeight:600,minWidth:50}}>{pwBarLabel}</span>
+                </div>
+                <div style={{display:"flex",flexDirection:"column",gap:3,marginTop:6}}>
+                  {pwRules.map(r=><span key={r.key} style={{fontSize:11,color:r.test(password)?"#4ade80":"#6b7280"}}>{r.test(password)?"✓":"✗"} {isDE?r.de:r.en}</span>)}
+                </div>
+              </div>
+            )}
+          </div>
+          {error&&(
+            <div style={{background:"rgba(239,68,68,0.1)",border:"1px solid rgba(239,68,68,0.3)",borderRadius:12,padding:"12px 16px",marginBottom:16}}>
+              <p style={{margin:0,fontSize:13,color:"#fca5a5"}}>{error}</p>
+            </div>
+          )}
+          <button onClick={handleSubmit} disabled={loading}
+            style={{width:"100%",height:52,background:loading?"#166834":(mode==="register"&&!pwStrong)?"#1f2937":"#22c55e",border:(mode==="register"&&!pwStrong)?"1px solid #374151":"none",borderRadius:14,fontSize:15,fontWeight:800,color:(mode==="register"&&!pwStrong)?"#4b5563":"#fff",cursor:(loading||(mode==="register"&&!pwStrong))?"not-allowed":"pointer",transition:"background 0.2s",marginBottom:16}}>
+            {loading?(isDE?"Laden...":"Loading..."):(mode==="login"?(isDE?"Anmelden":"Login"):(isDE?"Konto erstellen":"Create account"))}
+          </button>
+          <button onClick={onGuest}
+            style={{width:"100%",background:"transparent",border:"none",color:"#4b5563",fontSize:13,cursor:"pointer",padding:"8px 0"}}>
+            {isDE?"Ohne Konto fortfahren →":"Continue without account →"}
+          </button>
+          {mode==="register"&&(
+            <p style={{fontSize:11,color:"#4b5563",textAlign:"center",marginTop:16,lineHeight:1.5}}>
+              {isDE?"Mit der Registrierung stimmst du unserer Datenschutzerklärung zu.":"By registering you agree to our Privacy Policy."}
+            </p>
+          )}
+        </div>
+
+        {/* RIGHT — Synergy Cards */}
+        <div style={{flex:"0 0 280px",display:"flex",flexDirection:"column",gap:12}}>
+          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4}}>
+            {isDE?"Wissenschaftlich belegt":"Science-backed synergies"}
+          </p>
+          {[
+            {emoji:"🌶️+🌿",title:isDE?"Schwarzer Pfeffer + Kurkuma":"Black Pepper + Turmeric",desc:isDE?"Curcumin-Aufnahme x20":"Curcumin absorption x20",color:"#f59e0b",bg:"rgba(120,53,15,0.3)",border:"rgba(180,83,9,0.4)"},
+            {emoji:"🍊+🥩",title:isDE?"Vitamin C + Eisen":"Vitamin C + Iron",desc:isDE?"Eisenaufnahme x4":"Iron absorption x4",color:"#f97316",bg:"rgba(124,45,18,0.3)",border:"rgba(194,65,12,0.4)"},
+            {emoji:"🥑+🥗",title:isDE?"Avocado + Vitamine":"Avocado + Vitamins",desc:isDE?"A/E/K Aufnahme x5":"A/E/K absorption x5",color:"#22c55e",bg:"rgba(20,83,45,0.3)",border:"rgba(22,163,74,0.4)"},
+            {emoji:"🍵+🍋",title:isDE?"Grüner Tee + Zitrone":"Green Tea + Lemon",desc:isDE?"EGCG-Aufnahme x13":"EGCG absorption x13",color:"#60a5fa",bg:"rgba(30,58,138,0.3)",border:"rgba(37,99,235,0.4)"},
+          ].map((s,i)=>(
+            <div key={i} style={{background:s.bg,border:`1px solid ${s.border}`,borderRadius:16,padding:"14px 16px"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:20}}>{s.emoji}</span>
+                <div>
+                  <p style={{margin:0,fontSize:12,fontWeight:700,color:s.color}}>{s.title}</p>
+                  <p style={{margin:"2px 0 0",fontSize:11,color:"#9ca3af"}}>{s.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+          <div style={{background:"#0f172a",border:"1px solid #1f2937",borderRadius:16,padding:"14px 16px",marginTop:4}}>
+            <p style={{margin:"0 0 4px",fontSize:12,fontWeight:700,color:"#4b5563"}}>
+              {isDE?"10 Synergien insgesamt":"10 synergies total"}
+            </p>
+            <p style={{margin:0,fontSize:11,color:"#374151"}}>
+              {isDE?"Entdecke alle mit Nube Pro ⚡":"Discover all with Nube Pro ⚡"}
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
   if(registered)return(
   <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"0 24px"}}>
     <div style={{width:"100%",maxWidth:400,textAlign:"center"}}>
@@ -1708,7 +1861,7 @@ useEffect(()=>{
     </div>
   );
   if(!authChecked)return <div style={{minHeight:"100vh",background:"#030712"}}/>;
-  if(!user&&!isGuest)return <AuthScreen lang={lang} setLang={setLang} onAuth={u=>{setUser(u);}} onGuest={()=>setIsGuest(true)}/>;  if(showLanding)return(
+  if(!user&&!isGuest&&!showLanding)return <AuthScreen lang={lang} setLang={setLang} onAuth={u=>{setUser(u);}} onGuest={()=>setIsGuest(true)}/>;  if(showLanding)return(
   <>
     <LandingPage lang={lang} setLang={setLang} onEnter={()=>{setShowLanding(false);try{localStorage.setItem("wft-visited","1");}catch{}}} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>
     {showImpressum&&(
