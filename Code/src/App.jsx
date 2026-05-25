@@ -58,6 +58,10 @@ const T = {
     synergyModalTitle:"Synergies explained",
     synergyPossible:"Synergies you could unlock today",
     benefitDisclaimer:"ℹ️ This is general nutritional information, not medical advice.",
+    preferencesBtn:"⚙️ Preferences",preferencesTitle:"Your Preferences",dietLabel:"Diet",
+    dietAll:"🍽️ All",dietVegetarian:"🥗 Vegetarian",dietVegan:"🌱 Vegan",dietPescatarian:"🐟 Pescatarian",
+    hiddenFoods:"Hidden foods",clearExcluded:"Show all foods again",savePreferences:"Save preferences",
+    excludeToast:"Hidden. You can restore it in Preferences.",
   },
   de: {
     appTitle:"NuBe", appSubtitle:"What food can do.",
@@ -105,6 +109,10 @@ const T = {
     synergyModalTitle:"Synergien erklärt",
     synergyPossible:"Synergien die du heute noch freischalten könntest",
     benefitDisclaimer:"ℹ️ Dies sind allgemeine Ernährungshinweise, keine medizinische Beratung.",
+    preferencesBtn:"⚙️ Einstellungen",preferencesTitle:"Deine Einstellungen",dietLabel:"Ernährungsweise",
+    dietAll:"🍽️ Alles",dietVegetarian:"🥗 Vegetarisch",dietVegan:"🌱 Vegan",dietPescatarian:"🐟 Pescetarisch",
+    hiddenFoods:"Ausgeblendete Lebensmittel",clearExcluded:"Alle Lebensmittel wieder anzeigen",
+    savePreferences:"Einstellungen speichern",excludeToast:"Ausgeblendet. In Einstellungen wiederherstellbar.",
   }
 };
 
@@ -446,6 +454,9 @@ const seenSet = new Set();
 const FOODS = FOODS_RAW.filter(f=>{ if(seenSet.has(f.en))return false; seenSet.add(f.en); return true; });
 const FOOD_BY_EN = {};
 FOODS.forEach(f=>{ FOOD_BY_EN[f.en]=f; });
+const VEGETARIAN_HIDE=new Set(["Chicken Breast","Salmon","Beef","Sardines","Tuna","Turkey","Liver (Beef)","Mackerel","Oysters"]);
+const PESCATARIAN_HIDE=new Set(["Chicken Breast","Beef","Turkey","Liver (Beef)"]);
+const VEGAN_EXTRA_HIDE=new Set(["Eggs","Bone Broth","Whey Protein"]);
 
 const ALL_VIT = ["A","B1","B2","B3","B5","B6","B9","B12","C","D","E","K"];
 const ALL_MIN = ["Calcium","Copper","Iron","Magnesium","Manganese","Phosphorus","Potassium","Selenium","Zinc"];
@@ -766,7 +777,7 @@ function SynergyModal({lang,foodObjs,addFood,onClose,isPremium,onUpgrade}){
   );
 }
 
-function NutrientModal({nutrient,type,lang,onClose,added}){
+function NutrientModal({nutrient,type,lang,onClose,added,filteredFoodKeys}){
   const info=NUTRIENT_INFO[type]?.[nutrient];
   const sheetRef=useRef(null);const startY=useRef(null),curY=useRef(0);const [closing,setClosing]=useState(false);
   const onTS=e=>{startY.current=e.touches[0].clientY;};
@@ -776,7 +787,7 @@ function NutrientModal({nutrient,type,lang,onClose,added}){
   const t=T[lang],loc=info[lang]||info.en;
   const name=type==="vitamins"?t.vitNames[nutrient]:nutrient;
   const eaten=[],notYet=[];
-  loc.tops.forEach(n=>{const f=FOODS.find(x=>x[lang]===n||x.en===n);if(f&&added.includes(f.en))eaten.push(n);else notYet.push(n);});
+  loc.tops.forEach(n=>{const f=FOODS.find(x=>x[lang]===n||x.en===n);if(f&&added.includes(f.en))eaten.push(n);else if(!f||!filteredFoodKeys||filteredFoodKeys.has(f.en))notYet.push(n);});
   return(
     <div style={{position:"fixed",inset:0,zIndex:150,display:"flex",alignItems:"flex-end"}} onClick={onClose}>
       <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
@@ -814,8 +825,8 @@ function FoodTag({food,lang,onRemove,onRequestRemove,isNew}){
     </div>
   );
 }
-function getRotatedSuggestions(goal,lang,added,dateKey){
-  const allMatching=FOODS.filter(f=>
+function getRotatedSuggestions(goal,lang,added,dateKey,filteredFoods=FOODS){
+  const allMatching=filteredFoods.filter(f=>
     (f.b[lang]||[]).some(b=>goal.keywords.some(kw=>b.toLowerCase().includes(kw.toLowerCase())))
   );
   const seed=dateKey.replace(/-/g,"");
@@ -1774,6 +1785,69 @@ function usePullToRefresh(onRefresh){
   return{pulling,refreshing,handlers:{onTouchStart,onTouchMove,onTouchEnd}};
 }
 
+function PreferencesModal({lang,preferences,setPreferences,onClose}){
+  const t=T[lang];
+  const [draft,setDraft]=useState({...preferences,excludedFoods:[...preferences.excludedFoods]});
+  const sheetRef=useRef(null);
+  const startY=useRef(null),curY=useRef(0);
+  const [closing,setClosing]=useState(false);
+  const onTS=e=>{startY.current=e.touches[0].clientY;};
+  const onTM=e=>{const dy=e.touches[0].clientY-startY.current;if(dy<0)return;curY.current=dy;if(sheetRef.current)sheetRef.current.style.transform=`translateY(${dy}px)`;};
+  const onTE=()=>{if(curY.current>80){setClosing(true);setTimeout(onClose,200);}else if(sheetRef.current)sheetRef.current.style.transform="translateY(0)";curY.current=0;};
+  const diets=[
+    {key:"all",label:t.dietAll},{key:"vegetarian",label:t.dietVegetarian},
+    {key:"vegan",label:t.dietVegan},{key:"pescatarian",label:t.dietPescatarian},
+  ];
+  return(
+    <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>{setClosing(true);setTimeout(onClose,200);}}>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+      <div ref={sheetRef} onClick={e=>e.stopPropagation()} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
+        style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto",transition:closing?"transform 0.2s ease":"none"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+        <div style={{padding:"8px 20px 20px"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:20}}>
+            <h3 style={{margin:0,fontSize:16,fontWeight:900,color:"#f9fafb"}}>{t.preferencesTitle}</h3>
+            <button onClick={()=>{setClosing(true);setTimeout(onClose,200);}} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+          </div>
+          <p style={{margin:"0 0 10px",fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em"}}>{t.dietLabel}</p>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:24}}>
+            {diets.map(d=>(
+              <button key={d.key} onClick={()=>setDraft(p=>({...p,diet:d.key}))}
+                style={{padding:"8px 16px",borderRadius:99,border:"none",background:draft.diet===d.key?"#22c55e":"#1f2937",color:draft.diet===d.key?"#fff":"#9ca3af",fontWeight:700,fontSize:13,cursor:"pointer",transition:"all 0.15s"}}>
+                {d.label}
+              </button>
+            ))}
+          </div>
+          {draft.excludedFoods.length>0&&(
+            <>
+              <p style={{margin:"0 0 10px",fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em"}}>{t.hiddenFoods}</p>
+              <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:12}}>
+                {draft.excludedFoods.map(key=>{
+                  const f=FOOD_BY_EN[key];
+                  return(
+                    <div key={key} style={{display:"flex",alignItems:"center",gap:6,background:"#1f2937",border:"1px solid #374151",borderRadius:99,padding:"6px 12px"}}>
+                      <span style={{fontSize:12,fontWeight:600,color:"#e5e7eb"}}>{f?f[lang]:key}</span>
+                      <button onClick={()=>setDraft(p=>({...p,excludedFoods:p.excludedFoods.filter(k=>k!==key)}))}
+                        style={{background:"transparent",border:"none",color:"#6b7280",cursor:"pointer",padding:0,fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",minWidth:20,minHeight:20}}>✕</button>
+                    </div>
+                  );
+                })}
+              </div>
+              <button onClick={()=>setDraft(p=>({...p,excludedFoods:[]}))}
+                style={{width:"100%",background:"transparent",border:"1px solid #374151",borderRadius:10,padding:"8px 16px",fontSize:12,fontWeight:600,color:"#9ca3af",cursor:"pointer",marginBottom:20}}>
+                {t.clearExcluded}
+              </button>
+            </>
+          )}
+          <button onClick={()=>{setPreferences(draft);setClosing(true);setTimeout(onClose,200);}}
+            style={{width:"100%",minHeight:48,background:"#22c55e",border:"none",borderRadius:14,fontSize:14,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+            {t.savePreferences}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 export default function App(){
   const [lang,setLang]=useState("en");
   const t=T[lang];
@@ -1812,9 +1886,19 @@ export default function App(){
   const [isPremium,setIsPremium]=useState(false);
   const [showUpgradeModal,setShowUpgradeModal]=useState(false);
   const [billingYearly,setBillingYearly]=useState(true);
+  const [preferences,setPreferences]=useState({diet:"all",excludedFoods:[]});
+  const [showPreferences,setShowPreferences]=useState(false);
   const prevScore=useRef(0);
   const {offline,visible:offlineVisible}=useOffline();
   const {show:showInstall,install,dismiss:dismissInstall,isNative}=useInstallPrompt();
+  const filteredFoods=FOODS.filter(f=>{
+    if(preferences.excludedFoods.includes(f.en))return false;
+    if(preferences.diet==="vegetarian"&&VEGETARIAN_HIDE.has(f.en))return false;
+    if(preferences.diet==="vegan"&&(VEGETARIAN_HIDE.has(f.en)||f.cat==="Dairy"||VEGAN_EXTRA_HIDE.has(f.en)))return false;
+    if(preferences.diet==="pescatarian"&&PESCATARIAN_HIDE.has(f.en))return false;
+    return true;
+  });
+  const filteredFoodKeys=new Set(filteredFoods.map(f=>f.en));
 
   useEffect(()=>{
   supabase.auth.getSession().then(({data:{session}})=>{
@@ -1840,6 +1924,7 @@ useEffect(()=>{
           if(data.history)setHistory(data.history);
           if(data.foods_today&&data.date===todayKey())setAdded(data.foods_today);
           if(data.milestones)setShownMS(new Set(data.milestones));
+          if(data.preferences)setPreferences(data.preferences);
           setHistLoaded(true);return;
         }
       }catch(e){console.error("Load error:",e);}
@@ -1847,6 +1932,7 @@ useEffect(()=>{
     try{const r=localStorage.getItem("wft-hist4");if(r)setHistory(JSON.parse(r));}catch{}
     try{const r=localStorage.getItem("wft-today4");if(r){const d=JSON.parse(r);if(d.date===todayKey())setAdded(d.foods||[]);}}catch{}
     try{const r=localStorage.getItem("wft-ms2");if(r)setShownMS(new Set(JSON.parse(r)));}catch{}
+    try{const r=localStorage.getItem("nube-preferences");if(r)setPreferences(JSON.parse(r));}catch{}
     setHistLoaded(true);
   };
   if(authChecked)loadData();
@@ -1866,12 +1952,17 @@ useEffect(()=>{
         foods_today:added,
         history:history,
         milestones:[...shownMS],
+        preferences:preferences,
         date:todayKey()
       },{onConflict:"user_id"});
     }catch(e){console.error("Sync error:",e);}
   };
   sync();
-},[added,history,user,isGuest,histLoaded]);
+},[added,history,preferences,user,isGuest,histLoaded]);
+  useEffect(()=>{
+    if(!histLoaded)return;
+    try{localStorage.setItem("nube-preferences",JSON.stringify(preferences));}catch{}
+  },[preferences,histLoaded]);
   const fireMS=useCallback((key,msg)=>{
     if(shownMS.has(key))return;
     const u=new Set([...shownMS,key]);setShownMS(u);
@@ -1907,7 +1998,7 @@ useEffect(()=>{
   useEffect(()=>{
     if(!query.trim()){setSuggestions([]);return;}
     const q=query.toLowerCase();
-    const results=FOODS.filter(f=>f[lang].toLowerCase().includes(q)||f.en.toLowerCase().includes(q)||(f.aliases||[]).some(a=>a.toLowerCase().includes(q))).slice(0,7);
+    const results=filteredFoods.filter(f=>f[lang].toLowerCase().includes(q)||f.en.toLowerCase().includes(q)||(f.aliases||[]).some(a=>a.toLowerCase().includes(q))).slice(0,7);
     setSuggestions(results);
     if(results.length===0&&q.trim().length>=3){
     try{
@@ -1919,7 +2010,7 @@ useEffect(()=>{
     if(results.length===0&&query.trim().length>=3){
     try{window.va&&window.va("event",{name:"missing_food",data:{query:query.trim().toLowerCase()}});}catch{}
     }
-  },[query,lang]);
+  },[query,lang,preferences]);
 
   const addFood=useCallback(key=>{
     if(added.includes(key)){setQuery("");setSuggestions([]);return;}
@@ -1930,6 +2021,7 @@ useEffect(()=>{
 
   const removeFood=key=>setAdded(p=>p.filter(k=>k!==key));
   const clearAll=()=>setAdded([]);
+  const excludeFood=useCallback(key=>{setPreferences(p=>({...p,excludedFoods:[...p.excludedFoods,key]}));setToast(t.excludeToast);},[t]);
   const {pulling,refreshing,handlers:pullHandlers}=usePullToRefresh(()=>{setQuery("");setSuggestions([]);});
 
   const foodObjs=added.map(k=>FOOD_BY_EN[k]).filter(Boolean);
@@ -2080,7 +2172,7 @@ useEffect(()=>{
       <style>{`*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}input::placeholder{color:#4b5563;}@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}::-webkit-scrollbar{display:none;}*{scrollbar-width:none;-ms-overflow-style:none;}`}</style>
       <Confetti active={confetti}/>
       {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
-      {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added}/>}
+      {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added} filteredFoodKeys={filteredFoodKeys}/>}
       {selBenefit&&<BenefitModal benefit={selBenefit} lang={lang} onClose={()=>setSelBenefit(null)}/>}
       {editDay&&<EditDayModal dayKey={editDay} lang={lang} history={history} setHistory={setHistory} todayAdded={added} setAdded={setAdded} onClose={()=>setEditDay(null)}/>}
       {confirmRemove&&(
@@ -2109,6 +2201,7 @@ useEffect(()=>{
   </div>
 )}
       {showSynergyModal&&<SynergyModal lang={lang} foodObjs={foodObjs} addFood={addFood} onClose={()=>setShowSynergyModal(false)} isPremium={isPremium} onUpgrade={()=>{setShowSynergyModal(false);setShowUpgradeModal(true);}}/>}
+      {showPreferences&&<PreferencesModal lang={lang} preferences={preferences} setPreferences={setPreferences} onClose={()=>setShowPreferences(false)}/>}
         {showUpgradeModal&&(
         <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setShowUpgradeModal(false)}>
           <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(6px)"}}/>
@@ -2397,7 +2490,7 @@ useEffect(()=>{
               )}
             </div>
             {(()=>{
-              const recentFoods=getRecentFoods(history,todayKey(),added);
+              const recentFoods=getRecentFoods(history,todayKey(),added).filter(k=>filteredFoodKeys.has(k));
               if(!recentFoods.length)return null;
               return(
                 <div style={{marginBottom:12}}>
@@ -2655,7 +2748,7 @@ useEffect(()=>{
           </div>
           {browseQuery.trim()?(
             <div>
-              {FOODS.filter(f=>
+              {filteredFoods.filter(f=>
                 f[lang].toLowerCase().includes(browseQuery.toLowerCase())||
                 f.en.toLowerCase().includes(browseQuery.toLowerCase())||
                 (f.aliases||[]).some(a=>a.toLowerCase().includes(browseQuery.toLowerCase()))
@@ -2664,7 +2757,7 @@ useEffect(()=>{
                   {lang==="de"?"Keine Lebensmittel gefunden":"No foods found"}
                 </p>
               ):(
-                FOODS.filter(f=>
+                filteredFoods.filter(f=>
                   f[lang].toLowerCase().includes(browseQuery.toLowerCase())||
                   f.en.toLowerCase().includes(browseQuery.toLowerCase())||
                   (f.aliases||[]).some(a=>a.toLowerCase().includes(browseQuery.toLowerCase()))
@@ -2672,21 +2765,22 @@ useEffect(()=>{
                   const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};
                   const isAdded=added.includes(f.en);
                   return(
-                    <button key={f.en} onClick={()=>addFood(f.en)}
+                    <div key={f.en} onClick={()=>addFood(f.en)}
                       style={{width:"100%",minHeight:44,background:"#0f172a",border:"1px solid "+(isAdded?"rgba(34,197,94,0.3)":"#1f2937"),borderRadius:12,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left"}}
                       onMouseEnter={e=>e.currentTarget.style.background="#111827"}
                       onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
                       <span style={{fontSize:10,padding:"2px 7px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{(T[lang].catNames[f.cat])||f.cat}</span>
                       <span style={{fontSize:13,fontWeight:600,color:isAdded?"#4ade80":"#e5e7eb",flex:1}}>{f[lang]}</span>
                       {isAdded&&<span style={{fontSize:14,color:"#4ade80",flexShrink:0}}>✓</span>}
-                    </button>
+                      <button onClick={e=>{e.stopPropagation();excludeFood(f.en);}} style={{background:"transparent",border:"none",padding:"4px 2px",cursor:"pointer",fontSize:13,flexShrink:0,color:"#374151",lineHeight:1}} title={lang==="de"?"Ausblenden":"Hide"}>🚫</button>
+                    </div>
                   );
                 })
               )}
             </div>
           ):(
             ["Protein","Dairy","Vegetable","Fruit","Grain","Legume","Nut/Seed","Fat/Oil","Spice","Special","SoulFood"].map(cat=>{
-              const catFoods=FOODS.filter(f=>f.cat===cat);
+              const catFoods=filteredFoods.filter(f=>f.cat===cat);
               if(!catFoods.length)return null;
               const cs=CAT_STYLE[cat]||{bg:"#374151",color:"#d1d5db"};
               const isOpen=!!openCats[cat];
@@ -2706,13 +2800,14 @@ useEffect(()=>{
                       {catFoods.map((f,i)=>{
                         const isAdded=added.includes(f.en);
                         return(
-                          <button key={f.en} onClick={()=>addFood(f.en)}
-                            style={{width:"100%",minHeight:44,background:isAdded?"rgba(34,197,94,0.05)":"#0f172a",borderBottom:i<catFoods.length-1?"1px solid #111827":"none",padding:"10px 14px",display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left",border:"none"}}
+                          <div key={f.en} onClick={()=>addFood(f.en)}
+                            style={{width:"100%",minHeight:44,background:isAdded?"rgba(34,197,94,0.05)":"#0f172a",borderBottom:i<catFoods.length-1?"1px solid #111827":"none",padding:"10px 14px",display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left"}}
                             onMouseEnter={e=>e.currentTarget.style.background=isAdded?"rgba(34,197,94,0.1)":"#111827"}
                             onMouseLeave={e=>e.currentTarget.style.background=isAdded?"rgba(34,197,94,0.05)":"#0f172a"}>
                             <span style={{fontSize:13,fontWeight:600,color:isAdded?"#4ade80":"#d1d5db",flex:1}}>{f[lang]}</span>
                             {isAdded?<span style={{fontSize:13,color:"#4ade80",flexShrink:0}}>✓</span>:<span style={{fontSize:11,color:"#374151",flexShrink:0}}>+</span>}
-                          </button>
+                            <button onClick={e=>{e.stopPropagation();excludeFood(f.en);}} style={{background:"transparent",border:"none",padding:"4px 2px",cursor:"pointer",fontSize:13,flexShrink:0,color:"#374151",lineHeight:1}} title={lang==="de"?"Ausblenden":"Hide"}>🚫</button>
+                          </div>
                         );
                       })}
                     </div>
@@ -2785,7 +2880,7 @@ useEffect(()=>{
                   <div>
                     <p style={{fontSize:11,color:"#4b5563",fontWeight:600,marginBottom:6,textTransform:"uppercase",letterSpacing:"0.05em"}}>{lang==="de"?"Tipp — Noch heute hinzufügen:":"Tip — Add today:"}</p>
                     <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
-                      {getRotatedSuggestions(goal,lang,added,todayKey()).map(f=>{
+                      {getRotatedSuggestions(goal,lang,added,todayKey(),filteredFoods).map(f=>{
                         const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};
                         return <button key={f.en} onClick={()=>addFood(f.en)} style={{fontSize:11,padding:"3px 10px",borderRadius:99,background:"#1f2937",border:"1px dashed #374151",color:"#9ca3af",fontWeight:600,cursor:"pointer"}}>+ {f[lang]}</button>;
                       })}
@@ -2805,6 +2900,7 @@ useEffect(()=>{
         <button onClick={()=>setShowContact(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Kontakt":"Contact"}</button>
         <button onClick={()=>setShowAbout(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Ueber uns":"About"}</button>
         <button onClick={()=>window.open("https://buymeacoffee.com/DEIN_LINK","_blank")} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"☕ Unterstützen":"☕ Support"}</button>
+        <button onClick={()=>setShowPreferences(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{t.preferencesBtn}</button>
         {isGuest&&<button onClick={()=>setIsGuest(false)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"👤 Anmelden / Konto erstellen":"👤 Sign in / Create account"}</button>}
       </div> 
     </div>
