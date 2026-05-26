@@ -2364,6 +2364,10 @@ useEffect(()=>{
               )}
             </div>
           )}
+          <button onClick={()=>setShowPreferences(true)}
+            style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 12px",fontSize:12,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
+            {lang==="de"?"⚙️ Ernährung":"⚙️ Diet"}
+          </button>
           {isPremium?(
             <div style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f59e0b,#f97316)",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#fff",display:"flex",alignItems:"center",gap:4}}>
               ⚡ Pro
@@ -2900,7 +2904,6 @@ useEffect(()=>{
         <button onClick={()=>setShowContact(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Kontakt":"Contact"}</button>
         <button onClick={()=>setShowAbout(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Ueber uns":"About"}</button>
         <button onClick={()=>window.open("https://buymeacoffee.com/DEIN_LINK","_blank")} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"☕ Unterstützen":"☕ Support"}</button>
-        <button onClick={()=>setShowPreferences(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{t.preferencesBtn}</button>
         {isGuest&&<button onClick={()=>setIsGuest(false)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"👤 Anmelden / Konto erstellen":"👤 Sign in / Create account"}</button>}
       </div> 
     </div>
