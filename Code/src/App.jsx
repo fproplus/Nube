@@ -613,15 +613,22 @@ function Toast({msg,onDone}){
 }
 function PowerRing({score,label,emoji,col}){
   const r=52,circ=2*Math.PI*r,dash=(score/100)*circ;
+  const [c1,c2]=score<=30?["#6b7280","#9ca3af"]:score<=60?["#3b82f6","#60a5fa"]:score<=85?["#22c55e","#4ade80"]:["#8b5cf6","#a78bfa"];
   return(
     <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
       <div style={{position:"relative",width:144,height:144}}>
         <svg style={{width:"100%",height:"100%",transform:"rotate(-90deg)"}} viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={c1}/>
+              <stop offset="100%" stopColor={c2}/>
+            </linearGradient>
+          </defs>
           <circle cx="60" cy="60" r={r} fill="none" stroke="#1f2937" strokeWidth="10"/>
-          <circle cx="60" cy="60" r={r} fill="none" stroke={col.fill} strokeWidth="10" strokeDasharray={`${dash} ${circ-dash}`} strokeLinecap="round" style={{transition:"stroke-dasharray 0.8s cubic-bezier(0.34,1.56,0.64,1)"}}/>
+          <circle cx="60" cy="60" r={r} fill="none" stroke="url(#ringGrad)" strokeWidth="10" strokeDasharray={`${dash} ${circ-dash}`} strokeLinecap="round" style={{transition:"stroke-dasharray 0.8s cubic-bezier(0.34,1.56,0.64,1)",filter:`drop-shadow(0 0 6px ${c1})`}}/>
         </svg>
         <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
-          <span style={{fontSize:28,fontWeight:900,color:col.fill,lineHeight:1}}>{score}</span>
+          <span key={score} style={{fontSize:28,fontWeight:900,color:col.fill,lineHeight:1,animation:"scoreCount 0.3s ease both"}}>{score}</span>
           <span style={{fontSize:11,color:"#6b7280"}}>/ 100</span>
         </div>
       </div>
@@ -641,7 +648,7 @@ function BenefitModal({benefit,lang,onClose}){
   const t=T[lang];
   return(
     <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={onClose}>
-      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
       <div ref={sheetRef} onClick={e=>e.stopPropagation()} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
         style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",transition:closing?"transform 0.2s ease":"none"}}>
         <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
@@ -735,7 +742,7 @@ function SynergyModal({lang,foodObjs,addFood,onClose,isPremium,onUpgrade}){
 
   return(
     <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={onClose}>
-      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
       <div ref={sheetRef} onClick={e=>e.stopPropagation()} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
         style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",transition:closing?"transform 0.2s ease":"none",maxHeight:"85vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
@@ -790,7 +797,7 @@ function NutrientModal({nutrient,type,lang,onClose,added,filteredFoodKeys}){
   loc.tops.forEach(n=>{const f=FOODS.find(x=>x[lang]===n||x.en===n);if(f&&added.includes(f.en))eaten.push(n);else if(!f||!filteredFoodKeys||filteredFoodKeys.has(f.en))notYet.push(n);});
   return(
     <div style={{position:"fixed",inset:0,zIndex:150,display:"flex",alignItems:"flex-end"}} onClick={onClose}>
-      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
       <div ref={sheetRef} onClick={e=>e.stopPropagation()} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
         style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(24px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",transition:closing?"transform 0.2s ease":"none"}}>
         <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
@@ -811,14 +818,16 @@ function TabPane({active,children}){
   const [render,setRender]=useState(active);const [anim,setAnim]=useState(active?"in":"out");
   useEffect(()=>{if(active){setRender(true);setTimeout(()=>setAnim("in"),10);}else{setAnim("out");const t=setTimeout(()=>setRender(false),220);return()=>clearTimeout(t);}},[active]);
   if(!render)return null;
-  return <div style={{transition:"opacity 0.22s ease,transform 0.22s ease",opacity:anim==="in"?1:0,transform:anim==="in"?"translateY(0)":"translateY(10px)"}}>{children}</div>;
+  return <div style={{animation:anim==="in"?"slideUp 0.25s ease both":"none",opacity:anim==="in"?1:0,transform:anim==="in"?"translateY(0)":"translateY(10px)",transition:anim==="out"?"opacity 0.22s ease,transform 0.22s ease":"none"}}>{children}</div>;
 }
 function FoodTag({food,lang,onRemove,onRequestRemove,isNew}){
-  const [pop,setPop]=useState(isNew);const [removing,setRemoving]=useState(false);
-  useEffect(()=>{if(pop){const t=setTimeout(()=>setPop(false),350);return()=>clearTimeout(t);}},[pop]);
+  const [removing,setRemoving]=useState(false);
   const cs=CAT_STYLE[food.cat]||{bg:"#374151",color:"#d1d5db"};
   return(
-    <div style={{display:"flex",alignItems:"center",gap:6,background:"#1f2937",border:"1px solid #374151",borderRadius:99,padding:"8px 12px",transition:"opacity 0.2s ease,transform 0.2s ease",opacity:removing?0:1,transform:removing?"scale(0.7)":pop?"scale(1.12)":"scale(1)"}}>
+    <div style={{display:"flex",alignItems:"center",gap:6,background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:99,padding:"8px 12px",boxShadow:"0 2px 8px rgba(0,0,0,0.25)",transition:"opacity 0.2s ease,transform 0.2s ease,box-shadow 0.2s ease",opacity:removing?0:1,transform:removing?"scale(0.7)":"scale(1)",animation:isNew&&!removing?"foodTagPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both":"none"}}
+      onMouseEnter={e=>{if(!removing){e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 4px 12px rgba(0,0,0,0.3)";}}}
+      onMouseLeave={e=>{if(!removing){e.currentTarget.style.transform="scale(1)";e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.25)";}}}>
+
       <span style={{fontSize:11,padding:"2px 6px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:600}}>{(T[lang].catNames[food.cat]||food.cat)[0]}</span>
       <span style={{fontSize:12,fontWeight:600,color:"#e5e7eb"}}>{food[lang]}</span>
       <button onClick={()=>onRequestRemove(food.en)} style={{minWidth:24,minHeight:24,background:"transparent",border:"none",color:"#4b5563",cursor:"pointer",padding:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>✕</button>
@@ -884,7 +893,7 @@ function EditDayModal({dayKey,lang,history,setHistory,todayAdded,setAdded,onClos
 
   return(
     <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={onClose}>
-      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
       <div ref={sheetRef} onClick={e=>e.stopPropagation()} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
         style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",transition:closing?"transform 0.2s ease":"none",maxHeight:"85vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
@@ -1800,7 +1809,7 @@ function PreferencesModal({lang,preferences,setPreferences,onClose}){
   ];
   return(
     <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>{setClosing(true);setTimeout(onClose,200);}}>
-      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
       <div ref={sheetRef} onClick={e=>e.stopPropagation()} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
         style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto",transition:closing?"transform 0.2s ease":"none"}}>
         <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
@@ -2103,7 +2112,7 @@ useEffect(()=>{
     <LandingPage lang={lang} setLang={setLang} onEnter={()=>{setShowLanding(false);try{localStorage.setItem("wft-visited","1");}catch{}}} setShowImpressum={setShowImpressum} setShowPrivacy={setShowPrivacy} setShowContact={setShowContact} setShowAbout={setShowAbout}/>
     {showImpressum&&(
       <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
-        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
         <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
           <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
           <div style={{padding:"8px 20px 16px"}}>
@@ -2118,7 +2127,7 @@ useEffect(()=>{
     )}
     {showPrivacy&&(
       <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowPrivacy(false)}>
-        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
         <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
           <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
           <div style={{padding:"8px 20px 16px"}}>
@@ -2137,7 +2146,7 @@ useEffect(()=>{
     )}
     {showContact&&(
       <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowContact(false)}>
-        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
         <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
           <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
           <div style={{padding:"8px 20px 16px"}}>
@@ -2152,7 +2161,7 @@ useEffect(()=>{
     )}
     {showAbout&&(
       <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowAbout(false)}>
-        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
         <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
           <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
           <div style={{padding:"8px 20px 16px"}}>
@@ -2169,7 +2178,7 @@ useEffect(()=>{
 );
   return(
         <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif"}}>
-      <style>{`*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}input::placeholder{color:#4b5563;}@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}::-webkit-scrollbar{display:none;}*{scrollbar-width:none;-ms-overflow-style:none;}`}</style>
+      <style>{`*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}input::placeholder{color:#4b5563;}@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}@keyframes foodTagPop{0%{transform:scale(0) rotate(-10deg);opacity:0}60%{transform:scale(1.15) rotate(2deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}@keyframes scoreCount{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.3)}50%{box-shadow:0 0 0 8px rgba(34,197,94,0)}}@keyframes synergyGlow{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0.3)}50%{box-shadow:0 0 0 8px rgba(251,191,36,0)}}::-webkit-scrollbar{display:none;}*{scrollbar-width:none;-ms-overflow-style:none;}button{transition:all 0.2s ease;}.nube-footer-btn:hover{color:#f9fafb!important}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:0.01ms!important}}`}</style>
       <Confetti active={confetti}/>
       {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
       {selNutrient&&<NutrientModal nutrient={selNutrient.key} type={selNutrient.type} lang={lang} onClose={()=>setSelNutrient(null)} added={added} filteredFoodKeys={filteredFoodKeys}/>}
@@ -2177,7 +2186,7 @@ useEffect(()=>{
       {editDay&&<EditDayModal dayKey={editDay} lang={lang} history={history} setHistory={setHistory} todayAdded={added} setAdded={setAdded} onClose={()=>setEditDay(null)}/>}
       {confirmRemove&&(
   <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setConfirmRemove(null)}>
-    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
     <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:20,padding:"24px 20px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
       <p style={{margin:"0 0 6px",fontSize:15,fontWeight:900,color:"#f9fafb"}}>
         {lang==="de"?"Lebensmittel entfernen?":"Remove food?"}
@@ -2204,7 +2213,7 @@ useEffect(()=>{
       {showPreferences&&<PreferencesModal lang={lang} preferences={preferences} setPreferences={setPreferences} onClose={()=>setShowPreferences(false)}/>}
         {showUpgradeModal&&(
         <div style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 24px"}} onClick={()=>setShowUpgradeModal(false)}>
-          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(6px)"}}/>
+          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(16px)"}}/>
           <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:24,padding:"28px 24px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
             <div style={{textAlign:"center",marginBottom:20}}>
               <div style={{fontSize:40,marginBottom:8}}>⚡</div>
@@ -2249,7 +2258,7 @@ useEffect(()=>{
         )}
       {showImpressum&&(
         <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowImpressum(false)}>
-          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
           <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
             <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
             <div style={{padding:"8px 20px 16px"}}>
@@ -2264,7 +2273,7 @@ useEffect(()=>{
       )}
       {showContact&&(
   <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowContact(false)}>
-    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+    <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
     <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
       <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
       <div style={{padding:"8px 20px 16px"}}>
@@ -2279,7 +2288,7 @@ useEffect(()=>{
 )}
       {showAbout&&(
         <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowAbout(false)}>
-          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
           <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
             <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
             <div style={{padding:"8px 20px 16px"}}>
@@ -2294,7 +2303,7 @@ useEffect(()=>{
       )}
       {showPrivacy&&(
         <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowPrivacy(false)}>
-          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(4px)"}}/>
+          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
           <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",maxHeight:"85vh",overflowY:"auto"}}>
             <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
             <div style={{padding:"8px 20px 16px"}}>
@@ -2314,6 +2323,7 @@ useEffect(()=>{
       <InstallPrompt show={showInstall} onInstall={install} onDismiss={dismissInstall} isNative={isNative} lang={lang}/>
 
       <div style={{maxWidth:520,margin:"0 auto",padding:"0 16px"}}>
+        <div style={{position:"sticky",top:0,zIndex:50,background:"linear-gradient(180deg,rgba(3,7,18,1) 0%,rgba(3,7,18,0.97) 100%)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",borderBottom:"1px solid rgba(255,255,255,0.06)",margin:"0 -16px",padding:"0 16px"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"calc(16px + env(safe-area-inset-top))",paddingBottom:16}}>
           <div>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -2385,6 +2395,7 @@ useEffect(()=>{
             {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
           </button>
         </div>
+        </div>
 
         <div style={{display:"flex",gap:8,marginBottom:20}}>
           {["today","history","insights","browse"].map(tab=>(
@@ -2400,7 +2411,7 @@ useEffect(()=>{
             {refreshing?"✓ Refreshed":pulling>50?"Release ↑":pulling>10?"Pull ↓":""}
           </div>
           <div {...pullHandlers}>
-            <div style={{background:"#0f172a",borderRadius:24,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:20}}>
+            <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:24,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:20}}>
               <PowerRing score={score} label={t.powerLabels[pidx]} emoji={t.powerEmoji[pidx]} col={col}/>
               <div style={{flex:1}}>
                 {streak>0?(
@@ -2437,7 +2448,7 @@ useEffect(()=>{
             {(synergies.length>0||synergiesLocked>0)&&(
               <div style={{marginBottom:8}}>
                 {synergies.length>0&&(
-                  <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"rgba(120,53,15,0.3)",border:"1px solid rgba(180,83,9,0.4)",borderRadius:synergiesLocked>0?"16px 16px 0 0":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
+                  <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"rgba(120,53,15,0.3)",border:"1px solid rgba(180,83,9,0.4)",borderRadius:synergiesLocked>0?"16px 16px 0 0":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",transition:"background 0.2s",animation:"synergyGlow 2s infinite"}}
                     onMouseEnter={e=>e.currentTarget.style.background="rgba(120,53,15,0.45)"} onMouseLeave={e=>e.currentTarget.style.background="rgba(120,53,15,0.3)"}>
                     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
                       <p style={{margin:0,fontSize:12,fontWeight:700,color:"#fbbf24"}}>⚡ {t.synergiesDetected} ({synergies.length})</p>
@@ -2478,8 +2489,9 @@ useEffect(()=>{
 
             <div style={{position:"relative",marginBottom:12}}>
               <input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t.searchPlaceholder} autoComplete="off" autoCorrect="off"
-                style={{width:"100%",padding:"14px 16px",borderRadius:16,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none"}}
-                onFocus={e=>e.target.style.borderColor="#22c55e"} onBlur={e=>e.target.style.borderColor="#1f2937"}/>
+                style={{width:"100%",padding:"14px 16px",borderRadius:16,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",transition:"all 0.2s ease"}}
+                onFocus={e=>{e.target.style.borderColor="#22c55e";e.target.style.boxShadow="0 0 0 3px rgba(34,197,94,0.15)";}}
+                onBlur={e=>{e.target.style.borderColor="#1f2937";e.target.style.boxShadow="none";}}/>
               {suggestions.length>0&&(
                 <div style={{position:"absolute",zIndex:10,width:"100%",background:"#0f172a",border:"1px solid #1f2937",borderRadius:16,marginTop:4,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.6)"}}>
                   {suggestions.map(f=>{const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};return(
@@ -2547,7 +2559,7 @@ useEffect(()=>{
             )}
 
             {added.length>0&&(
-              <div style={{background:"#0f172a",borderRadius:20,padding:16,marginBottom:16}}>
+              <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:16,marginBottom:16}}>
                 <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
                 <div style={{display:"flex",gap:16,marginBottom:10,flexWrap:"wrap"}}>
                   {[["—","#374151",lang==="de"?"Nicht abgedeckt":"Not covered"],
@@ -2602,7 +2614,7 @@ useEffect(()=>{
         </TabPane>
 
         <TabPane active={activeTab==="history"}>
-          <div style={{background:"#0f172a",borderRadius:20,padding:20,marginBottom:16}}>
+          <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:20,marginBottom:16}}>
             <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:16,marginTop:0}}>{t.heatmapTitle}</p>
             <div style={{display:"grid",gridTemplateColumns:"repeat(10,1fr)",gap:6}}>
               {heatDays.map(({key,score:s,isToday})=>(
@@ -2615,7 +2627,7 @@ useEffect(()=>{
               ))}
             </div>
           </div>
-          <div style={{background:"#0f172a",borderRadius:20,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:12}}>
+          <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:12}}>
             <span style={{fontSize:36}}>🔥</span>
             <div>
               <p style={{margin:0,fontSize:24,fontWeight:900,color:col.fill}}>{streak} {t.streakDays}</p>
@@ -2638,9 +2650,9 @@ useEffect(()=>{
               if(!isPremium&&idx>6)return null;
               const c=getPowerColor(s);
               return(
-                <div key={key} onClick={()=>setEditDay(key)} style={{background:"#0f172a",borderRadius:16,padding:"12px 16px",border:isToday?"1px solid #065f46":"1px solid #111827",cursor:"pointer",transition:"border-color 0.15s"}}
-                onMouseEnter={e=>e.currentTarget.style.borderColor="#374151"}
-                onMouseLeave={e=>e.currentTarget.style.borderColor=isToday?"#065f46":"#111827"}>
+                <div key={key} onClick={()=>setEditDay(key)} style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",borderRadius:16,padding:"12px 16px",border:isToday?"1px solid rgba(34,197,94,0.3)":"1px solid rgba(255,255,255,0.06)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",cursor:"pointer",transition:"border-color 0.2s,box-shadow 0.2s,transform 0.2s"}}
+                onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.15)";e.currentTarget.style.transform="translateY(-1px)";e.currentTarget.style.boxShadow="0 8px 32px rgba(0,0,0,0.4)";}}
+                onMouseLeave={e=>{e.currentTarget.style.borderColor=isToday?"rgba(34,197,94,0.3)":"rgba(255,255,255,0.06)";e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 4px 24px rgba(0,0,0,0.3)";}}>
                   <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
                     <span style={{fontSize:13,fontWeight:600,color:"#d1d5db"}}>{t.dayLabel(d)}{isToday?" — "+t.todayMark:""}</span>
                     <span style={{fontSize:13,fontWeight:900,color:c.fill}}>{s}pts</span>
