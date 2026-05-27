@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { User, Sliders, Globe, Utensils, UtensilsCrossed, Flame, Activity, BookOpen, Zap, Moon, Leaf, Sprout, Droplets, Dumbbell, Trophy, Lightbulb, Info, Unlock, Microscope, Shield, Heart, Bone, Sparkles, WifiOff, Fish, Lock } from "lucide-react";
 import { createClient } from '@supabase/supabase-js';
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -57,9 +58,9 @@ const T = {
     todayMark:"Today",
     synergyModalTitle:"Synergies explained",
     synergyPossible:"Synergies you could unlock today",
-    benefitDisclaimer:"ℹ️ This is general nutritional information, not medical advice.",
-    preferencesBtn:"⚙️ Preferences",preferencesTitle:"Your Preferences",dietLabel:"Diet",
-    dietAll:"🍽️ All",dietVegetarian:"🥗 Vegetarian",dietVegan:"🌱 Vegan",dietPescatarian:"🐟 Pescatarian",
+    benefitDisclaimer:"This is general nutritional information, not medical advice.",
+    preferencesBtn:"Preferences",preferencesTitle:"Your Preferences",dietLabel:"Diet",
+    dietAll:"All",dietVegetarian:"Vegetarian",dietVegan:"Vegan",dietPescatarian:"Pescatarian",
     hiddenFoods:"Hidden foods",clearExcluded:"Show all foods again",savePreferences:"Save preferences",
     excludeToast:"Hidden. You can restore it in Preferences.",
   },
@@ -108,9 +109,9 @@ const T = {
     todayMark:"Heute",
     synergyModalTitle:"Synergien erklärt",
     synergyPossible:"Synergien die du heute noch freischalten könntest",
-    benefitDisclaimer:"ℹ️ Dies sind allgemeine Ernährungshinweise, keine medizinische Beratung.",
-    preferencesBtn:"⚙️ Einstellungen",preferencesTitle:"Deine Einstellungen",dietLabel:"Ernährungsweise",
-    dietAll:"🍽️ Alles",dietVegetarian:"🥗 Vegetarisch",dietVegan:"🌱 Vegan",dietPescatarian:"🐟 Pescetarisch",
+    benefitDisclaimer:"Dies sind allgemeine Ernährungshinweise, keine medizinische Beratung.",
+    preferencesBtn:"Einstellungen",preferencesTitle:"Deine Einstellungen",dietLabel:"Ernährungsweise",
+    dietAll:"Alles",dietVegetarian:"Vegetarisch",dietVegan:"Vegan",dietPescatarian:"Pescetarisch",
     hiddenFoods:"Ausgeblendete Lebensmittel",clearExcluded:"Alle Lebensmittel wieder anzeigen",
     savePreferences:"Einstellungen speichern",excludeToast:"Ausgeblendet. In Einstellungen wiederherstellbar.",
   }
@@ -251,24 +252,24 @@ const NUTRIENT_INFO = {
 
 const HEALTH_GOALS = {
   en:[
-    {id:"gut",icon:"🦠",label:"Gut Health",desc:"Feed your microbiome. A diverse gut = stronger immunity, better mood, clearer skin.",keywords:["Probiotics","Prebiotic","Beta-glucan","Bromelain","Gut health","Gut lining","Gut diversity","Inulin","pectin"]},
-    {id:"energy",icon:"⚡",label:"Energy & Focus",desc:"Fuel your brain and muscles with B-vitamins, iron and slow-burning carbs.",keywords:["Energy","B-vitamins","Iron","Sustained energy","Quick energy","Brain","Theobromine","L-theanine"]},
-    {id:"sleep",icon:"🌙",label:"Sleep & Recovery",desc:"Tryptophan, magnesium and melatonin — the sleep trifecta.",keywords:["Sleep","Melatonin","Tryptophan","Magnesium","stress","Recovery"]},
-    {id:"immune",icon:"🛡️",label:"Immune System",desc:"Vitamin C, zinc, selenium and beta-glucan keep your defenses strong.",keywords:["Immune","Antioxidant","Selenium","Zinc","Vitamin C","antimicrobial","Anti-inflammatory","EGCG"]},
-    {id:"muscle",icon:"💪",label:"Muscle & Strength",desc:"Protein, leucine and zinc for building and repairing muscle tissue.",keywords:["muscle","Protein","Leucine","Testosterone","Omega-3","Post-workout","Iron","B12"]},
-    {id:"heart",icon:"❤️",label:"Heart Health",desc:"Omega-3, potassium and flavanols keep your cardiovascular system in top shape.",keywords:["Heart","Omega-3","Potassium","Flavanols","Lycopene","Oleocanthal","ALA"]},
-    {id:"bone",icon:"🦴",label:"Bone Health",desc:"Calcium, Vitamin D and K2 work together to keep your bones strong for life.",keywords:["Bone","Calcium","Vitamin D","K2","Phosphorus","collagen"]},
-    {id:"skin",icon:"✨",label:"Skin & Glow",desc:"Collagen, Vitamin C, E and zinc for clear, radiant skin.",keywords:["Skin","collagen","Vitamin C","Vitamin E","Zinc","Beta-carotene","Lycopene","Antioxidant"]},
+    {id:"gut",icon:Activity,label:"Gut Health",desc:"Feed your microbiome. A diverse gut = stronger immunity, better mood, clearer skin.",keywords:["Probiotics","Prebiotic","Beta-glucan","Bromelain","Gut health","Gut lining","Gut diversity","Inulin","pectin"]},
+    {id:"energy",icon:Zap,label:"Energy & Focus",desc:"Fuel your brain and muscles with B-vitamins, iron and slow-burning carbs.",keywords:["Energy","B-vitamins","Iron","Sustained energy","Quick energy","Brain","Theobromine","L-theanine"]},
+    {id:"sleep",icon:Moon,label:"Sleep & Recovery",desc:"Tryptophan, magnesium and melatonin — the sleep trifecta.",keywords:["Sleep","Melatonin","Tryptophan","Magnesium","stress","Recovery"]},
+    {id:"immune",icon:Shield,label:"Immune System",desc:"Vitamin C, zinc, selenium and beta-glucan keep your defenses strong.",keywords:["Immune","Antioxidant","Selenium","Zinc","Vitamin C","antimicrobial","Anti-inflammatory","EGCG"]},
+    {id:"muscle",icon:Dumbbell,label:"Muscle & Strength",desc:"Protein, leucine and zinc for building and repairing muscle tissue.",keywords:["muscle","Protein","Leucine","Testosterone","Omega-3","Post-workout","Iron","B12"]},
+    {id:"heart",icon:Heart,label:"Heart Health",desc:"Omega-3, potassium and flavanols keep your cardiovascular system in top shape.",keywords:["Heart","Omega-3","Potassium","Flavanols","Lycopene","Oleocanthal","ALA"]},
+    {id:"bone",icon:Bone,label:"Bone Health",desc:"Calcium, Vitamin D and K2 work together to keep your bones strong for life.",keywords:["Bone","Calcium","Vitamin D","K2","Phosphorus","collagen"]},
+    {id:"skin",icon:Sparkles,label:"Skin & Glow",desc:"Collagen, Vitamin C, E and zinc for clear, radiant skin.",keywords:["Skin","collagen","Vitamin C","Vitamin E","Zinc","Beta-carotene","Lycopene","Antioxidant"]},
   ],
   de:[
-    {id:"gut",icon:"🦠",label:"Darmgesundheit",desc:"Füttere dein Mikrobiom. Ein vielfältiger Darm = stärkere Immunität, bessere Stimmung.",keywords:["Probiotika","Präbiotikum","Beta-Glucan","Bromelain","Darmgesundheit","Darmschleimhaut","Darmflora","Inulin","Pektin"]},
-    {id:"energy",icon:"⚡",label:"Energie & Fokus",desc:"Versorge Gehirn und Muskeln mit B-Vitaminen, Eisen und langsam brennenden Kohlenhydraten.",keywords:["Energie","B-Vitamine","Eisen","Anhaltende Energie","Schnelle Energie","Gehirn","Theobromin","L-Theanin"]},
-    {id:"sleep",icon:"🌙",label:"Schlaf & Erholung",desc:"Tryptophan, Magnesium und Melatonin — das Schlaf-Trifecta.",keywords:["Schlaf","Melatonin","Tryptophan","Magnesium","Stressregulation","Muskelregeneration"]},
-    {id:"immune",icon:"🛡️",label:"Immunsystem",desc:"Vitamin C, Zink, Selen und Beta-Glucan halten deine Abwehr stark.",keywords:["Immun","Antioxidantien","Selen","Zink","Vitamin C","antimikrobiell","Entzündungshemmend","EGCG"]},
-    {id:"muscle",icon:"💪",label:"Muskel & Kraft",desc:"Protein, Leucin und Zink für Muskelaufbau und Regeneration.",keywords:["Muskel","Protein","Leucin","Testosteron","Omega-3","Post-Workout","Eisen","B12"]},
-    {id:"heart",icon:"❤️",label:"Herzgesundheit",desc:"Omega-3, Kalium und Flavanole halten dein Herz-Kreislauf-System fit.",keywords:["Herz","Omega-3","Kalium","Flavanole","Lycopin","Oleocanthal","ALA"]},
-    {id:"bone",icon:"🦴",label:"Knochengesundheit",desc:"Kalzium, Vitamin D und K2 arbeiten zusammen für starke Knochen.",keywords:["Knochen","Kalzium","Vitamin D","K2","Phosphorus","Kollagen"]},
-    {id:"skin",icon:"✨",label:"Haut & Glow",desc:"Kollagen, Vitamin C, E und Zink für klare, strahlende Haut.",keywords:["Haut","Kollagen","Vitamin C","Vitamin E","Zink","Beta-Carotin","Lycopin","Antioxidantien"]},
+    {id:"gut",icon:Activity,label:"Darmgesundheit",desc:"Füttere dein Mikrobiom. Ein vielfältiger Darm = stärkere Immunität, bessere Stimmung.",keywords:["Probiotika","Präbiotikum","Beta-Glucan","Bromelain","Darmgesundheit","Darmschleimhaut","Darmflora","Inulin","Pektin"]},
+    {id:"energy",icon:Zap,label:"Energie & Fokus",desc:"Versorge Gehirn und Muskeln mit B-Vitaminen, Eisen und langsam brennenden Kohlenhydraten.",keywords:["Energie","B-Vitamine","Eisen","Anhaltende Energie","Schnelle Energie","Gehirn","Theobromin","L-Theanin"]},
+    {id:"sleep",icon:Moon,label:"Schlaf & Erholung",desc:"Tryptophan, Magnesium und Melatonin — das Schlaf-Trifecta.",keywords:["Schlaf","Melatonin","Tryptophan","Magnesium","Stressregulation","Muskelregeneration"]},
+    {id:"immune",icon:Shield,label:"Immunsystem",desc:"Vitamin C, Zink, Selen und Beta-Glucan halten deine Abwehr stark.",keywords:["Immun","Antioxidantien","Selen","Zink","Vitamin C","antimikrobiell","Entzündungshemmend","EGCG"]},
+    {id:"muscle",icon:Dumbbell,label:"Muskel & Kraft",desc:"Protein, Leucin und Zink für Muskelaufbau und Regeneration.",keywords:["Muskel","Protein","Leucin","Testosteron","Omega-3","Post-Workout","Eisen","B12"]},
+    {id:"heart",icon:Heart,label:"Herzgesundheit",desc:"Omega-3, Kalium und Flavanole halten dein Herz-Kreislauf-System fit.",keywords:["Herz","Omega-3","Kalium","Flavanole","Lycopin","Oleocanthal","ALA"]},
+    {id:"bone",icon:Bone,label:"Knochengesundheit",desc:"Kalzium, Vitamin D und K2 arbeiten zusammen für starke Knochen.",keywords:["Knochen","Kalzium","Vitamin D","K2","Phosphorus","Kollagen"]},
+    {id:"skin",icon:Sparkles,label:"Haut & Glow",desc:"Kollagen, Vitamin C, E und Zink für klare, strahlende Haut.",keywords:["Haut","Kollagen","Vitamin C","Vitamin E","Zink","Beta-Carotin","Lycopin","Antioxidantien"]},
   ],
 };
 
@@ -573,7 +574,7 @@ function OfflineBanner({offline,visible}){
   return(
     <div style={{position:"fixed",bottom:0,left:0,right:0,zIndex:100,pointerEvents:"none",transition:"opacity 0.4s ease,transform 0.4s ease",opacity:visible?1:0,transform:visible?"translateY(0)":"translateY(100%)"}}>
       <div style={{background:offline?"#1f2937":"#14532d",borderTop:offline?"1px solid #374151":"1px solid #166534",color:offline?"#fde68a":"#86efac",fontSize:12,fontWeight:600,padding:"10px 20px",textAlign:"center",paddingBottom:"calc(10px + env(safe-area-inset-bottom))"}}>
-        {offline?"⚡ Offline — your data is still saved":"✓ Back online"}
+        {offline?<><WifiOff size={13} style={{verticalAlign:"middle",marginRight:5}}/>Offline — your data is still saved</>:"✓ Back online"}
       </div>
       
     </div>
@@ -586,7 +587,7 @@ function InstallPrompt({show,onInstall,onDismiss,isNative,lang}){
   return(
     <div style={{position:"fixed",bottom:"calc(80px + env(safe-area-inset-bottom))",left:0,right:0,zIndex:99,display:"flex",justifyContent:"center",padding:"0 16px"}}>
       <div style={{background:"#111827",border:"1px solid #374151",borderRadius:20,padding:"16px 20px",maxWidth:440,width:"100%",boxShadow:"0 -4px 40px rgba(0,0,0,0.6)",display:"flex",alignItems:"center",gap:14,animation:"slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1)"}}>
-        <div style={{fontSize:32,flexShrink:0}}>🌿</div>
+        <div style={{flexShrink:0,color:"#22c55e"}}><Leaf size={32}/></div>
         <div style={{flex:1}}>
           <p style={{margin:0,fontSize:14,fontWeight:800,color:"#f9fafb"}}>{de?"Zum Startbildschirm":"Add to Home Screen"}</p>
           <p style={{margin:"3px 0 0",fontSize:11,color:"#6b7280",lineHeight:1.4}}>{isIOS?(de?'Tippe auf "Teilen" dann "Zum Home-Bildschirm"':'Tap Share → "Add to Home Screen"'):isNative?(de?"Installiere für schnellen Zugriff.":"Install for quick access."):(de?"Füge die App hinzu.":"Add this app to your home screen.")}</p>
@@ -630,7 +631,8 @@ function Toast({msg,onDone}){
     </div>
   );
 }
-function PowerRing({score,label,emoji,col}){
+const POWER_ICONS=[Moon,Sprout,Droplets,Leaf,Dumbbell,Zap,Trophy];
+function PowerRing({score,label,pidx,col}){
   const r=52,circ=2*Math.PI*r,dash=(score/100)*circ;
   const [c1,c2]=score<=30?["#6b7280","#9ca3af"]:score<=60?["#3b82f6","#60a5fa"]:score<=85?["#22c55e","#4ade80"]:["#8b5cf6","#a78bfa"];
   return(
@@ -651,7 +653,10 @@ function PowerRing({score,label,emoji,col}){
           <span style={{fontSize:11,color:"#6b7280"}}>/ 100</span>
         </div>
       </div>
-      <div style={{marginTop:6,fontSize:13,fontWeight:700,color:col.fill}}>{emoji} {label}</div>
+      <div style={{marginTop:6,fontSize:13,fontWeight:700,color:col.fill,display:"flex",alignItems:"center",gap:5}}>
+        {(()=>{const I=POWER_ICONS[pidx];return I?<I size={14} style={{flexShrink:0}}/>:null;})()}
+        {label}
+      </div>
     </div>
   );
 }
@@ -677,7 +682,7 @@ function BenefitModal({benefit,lang,onClose}){
             <button onClick={onClose} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
           </div>
           {info?<p style={{fontSize:13,color:"#d1d5db",lineHeight:1.7,margin:0}}>{info}</p>:<p style={{fontSize:13,color:"#6b7280",lineHeight:1.6,margin:0}}>{lang==="de"?"Keine weiteren Informationen verfügbar.":"No further information available."}</p>}
-          <p style={{fontSize:11,color:"#4b5563",marginTop:16,lineHeight:1.5}}>{t.benefitDisclaimer}</p>
+          <p style={{fontSize:11,color:"#4b5563",marginTop:16,lineHeight:1.5,display:"flex",alignItems:"flex-start",gap:5}}><Info size={12} style={{flexShrink:0,marginTop:1}}/>{t.benefitDisclaimer}</p>
         </div>
       </div>
     </div>
@@ -715,7 +720,7 @@ function SynergyModal({lang,foodObjs,addFood,onClose,isPremium,onUpgrade}){
         <p style={{fontSize:12,color:"#9ca3af",lineHeight:1.6,margin:0}}>{"█".repeat(120)}</p>
       </div>
       <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"rgba(3,7,18,0.7)",borderRadius:16}}>
-        <span style={{fontSize:24,marginBottom:8}}>🔒</span>
+        <Lock size={24} style={{marginBottom:8,color:"#6b7280"}}/>
         <button onClick={onUpgrade}
           style={{background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:10,padding:"8px 18px",fontSize:12,fontWeight:800,color:"#fff",cursor:"pointer"}}>
           {lang==="de"?"Mit Nube Pro freischalten →":"Unlock with Nube Pro →"}
@@ -767,20 +772,20 @@ function SynergyModal({lang,foodObjs,addFood,onClose,isPremium,onUpgrade}){
         <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
         <div style={{padding:"8px 20px 16px"}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-            <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>⚡ {t.synergyModalTitle}</h3>
+            <h3 style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb",display:"flex",alignItems:"center",gap:6}}><Zap size={16} style={{flexShrink:0}}/>{t.synergyModalTitle}</h3>
             <button onClick={onClose} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
           </div>
           {isPremium?(
             <>
               {unlocked.length>0&&(
                 <>
-                  <p style={{fontSize:11,fontWeight:700,color:"#4ade80",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>🔓 {lang==="de"?"Freigeschaltete Synergien":"Unlocked synergies"} ({unlocked.length})</p>
+                  <p style={{fontSize:11,fontWeight:700,color:"#4ade80",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,display:"flex",alignItems:"center",gap:5}}><Unlock size={13} style={{flexShrink:0}}/>{lang==="de"?"Freigeschaltete Synergien":"Unlocked synergies"} ({unlocked.length})</p>
                   {unlocked.map(syn=><SynergyCard key={syn.id} syn={syn} isUnlocked={true}/>)}
                 </>
               )}
               {partial.length>0&&(
                 <>
-                  <p style={{fontSize:11,fontWeight:700,color:"#f59e0b",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,marginTop:unlocked.length>0?16:0}}>💡 {t.potentialSynergies} — {lang==="de"?"du hast bereits eine Zutat:":"you already have one ingredient:"}</p>
+                  <p style={{fontSize:11,fontWeight:700,color:"#f59e0b",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,marginTop:unlocked.length>0?16:0,display:"flex",alignItems:"center",gap:5}}><Lightbulb size={13} style={{flexShrink:0}}/>{t.potentialSynergies} — {lang==="de"?"du hast bereits eine Zutat:":"you already have one ingredient:"}</p>
                   {partial.map(syn=><SynergyCard key={syn.id} syn={syn} isUnlocked={false}/>)}
                 </>
               )}
@@ -1063,7 +1068,7 @@ const pwBarLabel=isDE
             </div>
             <button onClick={()=>setLang(l=>l==="en"?"de":"en")}
               style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer"}}>
-              {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+              <Globe size={15} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="en"?"EN":"DE"}
             </button>
           </div>
           <h2 style={{margin:"0 0 8px",fontSize:24,fontWeight:900,color:"#fff"}}>
@@ -1183,7 +1188,7 @@ const pwBarLabel=isDE
               {isDE?"10 Synergien insgesamt":"10 synergies total"}
             </p>
             <p style={{margin:0,fontSize:11,color:"#374151"}}>
-              {isDE?"Entdecke alle mit Nube Pro ⚡":"Discover all with Nube Pro ⚡"}
+              {isDE?"Entdecke alle mit Nube Pro":"Discover all with Nube Pro"}<Zap size={12} style={{verticalAlign:"middle",marginLeft:4,color:"#f59e0b"}}/>
             </p>
           </div>
         </div>
@@ -1225,7 +1230,7 @@ const pwBarLabel=isDE
           </div>
           <button onClick={()=>setLang(l=>l==="en"?"de":"en")}
             style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer"}}>
-            {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+            <Globe size={15} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="en"?"EN":"DE"}
           </button>
         </div>
 
@@ -1363,8 +1368,8 @@ function AppDemo({lang}){
   const [fadeOut,setFadeOut]=useState(false);
 
   const powerLabels=isDE
-    ?["Ruhetag 😴","Anfang gemacht 🌱","Aufbauend 💧","Gute Basis 🌿","Starker Tag 💪","Kraftpaket ⚡","Elite Fuel 🏆"]
-    :["Rest Day 😴","Getting Started 🌱","Building Up 💧","Solid Foundation 🌿","Strong Day 💪","Powerhouse ⚡","Elite Fuel 🏆"];
+    ?["Ruhetag","Anfang gemacht","Aufbauend","Gute Basis","Starker Tag","Kraftpaket","Elite Fuel"]
+    :["Rest Day","Getting Started","Building Up","Solid Foundation","Strong Day","Powerhouse","Elite Fuel"];
 
   const getPowerIdx=s=>s===0?0:s<20?1:s<40?2:s<55?3:s<70?4:s<85?5:6;
   const getRingColor=s=>{
@@ -1537,7 +1542,7 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
             <div style={{display:"flex",alignItems:"center",gap:12}}>
               <button onClick={()=>setLang(l=>l==="en"?"de":"en")}
                 style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer"}}>
-                {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+                <Globe size={15} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="en"?"EN":"DE"}
               </button>
               <button onClick={onEnter} className="land-btn"
                 style={{height:44,background:"#22c55e",border:"none",borderRadius:12,padding:"0 24px",fontSize:13,fontWeight:800,color:"#fff",cursor:"pointer"}}>
@@ -1567,12 +1572,12 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
               {/* FEATURE CARDS */}
               <div className="land-section" style={{animationDelay:"0.2s",display:"flex",flexDirection:"column",gap:12}}>
                 {[
-                  {icon:"🔬",en:{t:"Science-backed",d:"Every benefit, every synergy is rooted in nutritional science. Not trends."},de:{t:"Wissenschaftlich belegt",d:"Jeder Benefit, jede Synergie basiert auf Ernährungswissenschaft."}},
-                  {icon:"🥗",en:{t:"Whole foods only",d:"No supplements, no processed food scores. Real food, real benefits."},de:{t:"Nur Vollwertkost",d:"Keine Supplements. Echte Lebensmittel, echte Benefits."}},
-                  {icon:"⚡",en:{t:"Synergy detection",d:"Discover which foods multiply each other's benefits when eaten together."},de:{t:"Synergie-Erkennung",d:"Entdecke welche Lebensmittel sich gegenseitig verstärken."}},
+                  {icon:Microscope,en:{t:"Science-backed",d:"Every benefit, every synergy is rooted in nutritional science. Not trends."},de:{t:"Wissenschaftlich belegt",d:"Jeder Benefit, jede Synergie basiert auf Ernährungswissenschaft."}},
+                  {icon:Utensils,en:{t:"Whole foods only",d:"No supplements, no processed food scores. Real food, real benefits."},de:{t:"Nur Vollwertkost",d:"Keine Supplements. Echte Lebensmittel, echte Benefits."}},
+                  {icon:Zap,en:{t:"Synergy detection",d:"Discover which foods multiply each other's benefits when eaten together."},de:{t:"Synergie-Erkennung",d:"Entdecke welche Lebensmittel sich gegenseitig verstärken."}},
                 ].map((f,i)=>(
                   <div key={i} style={{background:"#0f172a",borderRadius:16,padding:"16px 18px",display:"flex",alignItems:"flex-start",gap:14}}>
-                    <span style={{fontSize:24,flexShrink:0}}>{f.icon}</span>
+                    <span style={{flexShrink:0,color:"#9ca3af"}}>{(()=>{const I=f.icon;return <I size={24}/>;})()}</span>
                     <div>
                       <p style={{margin:"0 0 4px",fontSize:13,fontWeight:800,color:"#f9fafb"}}>{isDE?f.de.t:f.en.t}</p>
                       <p style={{margin:0,fontSize:12,color:"#6b7280",lineHeight:1.6}}>{isDE?f.de.d:f.en.d}</p>
@@ -1621,17 +1626,17 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
             </p>
             <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
               {[
-                {icon:"🦠",en:"Gut Health",de:"Darmgesundheit"},
-                {icon:"⚡",en:"Energy & Focus",de:"Energie & Fokus"},
-                {icon:"🛡️",en:"Immune System",de:"Immunsystem"},
-                {icon:"💪",en:"Muscle & Strength",de:"Muskel & Kraft"},
-                {icon:"❤️",en:"Heart Health",de:"Herzgesundheit"},
-                {icon:"🦴",en:"Bone Health",de:"Knochengesundheit"},
-                {icon:"✨",en:"Skin & Glow",de:"Haut & Glow"},
-                {icon:"🌙",en:"Sleep & Recovery",de:"Schlaf & Erholung"},
+                {icon:Activity,en:"Gut Health",de:"Darmgesundheit"},
+                {icon:Zap,en:"Energy & Focus",de:"Energie & Fokus"},
+                {icon:Shield,en:"Immune System",de:"Immunsystem"},
+                {icon:Dumbbell,en:"Muscle & Strength",de:"Muskel & Kraft"},
+                {icon:Heart,en:"Heart Health",de:"Herzgesundheit"},
+                {icon:Bone,en:"Bone Health",de:"Knochengesundheit"},
+                {icon:Sparkles,en:"Skin & Glow",de:"Haut & Glow"},
+                {icon:Moon,en:"Sleep & Recovery",de:"Schlaf & Erholung"},
               ].map(g=>(
                 <div key={g.en} style={{display:"flex",alignItems:"center",gap:6,background:"#0f172a",border:"1px solid #1f2937",borderRadius:99,padding:"8px 14px"}}>
-                  <span style={{fontSize:14}}>{g.icon}</span>
+                  {(()=>{const I=g.icon;return <I size={14} style={{color:"#9ca3af"}}/>;})()}
                   <span style={{fontSize:12,fontWeight:600,color:"#d1d5db"}}>{isDE?g.de:g.en}</span>
                 </div>
               ))}
@@ -1677,7 +1682,7 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
           </div>
           <button onClick={()=>setLang(l=>l==="en"?"de":"en")}
             style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
-            {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+            <Globe size={15} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="en"?"EN":"DE"}
           </button>
         </div>
 
@@ -1700,7 +1705,7 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
         {/* SYNERGY HIGHLIGHT */}
         <div className="land-section" style={{animationDelay:"0.2s",background:"#0f172a",border:"1px solid rgba(245,158,11,0.4)",borderRadius:20,padding:20,marginBottom:24}}>
           <p style={{margin:"0 0 8px",fontSize:13,fontWeight:800,color:"#fbbf24"}}>
-            {isDE?"⚡ Schwarzer Pfeffer + Kurkuma = Curcumin-Aufnahme x20":"⚡ Black Pepper + Turmeric = Curcumin absorption x20"}
+            <Zap size={14} style={{verticalAlign:"middle",marginRight:4}}/>{isDE?"Schwarzer Pfeffer + Kurkuma = Curcumin-Aufnahme x20":"Black Pepper + Turmeric = Curcumin absorption x20"}
           </p>
           <p style={{margin:"0 0 12px",fontSize:12,color:"#9ca3af",lineHeight:1.6}}>
             {isDE
@@ -1723,12 +1728,12 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
         {/* FEATURE CARDS */}
         <div className="land-section" style={{animationDelay:"0.3s",marginBottom:24}}>
           {[
-            {icon:"🔬",en:{t:"Science-backed",d:"Every benefit, every synergy is rooted in nutritional science. Not trends."},de:{t:"Wissenschaftlich belegt",d:"Jeder Benefit, jede Synergie basiert auf Ernährungswissenschaft. Keine Trends."}},
-            {icon:"🥗",en:{t:"Whole foods only",d:"No supplements, no processed food scores. Real food, real benefits."},de:{t:"Nur Vollwertkost",d:"Keine Supplements, keine Fertigkost-Scores. Echte Lebensmittel, echte Benefits."}},
-            {icon:"⚡",en:{t:"Synergy detection",d:"Discover which foods multiply each other's benefits when eaten together."},de:{t:"Synergie-Erkennung",d:"Entdecke welche Lebensmittel sich gegenseitig verstärken wenn du sie zusammen isst."}},
+            {icon:Microscope,en:{t:"Science-backed",d:"Every benefit, every synergy is rooted in nutritional science. Not trends."},de:{t:"Wissenschaftlich belegt",d:"Jeder Benefit, jede Synergie basiert auf Ernährungswissenschaft. Keine Trends."}},
+            {icon:Utensils,en:{t:"Whole foods only",d:"No supplements, no processed food scores. Real food, real benefits."},de:{t:"Nur Vollwertkost",d:"Keine Supplements, keine Fertigkost-Scores. Echte Lebensmittel, echte Benefits."}},
+            {icon:Zap,en:{t:"Synergy detection",d:"Discover which foods multiply each other's benefits when eaten together."},de:{t:"Synergie-Erkennung",d:"Entdecke welche Lebensmittel sich gegenseitig verstärken wenn du sie zusammen isst."}},
           ].map((f,i)=>(
             <div key={i} style={{background:"#0f172a",borderRadius:16,padding:"16px 18px",marginBottom:10,display:"flex",alignItems:"flex-start",gap:14}}>
-              <span style={{fontSize:24,flexShrink:0}}>{f.icon}</span>
+              <span style={{flexShrink:0,color:"#9ca3af"}}>{(()=>{const I=f.icon;return <I size={24}/>;})()}</span>
               <div>
                 <p style={{margin:"0 0 4px",fontSize:13,fontWeight:800,color:"#f9fafb"}}>{isDE?f.de.t:f.en.t}</p>
                 <p style={{margin:0,fontSize:12,color:"#6b7280",lineHeight:1.6}}>{isDE?f.de.d:f.en.d}</p>
@@ -1744,13 +1749,13 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
           </p>
           <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
             {[
-              {icon:"🦠",en:"Gut Health",de:"Darmgesundheit"},
-              {icon:"⚡",en:"Energy & Focus",de:"Energie & Fokus"},
-              {icon:"🛡️",en:"Immune System",de:"Immunsystem"},
-              {icon:"💪",en:"Muscle & Strength",de:"Muskel & Kraft"},
+              {icon:Activity,en:"Gut Health",de:"Darmgesundheit"},
+              {icon:Zap,en:"Energy & Focus",de:"Energie & Fokus"},
+              {icon:Shield,en:"Immune System",de:"Immunsystem"},
+              {icon:Dumbbell,en:"Muscle & Strength",de:"Muskel & Kraft"},
             ].map(g=>(
               <div key={g.en} style={{display:"flex",alignItems:"center",gap:6,background:"#0f172a",border:"1px solid #1f2937",borderRadius:99,padding:"8px 14px"}}>
-                <span style={{fontSize:14}}>{g.icon}</span>
+                {(()=>{const I=g.icon;return <I size={14} style={{color:"#9ca3af"}}/>;})()}
                 <span style={{fontSize:12,fontWeight:600,color:"#d1d5db"}}>{isDE?g.de:g.en}</span>
               </div>
             ))}
@@ -1822,6 +1827,7 @@ function PreferencesModal({lang,preferences,setPreferences,onClose}){
   const onTS=e=>{startY.current=e.touches[0].clientY;};
   const onTM=e=>{const dy=e.touches[0].clientY-startY.current;if(dy<0)return;curY.current=dy;if(sheetRef.current)sheetRef.current.style.transform=`translateY(${dy}px)`;};
   const onTE=()=>{if(curY.current>80){setClosing(true);setTimeout(onClose,200);}else if(sheetRef.current)sheetRef.current.style.transform="translateY(0)";curY.current=0;};
+  const dietIcons={all:UtensilsCrossed,vegetarian:Leaf,vegan:Sprout,pescatarian:Fish};
   const diets=[
     {key:"all",label:t.dietAll},{key:"vegetarian",label:t.dietVegetarian},
     {key:"vegan",label:t.dietVegan},{key:"pescatarian",label:t.dietPescatarian},
@@ -1841,7 +1847,8 @@ function PreferencesModal({lang,preferences,setPreferences,onClose}){
           <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:24}}>
             {diets.map(d=>(
               <button key={d.key} onClick={()=>setDraft(p=>({...p,diet:d.key}))}
-                style={{padding:"8px 16px",borderRadius:99,border:"none",background:draft.diet===d.key?"#22c55e":"#1f2937",color:draft.diet===d.key?"#fff":"#9ca3af",fontWeight:700,fontSize:13,cursor:"pointer",transition:"all 0.15s"}}>
+                style={{padding:"8px 16px",borderRadius:99,border:"none",background:draft.diet===d.key?"#22c55e":"#1f2937",color:draft.diet===d.key?"#fff":"#9ca3af",fontWeight:700,fontSize:13,cursor:"pointer",transition:"all 0.15s",display:"flex",alignItems:"center",gap:6}}>
+                {(()=>{const I=dietIcons[d.key];return I?<I size={14} style={{flexShrink:0}}/>:null;})()}
                 {d.label}
               </button>
             ))}
@@ -2235,7 +2242,7 @@ useEffect(()=>{
           <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(16px)"}}/>
           <div onClick={e=>e.stopPropagation()} style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:24,padding:"28px 24px",width:"100%",maxWidth:360,boxShadow:"0 8px 48px rgba(0,0,0,0.7)"}}>
             <div style={{textAlign:"center",marginBottom:20}}>
-              <div style={{fontSize:40,marginBottom:8}}>⚡</div>
+              <div style={{marginBottom:8,color:"#f59e0b"}}><Zap size={40}/></div>
               <h2 style={{margin:"0 0 16px",fontSize:22,fontWeight:900,color:"#fff"}}>Nube Pro</h2>
               <div style={{display:"flex",gap:4,background:"#0f172a",borderRadius:12,padding:4,marginBottom:16}}>
                 <button onClick={()=>setBillingYearly(false)}
@@ -2371,7 +2378,7 @@ useEffect(()=>{
             <div style={{position:"relative"}}>
               <button onClick={()=>setShowAccountMenu(p=>!p)}
                 style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 12px",fontSize:12,fontWeight:600,color:"#22c55e",cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
-                👤
+                <User size={18}/>
               </button>
               {showAccountMenu&&(
                 <div style={{position:"absolute",right:0,top:52,background:"#111827",border:"1px solid #374151",borderRadius:16,padding:12,minWidth:220,zIndex:100,boxShadow:"0 8px 32px rgba(0,0,0,0.6)"}}>
@@ -2395,23 +2402,23 @@ useEffect(()=>{
           )}
           <button onClick={()=>setShowPreferences(true)}
             style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 12px",fontSize:12,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
-            {lang==="de"?"⚙️ Ernährung":"⚙️ Diet"}
+            <Sliders size={16} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="de"?"Ernährung":"Diet"}
           </button>
           {isPremium?(
             <div style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f59e0b,#f97316)",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#fff",display:"flex",alignItems:"center",gap:4}}>
-              ⚡ Pro
+              <Zap size={14}/>Pro
             </div>
           ):(
             <button onClick={()=>setShowUpgradeModal(true)}
               style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#fff",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
-              ⚡ Pro
+              <Zap size={14}/>Pro
             </button>
           )}
           <button
             onClick={()=>setLang(l=>l==="en"?"de":"en")}
             title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
             style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
-            {lang==="en"?"🇬🇧 EN":"🇩🇪 DE"}
+            <Globe size={15} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="en"?"EN":"DE"}
           </button>
         </div>
         </div>
@@ -2420,7 +2427,7 @@ useEffect(()=>{
           {["today","history","insights","browse"].map(tab=>(
             <button key={tab} onClick={()=>setActiveTab(tab)}
               style={{flex:1,minHeight:44,background:activeTab===tab?"#fff":"#111827",color:activeTab===tab?"#111":"#6b7280",border:activeTab===tab?"none":"1px solid #1f2937",borderRadius:14,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s ease"}}>
-              {tab==="today"?"💪 "+t.tabToday:tab==="history"?"🔥 "+t.tabHistory:tab==="insights"?"🔬 "+t.tabInsights:"📖 "+(lang==="de"?"Lexikon":"Browse")}
+              {tab==="today"?<><Utensils size={14} style={{verticalAlign:"middle",marginRight:4}}/>{t.tabToday}</>:tab==="history"?<><Flame size={14} style={{verticalAlign:"middle",marginRight:4}}/>{t.tabHistory}</>:tab==="insights"?<><Activity size={14} style={{verticalAlign:"middle",marginRight:4}}/>{t.tabInsights}</>:<><BookOpen size={14} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="de"?"Lexikon":"Browse"}</>}
             </button>
           ))}
         </div>
@@ -2431,13 +2438,13 @@ useEffect(()=>{
           </div>
           <div {...pullHandlers}>
             <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:24,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:20}}>
-              <PowerRing score={score} label={t.powerLabels[pidx]} emoji={t.powerEmoji[pidx]} col={col}/>
+              <PowerRing score={score} label={t.powerLabels[pidx]} pidx={pidx} col={col}/>
               <div style={{flex:1}}>
                 {streak>0?(
                   <div style={{marginBottom:12}}>
                     <div style={{display:"flex",alignItems:"center",gap:6}}>
                       <span style={{fontSize:24,fontWeight:900,color:col.fill}}>{streak}</span>
-                      <span style={{fontSize:13,color:"#6b7280"}}>{t.streakDays} 🔥</span>
+                      <span style={{fontSize:13,color:"#6b7280",display:"flex",alignItems:"center",gap:4}}>{t.streakDays}<Flame size={14} style={{color:"#f59e0b"}}/></span>
                     </div>
                     <p style={{fontSize:11,color:"#4b5563",margin:"2px 0 0"}}>{t.streakTitle}</p>
                   </div>
@@ -2460,7 +2467,7 @@ useEffect(()=>{
               <div style={{borderRadius:16,padding:"12px 16px",marginBottom:16,background:col.grad}}>
                 <p style={{margin:0,fontSize:13,fontWeight:700,color:"#fff"}}>{t.todaySummary}</p>
                 <p style={{margin:"3px 0 0",fontSize:12,color:"rgba(255,255,255,0.85)"}}>{getVerdict(score)}</p>
-                {missingVit&&<p style={{margin:"4px 0 0",fontSize:11,color:"rgba(255,255,255,0.65)"}}>💡 {t.missingTip}: {t.vitNames[missingVit]} — {t.missingTips[missingVit]}</p>}
+                {missingVit&&<p style={{margin:"4px 0 0",fontSize:11,color:"rgba(255,255,255,0.65)",display:"flex",alignItems:"flex-start",gap:4}}><Lightbulb size={12} style={{flexShrink:0,marginTop:1}}/>{t.missingTip}: {t.vitNames[missingVit]} — {t.missingTips[missingVit]}</p>}
               </div>
             )}
 
@@ -2470,17 +2477,17 @@ useEffect(()=>{
                   <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"rgba(120,53,15,0.3)",border:"1px solid rgba(180,83,9,0.4)",borderRadius:synergiesLocked>0?"16px 16px 0 0":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",transition:"background 0.2s",animation:"synergyGlow 2s infinite"}}
                     onMouseEnter={e=>e.currentTarget.style.background="rgba(120,53,15,0.45)"} onMouseLeave={e=>e.currentTarget.style.background="rgba(120,53,15,0.3)"}>
                     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-                      <p style={{margin:0,fontSize:12,fontWeight:700,color:"#fbbf24"}}>⚡ {t.synergiesDetected} ({synergies.length})</p>
+                      <p style={{margin:0,fontSize:12,fontWeight:700,color:"#fbbf24",display:"flex",alignItems:"center",gap:5}}><Zap size={13} style={{flexShrink:0}}/>{t.synergiesDetected} ({synergies.length})</p>
                       <span style={{fontSize:11,color:"#f59e0b"}}>Details ›</span>
                     </div>
-                    {synergies.map((s,i)=><p key={i} style={{margin:0,fontSize:11,color:"rgba(251,191,36,0.8)"}}>⚡ {s}</p>)}
+                    {synergies.map((s,i)=><p key={i} style={{margin:0,fontSize:11,color:"rgba(251,191,36,0.8)",display:"flex",alignItems:"flex-start",gap:4}}><Zap size={11} style={{flexShrink:0,marginTop:1}}/>{s}</p>)}
                   </button>
                 )}
                 {synergiesLocked>0&&(
                   <button onClick={()=>setShowUpgradeModal(true)}
                     style={{width:"100%",background:"#0f172a",border:"1px solid #374151",borderRadius:synergies.length>0?"0 0 16px 16px":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"background 0.2s"}}
                     onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-                    <span style={{fontSize:16}}>🔒</span>
+                    <Lock size={16} style={{color:"#6b7280",flexShrink:0}}/>
                     <span style={{fontSize:12,fontWeight:600,color:"#6b7280"}}>
                       {lang==="de"?`${synergiesLocked} weitere Synergien erkannt — Mit Nube Pro freischalten`:`${synergiesLocked} more synergies detected — Unlock with Nube Pro`}
                     </span>
@@ -2491,18 +2498,18 @@ useEffect(()=>{
             {potentialSynergies.length>0&&added.length>0&&(
               <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:16,padding:"12px 16px",marginBottom:16,textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
                 onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-                <p style={{margin:"0 0 6px",fontSize:12,fontWeight:700,color:"#6b7280"}}>💡 {t.potentialSynergies}</p>
+                <p style={{margin:"0 0 6px",fontSize:12,fontWeight:700,color:"#6b7280",display:"flex",alignItems:"center",gap:5}}><Lightbulb size={13} style={{flexShrink:0}}/>{t.potentialSynergies}</p>
                 {potentialSynergies.map(s=>{
                   const missing=!s.sideA?s.missingA:s.missingB;
                   const benefit=t[s.key].split("→")[1]?.trim()||t[s.key];
-                  return <p key={s.key} style={{margin:0,fontSize:11,color:"#4b5563",lineHeight:1.6}}>💡 {t.addToUnlock(missing,benefit)}</p>;
+                  return <p key={s.key} style={{margin:0,fontSize:11,color:"#4b5563",lineHeight:1.6,display:"flex",alignItems:"flex-start",gap:4}}><Lightbulb size={11} style={{flexShrink:0,marginTop:2}}/>{t.addToUnlock(missing,benefit)}</p>;
                 })}
               </button>
             )}
             {synergies.length===0&&potentialSynergies.length===0&&added.length>0&&(
               <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:16,padding:"12px 16px",marginBottom:16,textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
                 onMouseEnter={e=>e.currentTarget.style.background="#1f2937"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-                <p style={{margin:0,fontSize:12,fontWeight:700,color:"#4b5563"}}>⚡ {t.synergyPossible} ›</p>
+                <p style={{margin:0,fontSize:12,fontWeight:700,color:"#4b5563",display:"flex",alignItems:"center",gap:5}}><Zap size={13} style={{flexShrink:0}}/>{t.synergyPossible} ›</p>
               </button>
             )}
 
@@ -2560,7 +2567,7 @@ useEffect(()=>{
               </div>
             ):(
               <div style={{textAlign:"center",padding:"40px 0",color:"#4b5563"}}>
-                <div style={{fontSize:40,marginBottom:8}}>🥗</div>
+                <div style={{marginBottom:8,color:"#374151"}}><Utensils size={40}/></div>
                 <p style={{margin:0,fontSize:14}}>{t.noFoodsYet}</p>
                 <p style={{margin:"4px 0 0",fontSize:12,color:"#374151"}}>{t.noFoodsTip}</p>
               {!isPremium&&foodObjs.length>3&&(
@@ -2568,7 +2575,7 @@ useEffect(()=>{
                     style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:14,padding:"12px 16px",marginTop:8,cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"background 0.2s"}}
                     onMouseEnter={e=>e.currentTarget.style.background="#111827"}
                     onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-                    <span style={{fontSize:16}}>🔒</span>
+                    <Lock size={16} style={{color:"#6b7280",flexShrink:0}}/>
                     <span style={{fontSize:12,fontWeight:600,color:"#6b7280"}}>
                       {lang==="de"?`${foodObjs.length-3} weitere Lebensmittel mit Nube Pro sehen`:`See ${foodObjs.length-3} more foods with Nube Pro`}
                     </span>
@@ -2600,7 +2607,7 @@ useEffect(()=>{
 
             {added.length>0&&(
               <div style={{marginBottom:16}}>
-                <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>✨ {lang==="de"?"Deine heutigen Lebensmittel":"Today's Foods"}</p>
+                <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,display:"flex",alignItems:"center",gap:5}}><Sparkles size={13}/>{lang==="de"?"Deine heutigen Lebensmittel":"Today's Foods"}</p>
                 {(isPremium?foodObjs:foodObjs.slice(0,3)).map((food,i)=>{
                   const cs=CAT_STYLE[food.cat]||{bg:"#374151",color:"#d1d5db"};
                   return(
@@ -2619,7 +2626,7 @@ useEffect(()=>{
                                 hasInfo&&setSelBenefit(b);
                               }}
                               style={{fontSize:11,padding:"3px 10px",borderRadius:99,background:bs.bg,color:bs.color,border:bs.border,fontWeight:500,cursor:hasInfo||!isPremium?"pointer":"default",transition:"opacity 0.15s",opacity:hasInfo?1:0.75}}>
-                              {b}{hasInfo?(isPremium?" ›":" 🔒"):""}
+                              {b}{hasInfo&&!isPremium?<Lock size={10} style={{verticalAlign:"middle",marginLeft:3}}/>:hasInfo?" ›":""}
                             </button>
                           );
                         })}
@@ -2647,7 +2654,7 @@ useEffect(()=>{
             </div>
           </div>
           <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:12}}>
-            <span style={{fontSize:36}}>🔥</span>
+            <Flame size={36} style={{color:"#f59e0b",flexShrink:0}}/>
             <div>
               <p style={{margin:0,fontSize:24,fontWeight:900,color:col.fill}}>{streak} {t.streakDays}</p>
               <p style={{margin:"2px 0 0",fontSize:12,color:"#4b5563"}}>{streak>0?t.streakTitle:t.streakNone}</p>
@@ -2705,7 +2712,7 @@ useEffect(()=>{
               </div>
             </div>
             <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,textAlign:"center",padding:"0 24px"}}>
-              <span style={{fontSize:32}}>🔒</span>
+              <Lock size={32} style={{color:"#6b7280"}}/>
               <p style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>
                 {lang==="de"?"Das Lebensmittel-Lexikon ist ein Nube Pro Feature":"The Food Lexicon is a Nube Pro feature"}
               </p>
@@ -2860,7 +2867,7 @@ useEffect(()=>{
                 {HEALTH_GOALS[lang].slice(0,2).map(goal=>(
                   <div key={goal.id} style={{background:"#0f172a",borderRadius:16,padding:16,marginBottom:12,border:"1px solid #1f2937"}}>
                     <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
-                      <span style={{fontSize:22}}>{goal.icon}</span>
+                      {(()=>{const I=goal.icon;return <I size={22} style={{color:"#9ca3af",flexShrink:0}}/>;})()}
                       <span style={{fontSize:14,fontWeight:800,color:"#f9fafb"}}>{goal.label}</span>
                     </div>
                     <p style={{fontSize:12,color:"#6b7280",lineHeight:1.5,margin:0}}>{goal.desc}</p>
@@ -2868,7 +2875,7 @@ useEffect(()=>{
                 ))}
               </div>
               <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,textAlign:"center",padding:"0 24px"}}>
-                <span style={{fontSize:32}}>🔒</span>
+                <Lock size={32} style={{color:"#6b7280"}}/>
                 <p style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>
                   {lang==="de"?"Health Goals sind ein Nube Pro Feature":"Health Goals are a Nube Pro feature"}
                 </p>
@@ -2935,7 +2942,7 @@ useEffect(()=>{
         <button onClick={()=>setShowContact(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Kontakt":"Contact"}</button>
         <button onClick={()=>setShowAbout(true)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"Ueber uns":"About"}</button>
         <button onClick={()=>window.open("https://buymeacoffee.com/DEIN_LINK","_blank")} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"☕ Unterstützen":"☕ Support"}</button>
-        {isGuest&&<button onClick={()=>setIsGuest(false)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0}}>{lang==="de"?"👤 Anmelden / Konto erstellen":"👤 Sign in / Create account"}</button>}
+        {isGuest&&<button onClick={()=>setIsGuest(false)} style={{background:"transparent",border:"none",color:"#4b5563",fontSize:11,cursor:"pointer",padding:0,display:"inline-flex",alignItems:"center",gap:4}}><User size={12}/>{lang==="de"?"Anmelden / Konto erstellen":"Sign in / Create account"}</button>}
       </div> 
     </div>
   );
