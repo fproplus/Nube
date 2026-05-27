@@ -616,7 +616,7 @@ function Confetti({active}){
     anim.current=requestAnimationFrame(draw);
     return()=>{if(anim.current)cancelAnimationFrame(anim.current);};
   },[active]);
-  return <canvas ref={cvs} style={{position:"fixed",inset:0,width:"100%",height:"100%",pointerEvents:"none",zIndex:200,opacity:active?1:0,transition:"opacity 0.5s ease"}}/>;
+  return <canvas ref={cvs} style={{position:"fixed",top:0,bottom:0,left:"50%",transform:"translateX(-50%)",width:"min(100vw,1100px)",height:"100%",pointerEvents:"none",zIndex:200,opacity:active?1:0,transition:"opacity 0.5s ease"}}/>;
 }
 function CoverageBar({level}){
   const w=level===0?"0%":level===1?"33%":level===2?"66%":"100%";
@@ -2355,6 +2355,7 @@ useEffect(()=>{
   .desktop-right{display:none}
   .hide-on-desktop{display:block}
   .hide-on-mobile{display:none}
+  .tab-bar-wrapper{padding:0}
   @media(min-width:768px){
     .desktop-container{max-width:1100px;display:flex;flex-direction:column}
     .desktop-columns{display:flex;gap:24px;align-items:flex-start;padding:0 24px}
@@ -2362,6 +2363,7 @@ useEffect(()=>{
     .desktop-right{display:block;flex:1}
     .hide-on-desktop{display:none}
     .hide-on-mobile{display:block}
+    .tab-bar-wrapper{padding:0 24px}
   }
   @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 `}</style>
@@ -2438,8 +2440,7 @@ useEffect(()=>{
           </button>
         </div>
         </div>
-        <div className="desktop-columns"><div className="desktop-left">
-
+        <div className="tab-bar-wrapper">
         <div style={{display:"flex",gap:8,marginBottom:20}}>
           {["today","history","insights","browse"].map(tab=>(
             <button key={tab} onClick={()=>setActiveTab(tab)}
@@ -2448,6 +2449,8 @@ useEffect(()=>{
             </button>
           ))}
         </div>
+        </div>
+        <div className="desktop-columns"><div className="desktop-left">
 
         <TabPane active={activeTab==="today"}>
           <div style={{height:pulling>0?pulling:0,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",transition:pulling===0?"height 0.3s ease":"none",color:"#4b5563",fontSize:12,fontWeight:600}}>
@@ -2712,7 +2715,7 @@ useEffect(()=>{
             })}
           </div>
         </TabPane>
-        <TabPane active={activeTab==="browse"}>
+        <div className="hide-on-desktop"><TabPane active={activeTab==="browse"}>
         {!isPremium?(
           <div style={{position:"relative",minHeight:300}}>
             <div style={{filter:"blur(5px)",pointerEvents:"none",opacity:0.4}}>
@@ -2877,7 +2880,7 @@ useEffect(()=>{
             })
           )}
         </div>)}
-      </TabPane>
+      </TabPane></div>
         <TabPane active={activeTab==="insights"}>
           {!isPremium?(
             <div style={{position:"relative",minHeight:300}}>
@@ -2953,10 +2956,10 @@ useEffect(()=>{
         </>)}
         </TabPane>
         </div>
-        {activeTab==="today"&&(
+        {(activeTab==="today"||activeTab==="browse")&&(
           <div className="desktop-right">
             <div className="hide-on-mobile">
-              {added.length>0&&(
+              {activeTab==="today"&&added.length>0&&(
                 <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.06)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:16,padding:20,marginBottom:16}}>
                   <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
                   <div style={{display:"flex",gap:16,marginBottom:10,flexWrap:"wrap"}}>
@@ -2975,6 +2978,126 @@ useEffect(()=>{
                   <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",margin:"12px 0 8px"}}>{t.minerals}</p>
                   {ALL_MIN.map(m=><NutrientRow key={m} nk={m} type="minerals"/>)}
                 </div>
+              )}
+              {activeTab==="browse"&&(
+                !isPremium?(
+                  <div style={{position:"relative",minHeight:300}}>
+                    <div style={{filter:"blur(5px)",pointerEvents:"none",opacity:0.4}}>
+                      <div style={{background:"#0f172a",borderRadius:14,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:10}}>
+                        <span style={{fontSize:10,padding:"2px 7px",borderRadius:99,background:"#fee2e2",color:"#b91c1c",fontWeight:700}}>Protein</span>
+                        <span style={{fontSize:13,fontWeight:600,color:"#d1d5db",flex:1}}>Chicken Breast</span>
+                      </div>
+                      <div style={{background:"#0f172a",borderRadius:14,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:10}}>
+                        <span style={{fontSize:10,padding:"2px 7px",borderRadius:99,background:"#dcfce7",color:"#15803d",fontWeight:700}}>Vegetable</span>
+                        <span style={{fontSize:13,fontWeight:600,color:"#d1d5db",flex:1}}>Spinach</span>
+                      </div>
+                    </div>
+                    <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,textAlign:"center",padding:"0 24px"}}>
+                      <Lock size={32} style={{color:"#6b7280"}}/>
+                      <p style={{margin:0,fontSize:15,fontWeight:900,color:"#f9fafb"}}>
+                        {lang==="de"?"Das Lebensmittel-Lexikon ist ein Nube Pro Feature":"The Food Lexicon is a Nube Pro feature"}
+                      </p>
+                      <p style={{margin:0,fontSize:13,color:"#6b7280",lineHeight:1.5}}>
+                        {lang==="de"?"Durchstöbere alle Lebensmittel nach Kategorie.":"Browse all foods by category and add them directly."}
+                      </p>
+                      <button onClick={()=>setShowUpgradeModal(true)}
+                        style={{background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:14,padding:"12px 24px",fontSize:14,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+                        {lang==="de"?"Nube Pro freischalten →":"Unlock Nube Pro →"}
+                      </button>
+                    </div>
+                  </div>
+                ):(
+                  <div>
+                    <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:4,marginTop:0}}>
+                      {lang==="de"?"Alle Lebensmittel":"All Foods"}
+                    </p>
+                    <p style={{fontSize:12,color:"#4b5563",marginBottom:12,marginTop:0}}>
+                      {lang==="de"?"Tippe ein Lebensmittel um es heute hinzuzufügen":"Tap any food to add it to today"}
+                    </p>
+                    <div style={{position:"relative",marginBottom:16}}>
+                      <input value={browseQuery} onChange={e=>setBrowseQuery(e.target.value)}
+                        placeholder={lang==="de"?"Lebensmittel suchen...":"Search foods..."}
+                        autoComplete="off" autoCorrect="off"
+                        style={{width:"100%",padding:"12px 16px",borderRadius:14,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none"}}
+                        onFocus={e=>e.target.style.borderColor="#22c55e"}
+                        onBlur={e=>e.target.style.borderColor="#1f2937"}/>
+                      {browseQuery&&(
+                        <button onClick={()=>setBrowseQuery("")}
+                          style={{position:"absolute",right:12,top:"50%",transform:"translateY(-50%)",background:"transparent",border:"none",color:"#6b7280",cursor:"pointer",fontSize:16,padding:0}}>✕</button>
+                      )}
+                    </div>
+                    {browseQuery.trim()?(
+                      <div>
+                        {filteredFoods.filter(f=>
+                          f[lang].toLowerCase().includes(browseQuery.toLowerCase())||
+                          f.en.toLowerCase().includes(browseQuery.toLowerCase())||
+                          (f.aliases||[]).some(a=>a.toLowerCase().includes(browseQuery.toLowerCase()))
+                        ).length===0?(
+                          <p style={{fontSize:13,color:"#4b5563",textAlign:"center",padding:"24px 0"}}>
+                            {lang==="de"?"Keine Lebensmittel gefunden":"No foods found"}
+                          </p>
+                        ):(
+                          filteredFoods.filter(f=>
+                            f[lang].toLowerCase().includes(browseQuery.toLowerCase())||
+                            f.en.toLowerCase().includes(browseQuery.toLowerCase())||
+                            (f.aliases||[]).some(a=>a.toLowerCase().includes(browseQuery.toLowerCase()))
+                          ).map(f=>{
+                            const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};
+                            const isAdded=added.includes(f.en);
+                            return(
+                              <div key={f.en} onClick={()=>addFood(f.en)}
+                                style={{width:"100%",minHeight:44,background:"#0f172a",border:"1px solid "+(isAdded?"rgba(34,197,94,0.3)":"#1f2937"),borderRadius:12,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left"}}
+                                onMouseEnter={e=>e.currentTarget.style.background="#111827"}
+                                onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                                <span style={{fontSize:10,padding:"2px 7px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{(T[lang].catNames[f.cat])||f.cat}</span>
+                                <span style={{fontSize:13,fontWeight:600,color:isAdded?"#4ade80":"#e5e7eb",flex:1}}>{f[lang]}</span>
+                                {isAdded&&<span style={{fontSize:14,color:"#4ade80",flexShrink:0}}>✓</span>}
+                                <button onClick={e=>{e.stopPropagation();excludeFood(f.en);}} style={{background:"transparent",border:"none",padding:"4px 2px",cursor:"pointer",fontSize:13,flexShrink:0,color:"#374151",lineHeight:1}} title={lang==="de"?"Ausblenden":"Hide"}>🚫</button>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    ):(
+                      ["Protein","Dairy","Vegetable","Fruit","Grain","Legume","Nut/Seed","Fat/Oil","Spice","Special","SoulFood"].map(cat=>{
+                        const catFoods=filteredFoods.filter(f=>f.cat===cat);
+                        if(!catFoods.length)return null;
+                        const cs=CAT_STYLE[cat]||{bg:"#374151",color:"#d1d5db"};
+                        const isOpen=!!openCats[cat];
+                        const catLabel=T[lang].catNames[cat]||cat;
+                        return(
+                          <div key={cat} style={{marginBottom:8}}>
+                            <button onClick={()=>setOpenCats(p=>({...p,[cat]:!p[cat]}))}
+                              style={{width:"100%",minHeight:44,background:"#0f172a",border:"1px solid #1f2937",borderRadius:isOpen?"14px 14px 0 0":"14px",padding:"10px 14px",display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left"}}
+                              onMouseEnter={e=>e.currentTarget.style.background="#111827"}
+                              onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                              <span style={{fontSize:11,padding:"2px 8px",borderRadius:8,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{catLabel}</span>
+                              <span style={{fontSize:13,fontWeight:700,color:"#d1d5db",flex:1}}>{catLabel} <span style={{color:"#4b5563",fontWeight:400}}>({catFoods.length})</span></span>
+                              <span style={{color:"#4b5563",fontSize:12,display:"inline-block",transform:isOpen?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.2s"}}>▼</span>
+                            </button>
+                            {isOpen&&(
+                              <div style={{border:"1px solid #1f2937",borderTop:"none",borderRadius:"0 0 14px 14px",overflow:"hidden"}}>
+                                {catFoods.map((f,i)=>{
+                                  const isAdded=added.includes(f.en);
+                                  return(
+                                    <div key={f.en} onClick={()=>addFood(f.en)}
+                                      style={{width:"100%",minHeight:44,background:isAdded?"rgba(34,197,94,0.05)":"#0f172a",borderBottom:i<catFoods.length-1?"1px solid #111827":"none",padding:"10px 14px",display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left"}}
+                                      onMouseEnter={e=>e.currentTarget.style.background=isAdded?"rgba(34,197,94,0.1)":"#111827"}
+                                      onMouseLeave={e=>e.currentTarget.style.background=isAdded?"rgba(34,197,94,0.05)":"#0f172a"}>
+                                      <span style={{fontSize:13,fontWeight:600,color:isAdded?"#4ade80":"#d1d5db",flex:1}}>{f[lang]}</span>
+                                      {isAdded?<span style={{fontSize:13,color:"#4ade80",flexShrink:0}}>✓</span>:<span style={{fontSize:11,color:"#374151",flexShrink:0}}>+</span>}
+                                      <button onClick={e=>{e.stopPropagation();excludeFood(f.en);}} style={{background:"transparent",border:"none",padding:"4px 2px",cursor:"pointer",fontSize:13,flexShrink:0,color:"#374151",lineHeight:1}} title={lang==="de"?"Ausblenden":"Hide"}>🚫</button>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                )
               )}
             </div>
           </div>
