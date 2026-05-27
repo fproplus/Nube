@@ -649,11 +649,11 @@ function PowerRing({score,label,pidx,col}){
           <circle cx="60" cy="60" r={r} fill="none" stroke="url(#ringGrad)" strokeWidth="10" strokeDasharray={`${dash} ${circ-dash}`} strokeLinecap="round" style={{transition:"stroke-dasharray 0.8s cubic-bezier(0.34,1.56,0.64,1)",filter:`drop-shadow(0 0 6px ${c1})`}}/>
         </svg>
         <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
-          <span key={score} style={{fontSize:28,fontWeight:900,color:col.fill,lineHeight:1,animation:"scoreCount 0.3s ease both"}}>{score}</span>
-          <span style={{fontSize:11,color:"#6b7280"}}>/ 100</span>
+          <span key={score} style={{fontSize:56,fontWeight:700,color:col.fill,lineHeight:1,letterSpacing:"-2px",animation:"scoreCount 0.3s ease both"}}>{score}</span>
+          <span style={{fontSize:13,color:"#f9fafb",opacity:0.4}}>/ 100</span>
         </div>
       </div>
-      <div style={{marginTop:6,fontSize:13,fontWeight:700,color:col.fill,display:"flex",alignItems:"center",gap:5}}>
+      <div style={{marginTop:8,fontSize:13,fontWeight:600,color:col.fill,opacity:0.85,display:"flex",alignItems:"center",gap:6}}>
         {(()=>{const I=POWER_ICONS[pidx];return I?<I size={14} style={{flexShrink:0}}/>:null;})()}
         {label}
       </div>
@@ -848,11 +848,11 @@ function FoodTag({food,lang,onRemove,onRequestRemove,isNew}){
   const [removing,setRemoving]=useState(false);
   const cs=CAT_STYLE[food.cat]||{bg:"#374151",color:"#d1d5db"};
   return(
-    <div style={{display:"flex",alignItems:"center",gap:6,background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:99,padding:"8px 12px",boxShadow:"0 2px 8px rgba(0,0,0,0.25)",transition:"opacity 0.2s ease,transform 0.2s ease,box-shadow 0.2s ease",opacity:removing?0:1,transform:removing?"scale(0.7)":"scale(1)",animation:isNew&&!removing?"foodTagPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both":"none"}}
+    <div style={{display:"flex",alignItems:"center",gap:6,background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:20,padding:"8px 12px",boxShadow:"0 2px 8px rgba(0,0,0,0.25)",transition:"opacity 0.2s ease,transform 0.2s ease,box-shadow 0.2s ease",opacity:removing?0:1,transform:removing?"scale(0.7)":"scale(1)",animation:isNew&&!removing?"foodTagPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both":"none"}}
       onMouseEnter={e=>{if(!removing){e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 4px 12px rgba(0,0,0,0.3)";}}}
       onMouseLeave={e=>{if(!removing){e.currentTarget.style.transform="scale(1)";e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.25)";}}}>
 
-      <span style={{fontSize:11,padding:"2px 6px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:600}}>{(T[lang].catNames[food.cat]||food.cat)[0]}</span>
+      <span style={{fontSize:11,padding:"2px 6px",borderRadius:8,background:cs.bg,color:cs.color,fontWeight:600}}>{(T[lang].catNames[food.cat]||food.cat)[0]}</span>
       <span style={{fontSize:12,fontWeight:600,color:"#e5e7eb"}}>{food[lang]}</span>
       <button onClick={()=>onRequestRemove(food.en)} style={{minWidth:24,minHeight:24,background:"transparent",border:"none",color:"#4b5563",cursor:"pointer",padding:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>✕</button>
     </div>
@@ -940,7 +940,7 @@ function EditDayModal({dayKey,lang,history,setHistory,todayAdded,setAdded,onClos
             </button>
           )}
 
-          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>
+          <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:10}}>
             {lang==="de"?"Lebensmittel dieses Tages":"Foods this day"} ({localFoods.length})
           </p>
 
@@ -1050,7 +1050,7 @@ const pwBarLabel=isDE
 
         {/* LEFT — App Demo */}
         <div style={{flex:"0 0 280px",display:"flex",flexDirection:"column",alignItems:"center"}}>
-          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:12,textAlign:"center"}}>
+          <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:12,textAlign:"center"}}>
             {isDE?"Sieh es in Aktion":"See it in action"}
           </p>
           <AppDemo lang={lang}/>
@@ -1164,7 +1164,7 @@ const pwBarLabel=isDE
 
         {/* RIGHT — Synergy Cards */}
         <div style={{flex:"0 0 280px",display:"flex",flexDirection:"column",gap:12}}>
-          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4}}>
+          <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:4}}>
             {isDE?"Wissenschaftlich belegt":"Science-backed synergies"}
           </p>
           {[
@@ -1591,7 +1591,7 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
             <div style={{flex:"0 0 480px",display:"flex",flexDirection:"column",gap:16}}>
               {/* APP DEMO */}
               <div className="land-section" style={{animationDelay:"0.15s"}}>
-                <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:12}}>
+                <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:12}}>
                   {isDE?"Sieh es in Aktion":"See it in action"}
                 </p>
                 <AppDemo lang={lang}/>
@@ -1599,7 +1599,7 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
 
               {/* SYNERGY CARDS */}
               <div className="land-section" style={{animationDelay:"0.25s",display:"flex",flexDirection:"column",gap:8}}>
-                <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4}}>
+                <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:4}}>
                   {isDE?"Wissenschaftlich belegte Synergien":"Science-backed synergies"}
                 </p>
                 {[
@@ -1621,7 +1621,7 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
 
           {/* HEALTH GOALS */}
           <div className="land-section" style={{animationDelay:"0.3s",marginBottom:32}}>
-            <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:12}}>
+            <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:12}}>
               {isDE?"Tracke was dein Körper braucht":"Track what your body needs"}
             </p>
             <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
@@ -1720,7 +1720,7 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
         </div>
         {/* APP DEMO */}
         <div className="land-section" style={{animationDelay:"0.25s",marginBottom:24}}>
-          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:12}}>
+          <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:12}}>
             {isDE?"Sieh es in Aktion":"See it in action"}
           </p>
           <AppDemo lang={lang}/>
@@ -1744,7 +1744,7 @@ function LandingPage({lang,setLang,onEnter,setShowImpressum,setShowPrivacy,setSh
 
         {/* HEALTH GOALS PREVIEW */}
         <div className="land-section" style={{animationDelay:"0.4s",marginBottom:32}}>
-          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:12}}>
+          <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:12}}>
             {isDE?"Tracke was dein Körper braucht":"Track what your body needs"}
           </p>
           <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
@@ -1843,7 +1843,7 @@ function PreferencesModal({lang,preferences,setPreferences,onClose}){
             <h3 style={{margin:0,fontSize:16,fontWeight:900,color:"#f9fafb"}}>{t.preferencesTitle}</h3>
             <button onClick={()=>{setClosing(true);setTimeout(onClose,200);}} style={{minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
           </div>
-          <p style={{margin:"0 0 10px",fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em"}}>{t.dietLabel}</p>
+          <p style={{margin:"0 0 10px",fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px"}}>{t.dietLabel}</p>
           <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:24}}>
             {diets.map(d=>(
               <button key={d.key} onClick={()=>setDraft(p=>({...p,diet:d.key}))}
@@ -1855,7 +1855,7 @@ function PreferencesModal({lang,preferences,setPreferences,onClose}){
           </div>
           {draft.excludedFoods.length>0&&(
             <>
-              <p style={{margin:"0 0 10px",fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em"}}>{t.hiddenFoods}</p>
+              <p style={{margin:"0 0 10px",fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px"}}>{t.hiddenFoods}</p>
               <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:12}}>
                 {draft.excludedFoods.map(key=>{
                   const f=FOOD_BY_EN[key];
@@ -2366,7 +2366,7 @@ useEffect(()=>{
   @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 `}</style>
         <div style={{position:"sticky",top:0,zIndex:50,background:"linear-gradient(180deg,rgba(3,7,18,1) 0%,rgba(3,7,18,0.97) 100%)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",borderBottom:"1px solid rgba(255,255,255,0.06)",margin:"0 -16px",padding:"0 16px"}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"calc(16px + env(safe-area-inset-top))",paddingBottom:16}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"calc(12px + env(safe-area-inset-top))",paddingBottom:12}}>
           <div>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
               <img
@@ -2386,14 +2386,14 @@ useEffect(()=>{
                   <path d="M12 7v2M12 15v2M7 12h2M15 12h2" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
               </div>
-              <h1 style={{margin:0,fontSize:18,fontWeight:900,color:"#fff"}}>{t.appTitle}</h1>
+              <h1 style={{margin:0,fontSize:18,fontWeight:700,letterSpacing:"-0.5px",color:"#fff"}}>{t.appTitle}</h1>
             </div>
-            <p style={{margin:0,fontSize:12,color:"#4b5563"}}>{t.appSubtitle}</p>
+            <p style={{margin:0,fontSize:12,color:"#f9fafb",opacity:0.4}}>{t.appSubtitle}</p>
           </div>
           {user&&!isGuest&&(
             <div style={{position:"relative"}}>
               <button onClick={()=>setShowAccountMenu(p=>!p)}
-                style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 12px",fontSize:12,fontWeight:600,color:"#22c55e",cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
+                style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:"10px 14px",fontSize:12,fontWeight:600,color:"#22c55e",cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
                 <User size={18}/>
               </button>
               {showAccountMenu&&(
@@ -2417,23 +2417,23 @@ useEffect(()=>{
             </div>
           )}
           <button onClick={()=>setShowPreferences(true)}
-            style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 12px",fontSize:12,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
+            style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:"10px 14px",fontSize:12,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
             <Sliders size={16} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="de"?"Ernährung":"Diet"}
           </button>
           {isPremium?(
-            <div style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f97316,#ea580c)",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#ffffff",display:"flex",alignItems:"center",gap:4,border:"1px solid rgba(255,255,255,0.2)"}}>
+            <div style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f97316,#ea580c)",borderRadius:12,padding:"10px 14px",fontSize:12,fontWeight:700,color:"#ffffff",display:"flex",alignItems:"center",gap:4,border:"1px solid rgba(255,255,255,0.2)"}}>
               <Zap size={14} fill="currentColor"/>Pro
             </div>
           ):(
             <button onClick={()=>setShowUpgradeModal(true)}
-              style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f97316,#ea580c)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#ffffff",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
+              style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f97316,#ea580c)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:"10px 14px",fontSize:12,fontWeight:700,color:"#ffffff",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
               <Zap size={14} fill="currentColor"/>Pro
             </button>
           )}
           <button
             onClick={()=>setLang(l=>l==="en"?"de":"en")}
             title={lang==="en"?"Switch to German":"Zu Englisch wechseln"}
-            style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid #374151",borderRadius:99,padding:"6px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            style={{minWidth:44,minHeight:44,background:"#111827",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:"10px 14px",fontSize:13,fontWeight:600,color:"#d1d5db",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
             <Globe size={15} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="en"?"EN":"DE"}
           </button>
         </div>
@@ -2443,7 +2443,7 @@ useEffect(()=>{
         <div style={{display:"flex",gap:8,marginBottom:20}}>
           {["today","history","insights","browse"].map(tab=>(
             <button key={tab} onClick={()=>setActiveTab(tab)}
-              style={{flex:1,minHeight:44,background:activeTab===tab?"#fff":"#111827",color:activeTab===tab?"#111":"#6b7280",border:activeTab===tab?"none":"1px solid #1f2937",borderRadius:14,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s ease"}}>
+              style={{flex:1,minHeight:44,background:activeTab===tab?"rgba(255,255,255,0.1)":"transparent",color:activeTab===tab?"#f9fafb":"rgba(255,255,255,0.4)",border:activeTab===tab?"1px solid rgba(255,255,255,0.15)":"1px solid rgba(255,255,255,0.06)",borderRadius:12,fontSize:12,fontWeight:600,cursor:"pointer",transition:"all 0.2s ease"}}>
               {tab==="today"?<><Utensils size={14} style={{verticalAlign:"middle",marginRight:4}}/>{t.tabToday}</>:tab==="history"?<><Flame size={14} style={{verticalAlign:"middle",marginRight:4}}/>{t.tabHistory}</>:tab==="insights"?<><Activity size={14} style={{verticalAlign:"middle",marginRight:4}}/>{t.tabInsights}</>:<><BookOpen size={14} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="de"?"Lexikon":"Browse"}</>}
             </button>
           ))}
@@ -2454,26 +2454,26 @@ useEffect(()=>{
             {refreshing?"✓ Refreshed":pulling>50?"Release ↑":pulling>10?"Pull ↓":""}
           </div>
           <div {...pullHandlers}>
-            <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:24,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:20}}>
+            <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.06)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:16,padding:24,marginBottom:16,display:"flex",alignItems:"center",gap:20}}>
               <PowerRing score={score} label={t.powerLabels[pidx]} pidx={pidx} col={col}/>
               <div style={{flex:1}}>
                 {streak>0?(
                   <div style={{marginBottom:12}}>
                     <div style={{display:"flex",alignItems:"center",gap:6}}>
-                      <span style={{fontSize:24,fontWeight:900,color:col.fill}}>{streak}</span>
+                      <span style={{fontSize:32,fontWeight:700,color:col.fill}}>{streak}</span>
                       <span style={{fontSize:13,color:"#6b7280",display:"flex",alignItems:"center",gap:4}}>{t.streakDays}<Flame size={14} style={{color:"#f59e0b"}}/></span>
                     </div>
                     <p style={{fontSize:11,color:"#4b5563",margin:"2px 0 0"}}>{t.streakTitle}</p>
                   </div>
                 ):<p style={{fontSize:12,color:"#4b5563",marginBottom:12}}>{t.streakNone}</p>}
                 {added.length>0&&(
-                  <div style={{fontSize:12,color:"#6b7280",display:"flex",flexDirection:"column",gap:4}}>
-                    <div style={{display:"flex",justifyContent:"space-between"}}><span>{t.vitamins}</span><span style={{color:"#4ade80",fontWeight:700}}>{ALL_VIT.filter(v=>totalN.v[v]>=2).length}/{ALL_VIT.length}</span></div>
-                    <div style={{display:"flex",justifyContent:"space-between"}}><span>{t.minerals}</span><span style={{color:"#60a5fa",fontWeight:700}}>{ALL_MIN.filter(m=>totalN.m[m]>=2).length}/{ALL_MIN.length}</span></div>
+                  <div style={{fontSize:12,color:"#f9fafb",display:"flex",flexDirection:"column",gap:5}}>
+                    <div style={{display:"flex",justifyContent:"space-between"}}><span style={{opacity:0.5}}>{t.vitamins}</span><span style={{color:"#4ade80",fontWeight:600}}>{ALL_VIT.filter(v=>totalN.v[v]>=2).length}/{ALL_VIT.length}</span></div>
+                    <div style={{display:"flex",justifyContent:"space-between"}}><span style={{opacity:0.5}}>{t.minerals}</span><span style={{color:"#60a5fa",fontWeight:600}}>{ALL_MIN.filter(m=>totalN.m[m]>=2).length}/{ALL_MIN.length}</span></div>
                     <button onClick={()=>setActiveTab("insights")} style={{display:"flex",justifyContent:"space-between",alignItems:"center",background:"transparent",border:"none",padding:0,cursor:"pointer",width:"100%",borderRadius:6,transition:"background 0.15s"}}
                       onMouseEnter={e=>e.currentTarget.style.background="rgba(192,132,252,0.08)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                      <span style={{color:"#6b7280",fontSize:12}}>{t.activeBenefits} ›</span>
-                      <span style={{color:"#c084fc",fontWeight:700}}>{[...new Set(foodObjs.flatMap(f=>f.b[lang]||[]))].length}</span>
+                      <span style={{opacity:0.5,fontSize:12}}>{t.activeBenefits} ›</span>
+                      <span style={{color:"#c084fc",fontWeight:600}}>{[...new Set(foodObjs.flatMap(f=>f.b[lang]||[]))].length}</span>
                     </button>
                   </div>
                 )}
@@ -2481,10 +2481,10 @@ useEffect(()=>{
             </div>
 
             {added.length>0&&(
-              <div style={{borderRadius:16,padding:"12px 16px",marginBottom:16,background:col.grad}}>
-                <p style={{margin:0,fontSize:13,fontWeight:700,color:"#fff"}}>{t.todaySummary}</p>
-                <p style={{margin:"3px 0 0",fontSize:12,color:"rgba(255,255,255,0.85)"}}>{getVerdict(score)}</p>
-                {missingVit&&<p style={{margin:"4px 0 0",fontSize:11,color:"rgba(255,255,255,0.65)",display:"flex",alignItems:"flex-start",gap:4}}><Lightbulb size={12} style={{flexShrink:0,marginTop:1}}/>{t.missingTip}: {t.vitNames[missingVit]} — {t.missingTips[missingVit]}</p>}
+              <div style={{borderRadius:16,padding:"16px 20px",marginBottom:16,background:col.grad}}>
+                <p style={{margin:0,fontSize:15,fontWeight:600,color:"#fff"}}>{t.todaySummary}</p>
+                <p style={{margin:"4px 0 0",fontSize:14,color:"rgba(255,255,255,0.7)",lineHeight:1.6}}>{getVerdict(score)}</p>
+                {missingVit&&<p style={{margin:"6px 0 0",fontSize:12,color:"rgba(255,255,255,0.55)",display:"flex",alignItems:"flex-start",gap:4}}><Lightbulb size={12} style={{flexShrink:0,marginTop:2}}/>{t.missingTip}: {t.vitNames[missingVit]} — {t.missingTips[missingVit]}</p>}
               </div>
             )}
 
@@ -2532,16 +2532,16 @@ useEffect(()=>{
 
             <div style={{position:"relative",marginBottom:12}}>
               <input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t.searchPlaceholder} autoComplete="off" autoCorrect="off"
-                style={{width:"100%",padding:"14px 16px",borderRadius:16,border:"1px solid #1f2937",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",transition:"all 0.2s ease"}}
+                style={{width:"100%",padding:"14px 16px",borderRadius:14,border:"1px solid rgba(255,255,255,0.08)",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",transition:"all 0.2s ease"}}
                 onFocus={e=>{e.target.style.borderColor="#22c55e";e.target.style.boxShadow="0 0 0 3px rgba(34,197,94,0.15)";}}
                 onBlur={e=>{e.target.style.borderColor="#1f2937";e.target.style.boxShadow="none";}}/>
               {suggestions.length>0&&(
-                <div style={{position:"absolute",zIndex:10,width:"100%",background:"#0f172a",border:"1px solid #1f2937",borderRadius:16,marginTop:4,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.6)"}}>
+                <div style={{position:"absolute",zIndex:10,width:"100%",background:"#0f172a",border:"1px solid rgba(255,255,255,0.08)",borderRadius:14,marginTop:4,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.6)"}}>
                   {suggestions.map(f=>{const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};return(
                     <button key={f.en} onClick={()=>addFood(f.en)}
                       style={{width:"100%",padding:"12px 16px",textAlign:"left",fontSize:13,background:"transparent",border:"none",borderBottom:"1px solid rgba(255,255,255,0.04)",color:"#e5e7eb",cursor:"pointer",display:"flex",alignItems:"center",gap:10,minHeight:44}}
                       onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                      <span style={{fontSize:11,padding:"2px 8px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:600,flexShrink:0}}>{t.catNames[f.cat]||f.cat}</span>
+                      <span style={{fontSize:11,padding:"2px 8px",borderRadius:8,background:cs.bg,color:cs.color,fontWeight:600,flexShrink:0}}>{t.catNames[f.cat]||f.cat}</span>
                       {f[lang]}
                     </button>
                   );})}
@@ -2553,7 +2553,7 @@ useEffect(()=>{
               if(!recentFoods.length)return null;
               return(
                 <div style={{marginBottom:12}}>
-                  <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8}}>
+                  <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:8}}>
                     {lang==="de"?"🕐 Zuletzt gegessen":"🕐 Recently eaten"}
                   </p>
                   <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
@@ -2603,13 +2603,13 @@ useEffect(()=>{
 
             {added.length>0&&(
               <div style={{marginBottom:16}}>
-                <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,display:"flex",alignItems:"center",gap:5}}><Sparkles size={13}/>{lang==="de"?"Deine heutigen Lebensmittel":"Today's Foods"}</p>
+                <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:10,display:"flex",alignItems:"center",gap:5}}><Sparkles size={13}/>{lang==="de"?"Deine heutigen Lebensmittel":"Today's Foods"}</p>
                 {(isPremium?foodObjs:foodObjs.slice(0,3)).map((food,i)=>{
                   const cs=CAT_STYLE[food.cat]||{bg:"#374151",color:"#d1d5db"};
                   return(
-                    <div key={food.en} style={{background:"#0f172a",borderRadius:14,padding:"12px 14px",marginBottom:8,animation:`fadeSlideIn 0.3s ease ${i*0.04}s both`}}>
+                    <div key={food.en} style={{background:"#0f172a",borderRadius:16,padding:"14px 16px",marginBottom:8,animation:`fadeSlideIn 0.3s ease ${i*0.04}s both`}}>
                       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                        <span style={{fontSize:11,padding:"2px 8px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{t.catNames[food.cat]||food.cat}</span>
+                        <span style={{fontSize:11,padding:"2px 8px",borderRadius:8,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{t.catNames[food.cat]||food.cat}</span>
                         <span style={{fontSize:13,fontWeight:700,color:"#f9fafb"}}>{food[lang]}</span>
                       </div>
                       <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
@@ -2634,8 +2634,8 @@ useEffect(()=>{
             )}
             <div className="hide-on-desktop">
             {added.length>0&&(
-              <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:16,marginBottom:16}}>
-                <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
+              <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.06)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:16,padding:20,marginBottom:16}}>
+                <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
                 <div style={{display:"flex",gap:16,marginBottom:10,flexWrap:"wrap"}}>
                   {[["—","#374151",lang==="de"?"Nicht abgedeckt":"Not covered"],
                     ["~","#facc15",lang==="de"?"Spur vorhanden":"Trace amount"],
@@ -2649,7 +2649,7 @@ useEffect(()=>{
                   ))}
                 </div>
                 {ALL_VIT.map(v=><NutrientRow key={v} nk={v} type="vitamins"/>)}
-                <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",margin:"12px 0 8px"}}>{t.minerals}</p>
+                <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",margin:"12px 0 8px"}}>{t.minerals}</p>
                 {ALL_MIN.map(m=><NutrientRow key={m} nk={m} type="minerals"/>)}
               </div>
             )}
@@ -2658,8 +2658,8 @@ useEffect(()=>{
         </TabPane>
 
         <TabPane active={activeTab==="history"}>
-          <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:20,marginBottom:16}}>
-            <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:16,marginTop:0}}>{t.heatmapTitle}</p>
+          <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.06)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:16,padding:20,marginBottom:16}}>
+            <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:16,marginTop:0}}>{t.heatmapTitle}</p>
             <div style={{display:"grid",gridTemplateColumns:"repeat(10,1fr)",gap:6}}>
               {heatDays.map(({key,score:s,isToday})=>(
                 <div key={key} style={{width:"100%",aspectRatio:"1",borderRadius:6,background:getHeatBg(s),outline:isToday?"2px solid white":""}}/>
@@ -2671,7 +2671,7 @@ useEffect(()=>{
               ))}
             </div>
           </div>
-          <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:12}}>
+          <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.06)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:16,padding:20,marginBottom:16,display:"flex",alignItems:"center",gap:12}}>
             <Flame size={36} style={{color:"#f59e0b",flexShrink:0}}/>
             <div>
               <p style={{margin:0,fontSize:24,fontWeight:900,color:col.fill}}>{streak} {t.streakDays}</p>
@@ -2704,7 +2704,7 @@ useEffect(()=>{
                   <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
                     {foods.map(k=>FOOD_BY_EN[k]).filter(Boolean).map(f=>{
                       const cs=CAT_STYLE[f.cat]||{bg:"#374151",color:"#d1d5db"};
-                      return <span key={f.en} style={{fontSize:11,padding:"2px 8px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:600}}>{f[lang]}</span>;
+                      return <span key={f.en} style={{fontSize:11,padding:"2px 8px",borderRadius:8,background:cs.bg,color:cs.color,fontWeight:600}}>{f[lang]}</span>;
                     })}
                   </div>
                 </div>
@@ -2779,7 +2779,7 @@ useEffect(()=>{
                     .map(([term,count])=>(
                       <div key={term} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"6px 0",borderBottom:"1px solid #1f2937"}}>
                         <span style={{fontSize:12,color:"#d1d5db"}}>{term}</span>
-                        <span style={{fontSize:11,fontWeight:700,color:"#ef4444",background:"rgba(239,68,68,0.1)",padding:"2px 8px",borderRadius:99}}>{count}×</span>
+                        <span style={{fontSize:11,fontWeight:700,color:"#ef4444",background:"rgba(239,68,68,0.1)",padding:"2px 8px",borderRadius:8}}>{count}×</span>
                       </div>
                     ))
                   }
@@ -2788,7 +2788,7 @@ useEffect(()=>{
             </div>
           )}
         </div>
-          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4,marginTop:0}}>
+          <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:4,marginTop:0}}>
             {lang==="de"?"Alle Lebensmittel":"All Foods"}
           </p>
           <p style={{fontSize:12,color:"#4b5563",marginBottom:12,marginTop:0}}>
@@ -2851,7 +2851,7 @@ useEffect(()=>{
                     style={{width:"100%",minHeight:44,background:"#0f172a",border:"1px solid #1f2937",borderRadius:isOpen?"14px 14px 0 0":"14px",padding:"10px 14px",display:"flex",alignItems:"center",gap:10,cursor:"pointer",textAlign:"left"}}
                     onMouseEnter={e=>e.currentTarget.style.background="#111827"}
                     onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-                    <span style={{fontSize:11,padding:"2px 8px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{catLabel}</span>
+                    <span style={{fontSize:11,padding:"2px 8px",borderRadius:8,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{catLabel}</span>
                     <span style={{fontSize:13,fontWeight:700,color:"#d1d5db",flex:1}}>{catLabel} <span style={{color:"#4b5563",fontWeight:400}}>({catFoods.length})</span></span>
                     <span style={{color:"#4b5563",fontSize:12,display:"inline-block",transform:isOpen?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.2s"}}>▼</span>
                   </button>
@@ -2908,7 +2908,7 @@ useEffect(()=>{
             </div>
           ):(
           <>
-          <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:16,marginTop:0}}>
+          <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:16,marginTop:0}}>
             {lang==="de"?"Was deckst du heute ab?":"What are you covering today?"}
           </p>
           {HEALTH_GOALS[lang].map((goal,i)=>{
@@ -2957,8 +2957,8 @@ useEffect(()=>{
           <div className="desktop-right">
             <div className="hide-on-mobile">
               {added.length>0&&(
-                <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:16,marginBottom:16}}>
-                  <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
+                <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.06)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:16,padding:20,marginBottom:16}}>
+                  <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
                   <div style={{display:"flex",gap:16,marginBottom:10,flexWrap:"wrap"}}>
                     {[["—","#374151",lang==="de"?"Nicht abgedeckt":"Not covered"],
                       ["~","#facc15",lang==="de"?"Spur vorhanden":"Trace amount"],
@@ -2972,7 +2972,7 @@ useEffect(()=>{
                     ))}
                   </div>
                   {ALL_VIT.map(v=><NutrientRow key={v} nk={v} type="vitamins"/>)}
-                  <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",margin:"12px 0 8px"}}>{t.minerals}</p>
+                  <p style={{fontSize:11,fontWeight:600,color:"#f9fafb",opacity:0.5,textTransform:"uppercase",letterSpacing:"2px",margin:"12px 0 8px"}}>{t.minerals}</p>
                   {ALL_MIN.map(m=><NutrientRow key={m} nk={m} type="minerals"/>)}
                 </div>
               )}
