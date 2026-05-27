@@ -2348,7 +2348,23 @@ useEffect(()=>{
       )}
       <InstallPrompt show={showInstall} onInstall={install} onDismiss={dismissInstall} isNative={isNative} lang={lang}/>
 
-      <div style={{maxWidth:520,margin:"0 auto",padding:"0 16px"}}>
+      <div className="desktop-container" style={{margin:"0 auto",padding:"0 16px"}}>
+        <style>{`
+  .desktop-container{max-width:520px;margin:0 auto}
+  .desktop-left{width:100%}
+  .desktop-right{display:none}
+  .hide-on-desktop{display:block}
+  .hide-on-mobile{display:none}
+  @media(min-width:768px){
+    .desktop-container{max-width:1100px;display:flex;flex-direction:column}
+    .desktop-columns{display:flex;gap:24px;align-items:flex-start;padding:0 24px}
+    .desktop-left{width:440px;flex-shrink:0;position:sticky;top:80px}
+    .desktop-right{display:block;flex:1}
+    .hide-on-desktop{display:none}
+    .hide-on-mobile{display:block}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+`}</style>
         <div style={{position:"sticky",top:0,zIndex:50,background:"linear-gradient(180deg,rgba(3,7,18,1) 0%,rgba(3,7,18,0.97) 100%)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",borderBottom:"1px solid rgba(255,255,255,0.06)",margin:"0 -16px",padding:"0 16px"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"calc(16px + env(safe-area-inset-top))",paddingBottom:16}}>
           <div>
@@ -2422,6 +2438,7 @@ useEffect(()=>{
           </button>
         </div>
         </div>
+        <div className="desktop-columns"><div className="desktop-left">
 
         <div style={{display:"flex",gap:8,marginBottom:20}}>
           {["today","history","insights","browse"].map(tab=>(
@@ -2584,6 +2601,7 @@ useEffect(()=>{
               </div>
             )}
 
+            <div className="hide-on-desktop">
             {added.length>0&&(
               <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:16,marginBottom:16}}>
                 <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
@@ -2604,7 +2622,6 @@ useEffect(()=>{
                 {ALL_MIN.map(m=><NutrientRow key={m} nk={m} type="minerals"/>)}
               </div>
             )}
-
             {added.length>0&&(
               <div style={{marginBottom:16}}>
                 <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,display:"flex",alignItems:"center",gap:5}}><Sparkles size={13}/>{lang==="de"?"Deine heutigen Lebensmittel":"Today's Foods"}</p>
@@ -2636,6 +2653,7 @@ useEffect(()=>{
                 })}
               </div>
             )}
+            </div>
           </div>
         </TabPane>
 
@@ -2934,6 +2952,65 @@ useEffect(()=>{
           })}
         </>)}
         </TabPane>
+        </div>
+        {activeTab==="today"&&(
+          <div className="desktop-right">
+            <div className="hide-on-mobile">
+              {added.length>0&&(
+                <div style={{background:"rgba(255,255,255,0.03)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 4px 24px rgba(0,0,0,0.3)",borderRadius:20,padding:16,marginBottom:16}}>
+                  <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,marginTop:0}}>{t.vitamins}</p>
+                  <div style={{display:"flex",gap:16,marginBottom:10,flexWrap:"wrap"}}>
+                    {[["—","#374151",lang==="de"?"Nicht abgedeckt":"Not covered"],
+                      ["~","#facc15",lang==="de"?"Spur vorhanden":"Trace amount"],
+                      ["✓","#60a5fa",lang==="de"?"Gut abgedeckt":"Good coverage"],
+                      ["✓✓","#4ade80",lang==="de"?"Sehr gut":"Excellent"]
+                    ].map(([sym,col,label])=>(
+                      <div key={sym} style={{display:"flex",alignItems:"center",gap:5}}>
+                        <span style={{fontSize:12,fontWeight:700,color:col,minWidth:16}}>{sym}</span>
+                        <span style={{fontSize:11,color:"#4b5563"}}>{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {ALL_VIT.map(v=><NutrientRow key={v} nk={v} type="vitamins"/>)}
+                  <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",margin:"12px 0 8px"}}>{t.minerals}</p>
+                  {ALL_MIN.map(m=><NutrientRow key={m} nk={m} type="minerals"/>)}
+                </div>
+              )}
+              {added.length>0&&(
+                <div style={{marginBottom:16}}>
+                  <p style={{fontSize:11,fontWeight:700,color:"#4b5563",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,display:"flex",alignItems:"center",gap:5}}><Sparkles size={13}/>{lang==="de"?"Deine heutigen Lebensmittel":"Today's Foods"}</p>
+                  {(isPremium?foodObjs:foodObjs.slice(0,3)).map((food,i)=>{
+                    const cs=CAT_STYLE[food.cat]||{bg:"#374151",color:"#d1d5db"};
+                    return(
+                      <div key={food.en} style={{background:"#0f172a",borderRadius:14,padding:"12px 14px",marginBottom:8,animation:`fadeSlideIn 0.3s ease ${i*0.04}s both`}}>
+                        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                          <span style={{fontSize:11,padding:"2px 8px",borderRadius:99,background:cs.bg,color:cs.color,fontWeight:700,flexShrink:0}}>{t.catNames[food.cat]||food.cat}</span>
+                          <span style={{fontSize:13,fontWeight:700,color:"#f9fafb"}}>{food[lang]}</span>
+                        </div>
+                        <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                          {(food.b[lang]||[]).map((b,j)=>{
+                            const bs=BENEFIT_STYLES[j%BENEFIT_STYLES.length];
+                            const hasInfo=!!(BENEFIT_INFO[lang]?.[b]||BENEFIT_INFO.en?.[b]);
+                            return(
+                              <button key={b} onClick={()=>{
+                                  if(!isPremium){setShowUpgradeModal(true);return;}
+                                  hasInfo&&setSelBenefit(b);
+                                }}
+                                style={{fontSize:11,padding:"3px 10px",borderRadius:99,background:bs.bg,color:bs.color,border:bs.border,fontWeight:500,cursor:hasInfo||!isPremium?"pointer":"default",transition:"opacity 0.15s",opacity:hasInfo?1:0.75}}>
+                                {b}{hasInfo&&!isPremium?<Lock size={10} style={{verticalAlign:"middle",marginLeft:3}}/>:hasInfo?" ›":""}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        </div>
       </div>
 
      <div style={{textAlign:"center",padding:"24px 0 calc(24px + env(safe-area-inset-bottom))",display:"flex",justifyContent:"center",gap:20}}>
