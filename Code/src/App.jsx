@@ -2364,7 +2364,7 @@ useEffect(()=>{
     .hide-on-desktop{display:none}
     .hide-on-mobile{display:block}
     .tab-bar-wrapper{padding:0 24px}
-    .desktop-columns.single-col{display:block;max-width:900px;margin:0 auto;padding:0 24px}
+    .desktop-columns.single-col{display:block;width:100%;padding:0 24px}
     .desktop-columns.single-col .desktop-left{width:100%;position:static}
     .desktop-columns.single-col .desktop-right{display:none!important}
   }
