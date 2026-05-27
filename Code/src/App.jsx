@@ -2405,13 +2405,13 @@ useEffect(()=>{
             <Sliders size={16} style={{verticalAlign:"middle",marginRight:4}}/>{lang==="de"?"Ernährung":"Diet"}
           </button>
           {isPremium?(
-            <div style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f59e0b,#f97316)",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#fff",display:"flex",alignItems:"center",gap:4}}>
-              <Zap size={14}/>Pro
+            <div style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f97316,#ea580c)",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#ffffff",display:"flex",alignItems:"center",gap:4,border:"1px solid rgba(255,255,255,0.2)"}}>
+              <Zap size={14} fill="currentColor"/>Pro
             </div>
           ):(
             <button onClick={()=>setShowUpgradeModal(true)}
-              style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f59e0b,#f97316)",border:"none",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#fff",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
-              <Zap size={14}/>Pro
+              style={{minWidth:44,minHeight:44,background:"linear-gradient(135deg,#f97316,#ea580c)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:99,padding:"6px 14px",fontSize:12,fontWeight:800,color:"#ffffff",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
+              <Zap size={14} fill="currentColor"/>Pro
             </button>
           )}
           <button
