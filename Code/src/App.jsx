@@ -2883,7 +2883,7 @@ useEffect(()=>{
             })
           )}
         </div>)}
-      </TabPane></div>
+      </TabPane>
         <TabPane active={activeTab==="insights"}>
           {!isPremium?(
             <div style={{position:"relative",minHeight:300}}>
@@ -2958,6 +2958,7 @@ useEffect(()=>{
           })}
         </>)}
         </TabPane>
+        </div>
         {activeTab==="today"&&(
           <div className="desktop-right">
             <div className="hide-on-mobile">
