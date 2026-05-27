@@ -2486,56 +2486,6 @@ useEffect(()=>{
               </div>
             </div>
 
-            {added.length>0&&(
-              <div style={{borderRadius:16,padding:"16px 20px",marginBottom:16,background:col.grad}}>
-                <p style={{margin:0,fontSize:15,fontWeight:600,color:"#fff"}}>{t.todaySummary}</p>
-                <p style={{margin:"4px 0 0",fontSize:14,color:"rgba(255,255,255,0.7)",lineHeight:1.6}}>{getVerdict(score)}</p>
-                {missingVit&&<p style={{margin:"6px 0 0",fontSize:12,color:"rgba(255,255,255,0.55)",display:"flex",alignItems:"flex-start",gap:4}}><Lightbulb size={12} style={{flexShrink:0,marginTop:2}}/>{t.missingTip}: {t.vitNames[missingVit]} — {t.missingTips[missingVit]}</p>}
-              </div>
-            )}
-
-            {(synergies.length>0||synergiesLocked>0)&&(
-              <div style={{marginBottom:8}}>
-                {synergies.length>0&&(
-                  <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"rgba(120,53,15,0.3)",border:"1px solid rgba(180,83,9,0.4)",borderRadius:synergiesLocked>0?"16px 16px 0 0":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",transition:"background 0.2s",animation:"synergyGlow 2s infinite"}}
-                    onMouseEnter={e=>e.currentTarget.style.background="rgba(120,53,15,0.45)"} onMouseLeave={e=>e.currentTarget.style.background="rgba(120,53,15,0.3)"}>
-                    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-                      <p style={{margin:0,fontSize:12,fontWeight:700,color:"#fbbf24",display:"flex",alignItems:"center",gap:5}}><Zap size={13} style={{flexShrink:0}}/>{t.synergiesDetected} ({synergies.length})</p>
-                      <span style={{fontSize:11,color:"#f59e0b"}}>Details ›</span>
-                    </div>
-                    {synergies.map((s,i)=><p key={i} style={{margin:0,fontSize:11,color:"rgba(251,191,36,0.8)",display:"flex",alignItems:"flex-start",gap:4}}><Zap size={11} style={{flexShrink:0,marginTop:1}}/>{s}</p>)}
-                  </button>
-                )}
-                {synergiesLocked>0&&(
-                  <button onClick={()=>setShowUpgradeModal(true)}
-                    style={{width:"100%",background:"#0f172a",border:"1px solid #374151",borderRadius:synergies.length>0?"0 0 16px 16px":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"background 0.2s"}}
-                    onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-                    <Lock size={16} style={{color:"#6b7280",flexShrink:0}}/>
-                    <span style={{fontSize:12,fontWeight:600,color:"#6b7280"}}>
-                      {lang==="de"?`${synergiesLocked} weitere Synergien erkannt — Mit Nube Pro freischalten`:`${synergiesLocked} more synergies detected — Unlock with Nube Pro`}
-                    </span>
-                  </button>
-                )}
-              </div>
-            )}
-            {potentialSynergies.length>0&&added.length>0&&(
-              <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:16,padding:"12px 16px",marginBottom:16,textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
-                onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-                <p style={{margin:"0 0 6px",fontSize:12,fontWeight:700,color:"#6b7280",display:"flex",alignItems:"center",gap:5}}><Lightbulb size={13} style={{flexShrink:0}}/>{t.potentialSynergies}</p>
-                {potentialSynergies.map(s=>{
-                  const missing=!s.sideA?s.missingA:s.missingB;
-                  const benefit=t[s.key].split("→")[1]?.trim()||t[s.key];
-                  return <p key={s.key} style={{margin:0,fontSize:11,color:"#4b5563",lineHeight:1.6,display:"flex",alignItems:"flex-start",gap:4}}><Lightbulb size={11} style={{flexShrink:0,marginTop:2}}/>{t.addToUnlock(missing,benefit)}</p>;
-                })}
-              </button>
-            )}
-            {synergies.length===0&&potentialSynergies.length===0&&added.length>0&&(
-              <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:16,padding:"12px 16px",marginBottom:16,textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
-                onMouseEnter={e=>e.currentTarget.style.background="#1f2937"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-                <p style={{margin:0,fontSize:12,fontWeight:700,color:"#4b5563",display:"flex",alignItems:"center",gap:5}}><Zap size={13} style={{flexShrink:0}}/>{t.synergyPossible} ›</p>
-              </button>
-            )}
-
             <div style={{position:"relative",marginBottom:12}}>
               <input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t.searchPlaceholder} autoComplete="off" autoCorrect="off"
                 style={{width:"100%",padding:"14px 16px",borderRadius:14,border:"1px solid rgba(255,255,255,0.08)",background:"#0f172a",fontSize:14,color:"#fff",outline:"none",transition:"all 0.2s ease"}}
@@ -2605,6 +2555,56 @@ useEffect(()=>{
                   </button>
                 )}
               </div>
+            )}
+
+            {added.length>0&&(
+              <div style={{borderRadius:16,padding:"16px 20px",marginBottom:16,background:col.grad}}>
+                <p style={{margin:0,fontSize:15,fontWeight:600,color:"#fff"}}>{t.todaySummary}</p>
+                <p style={{margin:"4px 0 0",fontSize:14,color:"rgba(255,255,255,0.7)",lineHeight:1.6}}>{getVerdict(score)}</p>
+                {missingVit&&<p style={{margin:"6px 0 0",fontSize:12,color:"rgba(255,255,255,0.55)",display:"flex",alignItems:"flex-start",gap:4}}><Lightbulb size={12} style={{flexShrink:0,marginTop:2}}/>{t.missingTip}: {t.vitNames[missingVit]} — {t.missingTips[missingVit]}</p>}
+              </div>
+            )}
+
+            {(synergies.length>0||synergiesLocked>0)&&(
+              <div style={{marginBottom:8}}>
+                {synergies.length>0&&(
+                  <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"rgba(120,53,15,0.3)",border:"1px solid rgba(180,83,9,0.4)",borderRadius:synergiesLocked>0?"16px 16px 0 0":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",transition:"background 0.2s",animation:"synergyGlow 2s infinite"}}
+                    onMouseEnter={e=>e.currentTarget.style.background="rgba(120,53,15,0.45)"} onMouseLeave={e=>e.currentTarget.style.background="rgba(120,53,15,0.3)"}>
+                    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+                      <p style={{margin:0,fontSize:12,fontWeight:700,color:"#fbbf24",display:"flex",alignItems:"center",gap:5}}><Zap size={13} style={{flexShrink:0}}/>{t.synergiesDetected} ({synergies.length})</p>
+                      <span style={{fontSize:11,color:"#f59e0b"}}>Details ›</span>
+                    </div>
+                    {synergies.map((s,i)=><p key={i} style={{margin:0,fontSize:11,color:"rgba(251,191,36,0.8)",display:"flex",alignItems:"flex-start",gap:4}}><Zap size={11} style={{flexShrink:0,marginTop:1}}/>{s}</p>)}
+                  </button>
+                )}
+                {synergiesLocked>0&&(
+                  <button onClick={()=>setShowUpgradeModal(true)}
+                    style={{width:"100%",background:"#0f172a",border:"1px solid #374151",borderRadius:synergies.length>0?"0 0 16px 16px":"16px",padding:"12px 16px",textAlign:"left",cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"background 0.2s"}}
+                    onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                    <Lock size={16} style={{color:"#6b7280",flexShrink:0}}/>
+                    <span style={{fontSize:12,fontWeight:600,color:"#6b7280"}}>
+                      {lang==="de"?`${synergiesLocked} weitere Synergien erkannt — Mit Nube Pro freischalten`:`${synergiesLocked} more synergies detected — Unlock with Nube Pro`}
+                    </span>
+                  </button>
+                )}
+              </div>
+            )}
+            {potentialSynergies.length>0&&added.length>0&&(
+              <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:16,padding:"12px 16px",marginBottom:16,textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
+                onMouseEnter={e=>e.currentTarget.style.background="#111827"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                <p style={{margin:"0 0 6px",fontSize:12,fontWeight:700,color:"#6b7280",display:"flex",alignItems:"center",gap:5}}><Lightbulb size={13} style={{flexShrink:0}}/>{t.potentialSynergies}</p>
+                {potentialSynergies.map(s=>{
+                  const missing=!s.sideA?s.missingA:s.missingB;
+                  const benefit=t[s.key].split("→")[1]?.trim()||t[s.key];
+                  return <p key={s.key} style={{margin:0,fontSize:11,color:"#4b5563",lineHeight:1.6,display:"flex",alignItems:"flex-start",gap:4}}><Lightbulb size={11} style={{flexShrink:0,marginTop:2}}/>{t.addToUnlock(missing,benefit)}</p>;
+                })}
+              </button>
+            )}
+            {synergies.length===0&&potentialSynergies.length===0&&added.length>0&&(
+              <button onClick={()=>setShowSynergyModal(true)} style={{width:"100%",background:"#0f172a",border:"1px dashed #374151",borderRadius:16,padding:"12px 16px",marginBottom:16,textAlign:"left",cursor:"pointer",transition:"background 0.2s"}}
+                onMouseEnter={e=>e.currentTarget.style.background="#1f2937"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+                <p style={{margin:0,fontSize:12,fontWeight:700,color:"#4b5563",display:"flex",alignItems:"center",gap:5}}><Zap size={13} style={{flexShrink:0}}/>{t.synergyPossible} ›</p>
+              </button>
             )}
 
             {added.length>0&&(
