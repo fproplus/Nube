@@ -2923,7 +2923,7 @@ useEffect(()=>{
             return(
               <div key={goal.id} style={{background:"#0f172a",borderRadius:16,padding:16,marginBottom:12,border:covered?"1px solid rgba(34,197,94,0.3)":"1px solid #1f2937",animation:`fadeSlideIn 0.3s ease ${i*0.05}s both`}}>
                 <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
-                  <span style={{fontSize:22}}>{goal.icon}</span>
+                  {(()=>{const I=goal.icon;return <I size={22} style={{color:"#9ca3af",flexShrink:0}}/>;})()}
                   <div style={{flex:1}}>
                     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
                       <span style={{fontSize:14,fontWeight:800,color:covered?"#4ade80":"#f9fafb"}}>{goal.label}</span>
