@@ -1064,6 +1064,7 @@ const pwBarLabel=isDE
       try{localStorage.setItem("nube-just-registered","true");}catch{}
       setRegisteredEmail(email);
       setRegistered(true);
+      setLoading(false);
       return;
     }
     onAuth(result.data.user||result.data.session?.user);
@@ -1095,7 +1096,7 @@ const pwBarLabel=isDE
     }    setLoading(false);
   };
   const isDesktop=window.innerWidth>=900;
-  if(isDesktop)return(
+  if(isDesktop&&!registered)return(
     <div style={{minHeight:"100vh",background:"#030712",color:"#fff",fontFamily:"system-ui,-apple-system,sans-serif",display:"flex",alignItems:"center",justifyContent:"center"}}>
       <div style={{width:"100%",maxWidth:1200,display:"flex",alignItems:"center",gap:32,padding:"0 40px"}}>
 
