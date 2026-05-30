@@ -689,6 +689,56 @@ function BenefitModal({benefit,lang,onClose}){
   );
 }
 
+function WelcomeModal({lang,onClose}){
+  const sheetRef=useRef(null);
+  const startY=useRef(null),curY=useRef(0);
+  const [closing,setClosing]=useState(false);
+  const [cf,setCf]=useState(false);
+  useEffect(()=>{
+    const a=setTimeout(()=>setCf(true),50);
+    const b=setTimeout(()=>setCf(false),2050);
+    return()=>{clearTimeout(a);clearTimeout(b);};
+  },[]);
+  const onTS=e=>{startY.current=e.touches[0].clientY;};
+  const onTM=e=>{const dy=e.touches[0].clientY-startY.current;if(dy<0)return;curY.current=dy;if(sheetRef.current)sheetRef.current.style.transform=`translateY(${dy}px)`;};
+  const onTE=()=>{if(curY.current>80){setClosing(true);setTimeout(onClose,200);}else if(sheetRef.current)sheetRef.current.style.transform="translateY(0)";curY.current=0;};
+  const isDE=lang==="de";
+  const c=isDE?{
+    title:"Willkommen bei Nube! 🎉",
+    subtitle:"Du bist einer unserer ersten Nutzer — und das bedeutet uns viel.",
+    badge:"⚡ Lifetime Pro Zugang — Aktiviert",
+    body:"Als Dankeschön dafür, dass du einer unserer ersten Nutzer bist, bekommst du vollen Pro-Zugang — kostenlos, für immer.\n\nUnser Dankeschön dafür, dass du von Anfang an dabei bist.\nKeine Kreditkarte. Kein Haken. Bleibt für immer deins.",
+    button:"Jetzt entdecken →"
+  }:{
+    title:"Welcome to Nube! 🎉",
+    subtitle:"You're one of our first users — and that means a lot.",
+    badge:"⚡ Lifetime Pro Access — Activated",
+    body:"As a thank you for being one of our first users, you get full Pro access — free, forever.\n\nThis is our way of saying thanks for being early.\nNo credit card. No catch. It's yours to keep.",
+    button:"Start exploring →"
+  };
+  return(
+    <div style={{position:"fixed",inset:0,zIndex:155,display:"flex",alignItems:"flex-end"}} onClick={onClose}>
+      <Confetti active={cf}/>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.7)",backdropFilter:"blur(16px)"}}/>
+      <div ref={sheetRef} onClick={e=>e.stopPropagation()} onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
+        style={{position:"relative",background:"#111827",border:"1px solid #374151",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:520,margin:"0 auto",paddingBottom:"calc(28px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 48px rgba(0,0,0,0.7)",transition:closing?"transform 0.2s ease":"none",maxHeight:"90vh",overflowY:"auto"}}>
+        <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}><div style={{width:36,height:4,borderRadius:2,background:"#374151"}}/></div>
+        <button onClick={onClose} style={{position:"absolute",top:6,right:6,minWidth:44,minHeight:44,background:"transparent",border:"none",color:"#6b7280",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+        <div style={{padding:"8px 24px 0",textAlign:"center"}}>
+          <div style={{fontSize:56,lineHeight:1,marginBottom:10}}>🎉</div>
+          <h2 style={{margin:"0 0 8px",fontSize:24,fontWeight:900,color:"#f9fafb"}}>{c.title}</h2>
+          <p style={{margin:"0 0 20px",fontSize:14,color:"#9ca3af",lineHeight:1.6}}>{c.subtitle}</p>
+          <div style={{display:"inline-block",background:"#22c55e",color:"#fff",borderRadius:99,padding:"8px 20px",fontWeight:800,fontSize:14,marginBottom:20}}>{c.badge}</div>
+          <p style={{margin:"0 0 24px",fontSize:14,color:"#d1d5db",lineHeight:1.7,whiteSpace:"pre-line"}}>{c.body}</p>
+          <button onClick={onClose}
+            style={{width:"100%",height:52,background:"#22c55e",border:"none",borderRadius:14,fontSize:15,fontWeight:800,color:"#fff",cursor:"pointer"}}>
+            {c.button}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 function SynergyModal({lang,foodObjs,addFood,onClose,isPremium,onUpgrade}){
   const details=SYNERGY_DETAILS[lang];
   const sheetRef=useRef(null);
@@ -1007,10 +1057,11 @@ const pwBarLabel=isDE
       if(mode==="login"){
         result=await supabase.auth.signInWithPassword({email,password});
       }else{
-        result=await supabase.auth.signUp({email,password});
+        result=await supabase.auth.signUp({email,password,options:{data:{isPremium:true}}});
       }
     if(result.error)throw result.error;
       if(mode==="register"){
+      try{localStorage.setItem("nube-just-registered","true");}catch{}
       setRegisteredEmail(email);
       setRegistered(true);
       return;
@@ -1919,6 +1970,7 @@ export default function App(){
   });
   const [showAbout,setShowAbout]=useState(false);
   const [isPremium,setIsPremium]=useState(false);
+  const [showWelcomeModal,setShowWelcomeModal]=useState(false);
   const [showUpgradeModal,setShowUpgradeModal]=useState(false);
   const [billingYearly,setBillingYearly]=useState(true);
   const [preferences,setPreferences]=useState({diet:"all",excludedFoods:[]});
@@ -1950,6 +2002,18 @@ export default function App(){
   });
   return()=>subscription.unsubscribe();
 },[]);
+useEffect(()=>{
+  if(!user||isGuest)return;
+  try{
+    if(localStorage.getItem("nube-just-registered")==="true"&&localStorage.getItem("nube-welcome-shown")!=="true"){
+      setShowWelcomeModal(true);
+    }
+  }catch{}
+},[user,isGuest]);
+const closeWelcomeModal=()=>{
+  try{localStorage.setItem("nube-welcome-shown","true");localStorage.removeItem("nube-just-registered");}catch{}
+  setShowWelcomeModal(false);
+};
 useEffect(()=>{
   const loadData=async()=>{
     if(user&&!isGuest){
@@ -2235,6 +2299,7 @@ useEffect(()=>{
     </div>
   </div>
 )}
+      {showWelcomeModal&&<WelcomeModal lang={lang} onClose={closeWelcomeModal}/>}
       {showSynergyModal&&<SynergyModal lang={lang} foodObjs={foodObjs} addFood={addFood} onClose={()=>setShowSynergyModal(false)} isPremium={isPremium} onUpgrade={()=>{setShowSynergyModal(false);setShowUpgradeModal(true);}}/>}
       {showPreferences&&<PreferencesModal lang={lang} preferences={preferences} setPreferences={setPreferences} onClose={()=>setShowPreferences(false)}/>}
         {showUpgradeModal&&(
