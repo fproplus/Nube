@@ -1082,15 +1082,19 @@ const pwBarLabel=isDE
         else
           friendly=isDE?"Etwas ist schiefgelaufen. Bitte erneut versuchen.":"Something went wrong. Please try again.";
       }else{
-        if(msg.includes("User already registered"))
+        const low=msg.toLowerCase();
+        if(msg.includes("User already registered")||low.includes("already been registered")||low.includes("already registered"))
           friendly=isDE?"Diese E-Mail ist bereits registriert. Versuche dich anzumelden.":"This email is already registered. Try logging in.";
         else if(msg.includes("Password should be at least"))
           friendly=isDE?"Passwort muss mindestens 8 Zeichen haben.":"Password must be at least 8 characters.";
-        else if(msg.includes("NetworkError")||msg.includes("fetch")||msg.includes("Failed to fetch")||msg.includes("network"))
-          friendly=isDE?"Verbindungsfehler. Bitte Internet prüfen.":"Connection error. Please check your internet.";        else if(msg.includes("Too many requests"))
-          friendly=isDE?"Zu viele Versuche. Bitte kurz warten.":"Too many attempts. Please wait a moment.";
+        else if(msg.includes("NetworkError")||msg.includes("fetch")||msg.includes("Failed to fetch")||low.includes("network"))
+          friendly=isDE?"Verbindungsfehler. Bitte Internet prüfen.":"Connection error. Please check your internet.";
+        else if(msg.includes("Too many requests")||low.includes("rate limit")||low.includes("rate_limit")||low.includes("security purposes")||low.includes("after"))
+          friendly=isDE?"Zu viele Registrierungsversuche. Bitte ein paar Minuten warten und erneut versuchen.":"Too many sign-up attempts. Please wait a few minutes and try again.";
+        else if(low.includes("database error"))
+          friendly=isDE?"Serverfehler beim Anlegen des Kontos. Bitte später erneut versuchen.":"Server error creating the account. Please try again later.";
         else
-          friendly=isDE?"Etwas ist schiefgelaufen. Bitte erneut versuchen.":"Something went wrong. Please try again.";
+          friendly=(isDE?"Etwas ist schiefgelaufen: ":"Something went wrong: ")+msg;
       }
       console.log("Error message:", msg);setError(friendly);
     }    setLoading(false);
